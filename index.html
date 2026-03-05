@@ -1490,7 +1490,16 @@ async function runUrlScan() {
   } catch(e) {
     document.getElementById('urlLoading').style.display='none';
     document.getElementById('urlRunBtn').disabled=false;
-    document.getElementById('urlResults').innerHTML=`<div class="api-key-row" style="border-color:rgba(239,68,68,0.25);background:var(--red-glow)">Error: ${e.message}. Check your API key and try again.</div>`;
+    const isFileProt = window.location.protocol === 'file:';
+    const vtLink = `https://www.virustotal.com/gui/home/url`;
+    const msg = isFileProt
+      ? `<div style="font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:6px">⚠️ CORS restriction — open via web server to use this feature</div>
+         <div style="font-size:12px;color:var(--text-secondary);line-height:1.7;margin-bottom:10px">Browsers block direct API calls when opening an HTML file locally. This feature works when the tool is served from <strong>GitHub Pages</strong> or any web server.</div>
+         <div style="font-size:12px;color:var(--text-secondary);margin-bottom:10px">In the meantime, check the URL directly on VirusTotal:</div>
+         <a href="${vtLink}" target="_blank" class="run-btn" style="display:inline-flex;text-decoration:none">Open VirusTotal ↗</a>`
+      : `<div style="font-size:13px;font-weight:600;color:var(--red);margin-bottom:4px">Error: ${e.message}</div>
+         <div style="font-size:12px;color:var(--text-secondary)">Double-check your API key is correct and has not expired. <a href="https://www.virustotal.com/gui/my-apikey" target="_blank" style="color:var(--accent)">Check your key on VirusTotal ↗</a></div>`;
+    document.getElementById('urlResults').innerHTML=`<div class="vt-result">${msg}</div>`;
     document.getElementById('urlResults').style.display='';
   }
 }
@@ -1568,7 +1577,14 @@ async function runHashCheck() {
   } catch(e) {
     document.getElementById('hashLoading').style.display='none';
     document.getElementById('hashRunBtn').disabled=false;
-    document.getElementById('hashResults').innerHTML=`<div class="api-key-row" style="border-color:rgba(239,68,68,0.25);background:var(--red-glow)">Error: ${e.message}</div>`;
+    const isFileProt = window.location.protocol === 'file:';
+    const msg = isFileProt
+      ? `<div style="font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:6px">⚠️ CORS restriction — open via web server to use this feature</div>
+         <div style="font-size:12px;color:var(--text-secondary);line-height:1.7;margin-bottom:10px">Browsers block direct API calls when opening an HTML file locally. This works when served from <strong>GitHub Pages</strong> or any web server.</div>
+         <a href="https://www.virustotal.com/gui/home/search" target="_blank" class="run-btn" style="display:inline-flex;text-decoration:none">Search on VirusTotal ↗</a>`
+      : `<div style="font-size:13px;font-weight:600;color:var(--red);margin-bottom:4px">Error: ${e.message}</div>
+         <div style="font-size:12px;color:var(--text-secondary)">Double-check your API key. <a href="https://www.virustotal.com/gui/my-apikey" target="_blank" style="color:var(--accent)">Check your key ↗</a></div>`;
+    document.getElementById('hashResults').innerHTML=`<div class="vt-result">${msg}</div>`;
     document.getElementById('hashResults').style.display='';
   }
 }
@@ -1879,6 +1895,15 @@ try {
 } catch {}
 loadVtKey();
 checkUrlParams();
+// Warn if opened as local file — VT API calls will be blocked by CORS
+if (window.location.protocol === 'file:') {
+  const corsBanner = `<div class="api-key-row" style="margin-bottom:14px">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;color:var(--amber)"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    <span>URL Scanner and Hash Checker require the tool to be served from a web server (e.g. GitHub Pages). API calls are blocked by the browser when opening a local file. All DNS features work normally.</span>
+  </div>`;
+  document.querySelector('#view-urlscan .section-card').insertAdjacentHTML('afterend', corsBanner);
+  document.querySelector('#view-hashcheck .section-card').insertAdjacentHTML('afterend', corsBanner);
+}
 </script>
 </body>
 </html>
