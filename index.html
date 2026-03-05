@@ -47,15 +47,11 @@ body{background:var(--bg-root);color:var(--text-primary);font-family:var(--font-
 .sidebar-overlay.visible{display:block;}
 
 /* ── SIDEBAR ── */
-.sidebar-header{padding:20px 16px 16px;border-bottom:1px solid var(--border);}
+.sidebar-header{padding:18px 16px 14px;border-bottom:1px solid var(--border);}
 .sidebar-logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;color:var(--text-primary);text-decoration:none;}
 .sidebar-logo svg{color:var(--accent);flex-shrink:0;}
 .sidebar-sub{font-size:11px;color:var(--text-dim);margin-top:4px;}
-.sidebar-brand{display:flex;align-items:center;gap:8px;text-decoration:none;padding:8px;border-radius:var(--radius-sm);margin-top:10px;transition:all 0.15s;border:1px solid transparent;}
-.sidebar-brand:hover{background:var(--accent-glow);border-color:rgba(59,130,246,0.2);}
-.sidebar-brand-icon{width:26px;height:26px;background:var(--accent);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.sidebar-brand-text{font-size:12px;font-weight:600;color:var(--text-secondary);}
-.sidebar-brand-sub{font-size:10px;color:var(--text-dim);}
+
 .sidebar-nav{flex:1;padding:10px 8px;}
 .nav-section-title{font-size:10px;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:1.5px;padding:12px 12px 6px;user-select:none;}
 .nav-item{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:var(--radius-sm);font-size:13px;color:var(--text-secondary);cursor:pointer;transition:all 0.15s;user-select:none;border:1px solid transparent;}
@@ -287,8 +283,51 @@ textarea.param-input{min-height:110px;resize:vertical;line-height:1.6;color:var(
 .app-footer a{color:var(--text-secondary);text-decoration:none;}
 .app-footer a:hover{color:var(--accent);}
 .footer-brand{display:inline-flex;align-items:center;gap:8px;margin-bottom:8px;text-decoration:none;}
-.footer-brand-icon{width:28px;height:28px;background:var(--accent);border-radius:7px;display:flex;align-items:center;justify-content:center;}
+.footer-brand-icon{display:flex;align-items:center;}
 .footer-brand-name{font-size:13px;font-weight:700;color:var(--text-secondary);}
+
+
+/* ── TOOLTIPS ── */
+[data-tip]{position:relative;cursor:help;}
+[data-tip]:hover::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:#1e2a3a;color:var(--text-primary);font-size:11px;font-family:var(--font-body);white-space:nowrap;padding:5px 9px;border-radius:var(--radius-sm);border:1px solid var(--border);pointer-events:none;z-index:100;max-width:240px;white-space:normal;line-height:1.5;}
+[data-tip]:hover::before{content:'';position:absolute;bottom:calc(100% + 2px);left:50%;transform:translateX(-50%);border:4px solid transparent;border-top-color:#1e2a3a;pointer-events:none;z-index:100;}
+
+/* ── SPF DEPTH TREE ── */
+.spf-tree{margin-top:10px;padding:10px 14px;background:var(--bg-code);border:1px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font-mono);font-size:11px;line-height:1.8;}
+.spf-tree-item{display:flex;align-items:center;gap:7px;padding:1px 0;}
+.spf-tree-item .ti{color:var(--text-dim);flex-shrink:0;}
+.spf-tree-item .td{color:var(--text-primary);}
+.spf-tree-item .tc{color:var(--text-dim);font-size:10px;margin-left:auto;}
+.spf-depth-bar{display:flex;align-items:center;gap:8px;margin-top:8px;padding:7px 12px;background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);}
+.spf-depth-track{flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden;}
+.spf-depth-fill{height:100%;border-radius:3px;transition:width 0.4s;}
+.spf-depth-fill.ok{background:var(--green);}
+.spf-depth-fill.warn{background:var(--amber);}
+.spf-depth-fill.over{background:var(--red);}
+
+/* ── SHARE TOAST ── */
+.share-toast{position:fixed;bottom:70px;right:22px;z-index:70;padding:10px 16px;background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius);font-size:12px;color:var(--text-primary);display:none;align-items:center;gap:8px;box-shadow:0 4px 16px rgba(0,0,0,0.3);animation:slideUp 0.2s ease;}
+.share-toast.visible{display:flex;}
+@keyframes slideUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+/* ── PRINT STYLES ── */
+@media print{
+  .sidebar,.toolbar,.back-to-top,.share-toast,.guide-toggle,.guide-panel,.run-btn,.tool-btn,.cb,.copy-float{display:none!important;}
+  .main{margin-left:0!important;}
+  body{background:#fff!important;color:#000!important;}
+  .content{padding:0 20px!important;max-width:100%!important;}
+  .check-card.expanded .check-detail,.check-detail{display:block!important;}
+  .check-card{border:1px solid #ccc!important;border-left:3px solid #999!important;break-inside:avoid;margin-bottom:8px;}
+  .check-card.pass{border-left-color:#059669!important;}
+  .check-card.warn{border-left-color:#d97706!important;}
+  .check-card.fail{border-left-color:#dc2626!important;}
+  .verdict-card{border:1px solid #ccc!important;}
+  .print-header{display:block!important;}
+  .section-card{border:1px solid #ccc!important;}
+  .detail-value{border:1px solid #ccc!important;background:#f5f5f5!important;color:#000!important;}
+  .explain-box{background:#f5f5f5!important;border:1px solid #ccc!important;}
+}
+.print-header{display:none;padding:0 0 16px;border-bottom:2px solid var(--border);margin-bottom:20px;}
 
 /* ── BACK TO TOP ── */
 .back-to-top{position:fixed;bottom:22px;right:22px;z-index:60;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;border:none;cursor:pointer;display:none;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,0.3);transition:all 0.3s;}
@@ -312,17 +351,11 @@ code{font-family:var(--font-mono);font-size:11px;background:var(--bg-code);paddi
 <!-- ═══ SIDEBAR ═══ -->
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-header">
-    <a class="sidebar-logo" href="https://great-it-nordic.github.io/m365-ps-toolkit/" target="_blank">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    <a class="sidebar-logo" href="https://greatit.se/en/" target="_blank">
+      <img src="data:image/png;base64,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" style="width:28px;height:28px;object-fit:contain;flex-shrink:0;">
       Email Spoof Checker
     </a>
-    <div class="sidebar-sub">Great IT Nordic · Security Tools v2.0</div>
-    <a class="sidebar-brand" href="https://great-it-nordic.github.io/m365-ps-toolkit/" target="_blank">
-      <div class="sidebar-brand-icon">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-      </div>
-      <div><div class="sidebar-brand-text">Great IT Nordic</div><div class="sidebar-brand-sub">M365 PS Toolkit →</div></div>
-    </a>
+    <div class="sidebar-sub">greatit.se · Security Tools v3.0</div>
   </div>
 
   <nav class="sidebar-nav">
@@ -340,27 +373,22 @@ code{font-family:var(--font-mono);font-size:11px;background:var(--bg-code);paddi
     <div class="nav-item" id="nav-bulk" onclick="setView('bulk')">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
       Bulk Domain Checker
-      <span class="new-badge">NEW</span>
     </div>
     <div class="nav-item" id="nav-history" onclick="setView('history')">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
       History &amp; Changes
-      <span class="new-badge">NEW</span>
     </div>
     <div class="nav-item" id="nav-urlscan" onclick="setView('urlscan')">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
       Phishing URL Scanner
-      <span class="new-badge">NEW</span>
     </div>
     <div class="nav-item" id="nav-hashcheck" onclick="setView('hashcheck')">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
       Attachment Hash Check
-      <span class="new-badge">NEW</span>
     </div>
     <div class="nav-item" id="nav-psgen" onclick="setView('psgen')">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
       PowerShell Fix Generator
-      <span class="new-badge">NEW</span>
     </div>
 
     <div class="nav-section-title" style="margin-top:6px">Learn</div>
@@ -379,7 +407,7 @@ code{font-family:var(--font-mono);font-size:11px;background:var(--bg-code);paddi
 
     <div class="nav-section-title" style="margin-top:6px">Resources</div>
     <div class="sidebar-links">
-      <a class="sidebar-link" href="https://great-it-nordic.github.io/m365-ps-toolkit/" target="_blank">
+      <a class="sidebar-link" href="https://greatit.se/en/" target="_blank">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>M365 PS Toolkit
       </a>
       <a class="sidebar-link" href="https://github.com/great-it-nordic" target="_blank">
@@ -393,6 +421,9 @@ code{font-family:var(--font-mono);font-size:11px;background:var(--bg-code);paddi
       </a>
       <a class="sidebar-link" href="https://www.virustotal.com" target="_blank">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>VirusTotal
+      </a>
+      <a class="sidebar-link" href="https://learndmarc.com/" target="_blank">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>LearnDMARC
       </a>
     </div>
   </nav>
@@ -414,6 +445,14 @@ code{font-family:var(--font-mono);font-size:11px;background:var(--bg-code);paddi
       <button class="tool-btn" id="exportCsvBtn" onclick="exportCSV()" style="display:none">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         Export CSV
+      </button>
+      <button class="tool-btn" id="shareBtn" onclick="shareResults()" style="display:none">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        Share
+      </button>
+      <button class="tool-btn" id="printBtn" onclick="printReport()" style="display:none">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        Print / PDF
       </button>
       <button class="tool-btn" id="clearBtn" onclick="clearCurrent()" style="display:none">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.51"/></svg>
@@ -462,7 +501,7 @@ code{font-family:var(--font-mono);font-size:11px;background:var(--bg-code);paddi
         <div id="mx-p" class="guide-pane"><div class="guide-section"><h5>📬 MX — Mail Exchanger Records</h5>
           <p><strong style="color:var(--text-primary)">What it does:</strong> MX records tell the world where to deliver inbound email for your domain.</p>
           <pre>contoso.com MX 10 contoso-com.mail.protection.outlook.com</pre>
-          <ul style="margin-top:8px"><li>Exchange Online: ends in <code>.mail.protection.outlook.com</code></li><li>Google Workspace: <code>aspmx.l.google.com</code></li><li>No MX = domain can't receive email — but CAN still be used in a spoofed From address</li></ul>
+          <ul style="margin-top:8px"><li>Exchange Online: ends in <code>.mail.protection.outlook.com</code></li><li>Google Workspace: <code>aspmx.l.google.com</code></li><li>No MX = domain can\'t receive email — but CAN still be used in a spoofed From address</li></ul>
           <p class="note">Non-sending domains should still publish <code>v=spf1 -all</code> and DMARC <code>p=reject</code> to block abuse of their name.</p>
         </div></div>
       </div>
@@ -503,7 +542,7 @@ code{font-family:var(--font-mono);font-size:11px;background:var(--bg-code);paddi
       <div class="guide-panel" id="gp-spoofed">
         <p style="font-size:12px;color:var(--text-secondary);margin-bottom:12px">Common warning signs — you do not need to be technical to spot most of these.</p>
         <div class="spoofed-grid">
-          <div class="spoof-sign"><h6>🔍 From address looks right but isn't</h6><p>Lookalike domains: <code>contoso.com</code> vs <code>contoso-secure.com</code>. Always reveal the actual email address behind the display name.</p></div>
+          <div class="spoof-sign"><h6>🔍 From address looks right but isn\'t</h6><p>Lookalike domains: <code>contoso.com</code> vs <code>contoso-secure.com</code>. Always reveal the actual email address behind the display name.</p></div>
           <div class="spoof-sign"><h6>↩️ Reply goes to a different domain</h6><p>The From says <code>hr@contoso.com</code> but Reply-To is <code>payroll@gmail.com</code>. Replies go to the attacker. This tool checks for this automatically.</p></div>
           <div class="spoof-sign"><h6>⚡ Manufactured urgency</h6><p>"Your account suspends in 24h", "Urgent CEO request". Pressure to act fast without thinking is one of the most reliable phishing signals.</p></div>
           <div class="spoof-sign"><h6>🔗 Links don't go where they say</h6><p>Hover before clicking. Display text says <code>microsoft.com</code>, real link goes to <code>micr0soft-login.ru</code>. On mobile, long-press to preview.</p></div>
@@ -538,7 +577,11 @@ code{font-family:var(--font-mono);font-size:11px;background:var(--bg-code);paddi
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>Analyze
             </button>
           </div>
-          <div class="input-hint">Enter any domain — no login required. DNS records are public. Example: <code>microsoft.com</code>, <code>google.com</code>, or your organization's domain.</div>
+          <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+            <label style="font-size:11px;color:var(--text-dim);white-space:nowrap">Custom DKIM selector (optional):</label>
+            <input type="text" class="param-input" id="dkimSelectorInput" placeholder="e.g. selector1 or google" style="max-width:200px;font-size:12px;padding:6px 10px;">
+          </div>
+          <div class="input-hint">Enter any domain — no login required. DNS records are public. Leave DKIM selector blank to auto-probe 14 common selectors.</div>
         </div>
         <div id="headerArea" style="display:none">
           <textarea class="param-input" id="headerInput" placeholder="Paste full email headers here...&#10;&#10;Received: from mail.example.com...&#10;From: Sender &lt;sender@example.com&gt;&#10;Return-Path: &lt;bounce@otherdomain.com&gt;&#10;Reply-To: attacker@phishing.com&#10;Authentication-Results: mx.google.com; spf=fail; dkim=pass; dmarc=fail"></textarea>
@@ -554,6 +597,10 @@ code{font-family:var(--font-mono);font-size:11px;background:var(--bg-code);paddi
       <div class="loading-row" id="domainLoading" style="display:none"><div class="spinner"></div><span id="loadingText">Querying DNS…</span></div>
 
       <div id="domainResults" style="display:none">
+        <div class="print-header" id="printHeader">
+          <div style="font-size:18px;font-weight:700;margin-bottom:4px;">Email Security Report</div>
+          <div style="font-size:12px;color:#666;" id="printMeta"></div>
+        </div>
         <div id="domainVerdict" class="verdict-card pass"></div>
         <div class="stats-bar" id="domainStats"></div>
         <div class="cat-title">
@@ -716,17 +763,21 @@ code{font-family:var(--font-mono);font-size:11px;background:var(--bg-code);paddi
   <!-- Footer -->
   <div class="app-footer">
     <div style="display:flex;justify-content:center;margin-bottom:8px">
-      <a class="footer-brand" href="https://great-it-nordic.github.io/m365-ps-toolkit/" target="_blank">
-        <div class="footer-brand-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+      <a class="footer-brand" href="https://greatit.se/en/" target="_blank">
+        <img src="data:image/png;base64,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" style="height:26px;object-fit:contain;">
         <span class="footer-brand-name">Great IT Nordic</span>
       </a>
     </div>
-    Email Spoof Checker v2.0 · Part of the <a href="https://great-it-nordic.github.io/m365-ps-toolkit/" target="_blank">Great IT Nordic Security Toolset</a><br>
+    Email Spoof Checker v3.0 · Part of the <a href="https://greatit.se/en/" target="_blank">Great IT Nordic Security Toolset</a><br>
     <span style="margin-top:4px;display:inline-block">DNS via <a href="https://cloudflare-dns.com" target="_blank">Cloudflare DoH</a> · Threat intel via <a href="https://virustotal.com" target="_blank">VirusTotal</a> · <a href="https://github.com/great-it-nordic" target="_blank">GitHub</a></span>
   </div>
 </div>
 </div>
 
+<div class="share-toast" id="shareToast">
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+  <span id="shareToastMsg">Link copied to clipboard</span>
+</div>
 <button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
 </button>
@@ -740,6 +791,7 @@ function toggleTheme() {
   dark = !dark;
   document.documentElement.setAttribute('data-theme', dark ? '' : 'light');
   document.getElementById('themeBtn').textContent = dark ? '☀ Light' : '🌙 Dark';
+  try { localStorage.setItem('esc_theme', dark ? 'dark' : 'light'); } catch {}
 }
 
 // ══════════════════════════════════════════════
@@ -770,6 +822,8 @@ function setView(v) {
   document.getElementById('toolbarSub').textContent = '· ' + (viewTitles[v] || '');
   document.getElementById('exportCsvBtn').style.display = v === 'bulk' && bulkData.length ? 'inline-flex' : 'none';
   document.getElementById('clearBtn').style.display = 'none';
+  document.getElementById('shareBtn').style.display = 'none';
+  document.getElementById('printBtn').style.display = 'none';
   if (v === 'history') renderHistory();
   if (v === 'headers') { switchDomainMode('headers'); document.getElementById('nav-domain').classList.remove('active'); document.getElementById('nav-headers').classList.add('active'); }
   if (v === 'domain') { switchDomainMode('domain'); }
@@ -868,6 +922,27 @@ async function checkDomain(d, onProgress) {
     }
   }
 
+  // SPF DEPTH ANALYSIS
+  emit('Analyzing SPF include chain…');
+  const spfCheck = checks.find(c => c.id === 'spf');
+  if (spfCheck && spfCheck.value) {
+    try {
+      const depthResult = await analyzeSPFDepth(d, spfCheck.value, 0, new Set());
+      spfCheck._spfDepth = depthResult;
+      if (depthResult.total >= 10) {
+        spfCheck.s = 'fail';
+        spfCheck.badge = `SPF Lookup Limit Exceeded (${depthResult.total}/10)`;
+        spfCheck.desc = `SPF has ${depthResult.total} DNS lookups — exceeds the 10-lookup limit. Email will likely fail SPF.`;
+        spfCheck.rec = (spfCheck.rec||'') + `<b>Critical:</b> SPF records exceeding 10 DNS lookups silently fail. Use SPF flattening or consolidate include: directives.`;
+      } else if (depthResult.total >= 7) {
+        if (spfCheck.s === 'pass') { spfCheck.s = 'warn'; }
+        spfCheck.desc += ` ⚠️ ${depthResult.total}/10 DNS lookups — approaching the limit.`;
+      } else {
+        spfCheck.desc += ` (${depthResult.total}/10 DNS lookups)`;
+      }
+    } catch(e) {}
+  }
+
   // DMARC
   emit('Checking DMARC…');
   const dmR = await doh('_dmarc.' + d, 'TXT');
@@ -898,7 +973,8 @@ async function checkDomain(d, onProgress) {
 
   // DKIM
   emit('Probing DKIM selectors…');
-  const sels = ['default','google','mail','selector1','selector2','k1','dkim','proofpoint','mimecast','s1','s2','smtp','mandrill','sendgrid'];
+  const customSel = (typeof document !== 'undefined') ? document.getElementById('dkimSelectorInput')?.value?.trim() : '';
+  const sels = customSel ? [customSel, 'default','google','mail','selector1','selector2','k1','dkim','proofpoint','mimecast','s1','s2','smtp','mandrill','sendgrid'] : ['default','google','mail','selector1','selector2','k1','dkim','proofpoint','mimecast','s1','s2','smtp','mandrill','sendgrid'];
   let dkimFound = false;
   for (const sel of sels) {
     const recs = await doh(`${sel}._domainkey.${d}`, 'TXT');
@@ -937,7 +1013,119 @@ async function checkDomain(d, onProgress) {
       why:'MX records point to the servers accepting inbound mail. Exchange Online uses .mail.protection.outlook.com; Google Workspace uses aspmx.l.google.com.' });
   }
 
+  // BIMI
+  emit('Checking BIMI…');
+  const bimiR = await doh('default._bimi.' + d, 'TXT');
+  if (bimiR?.length) {
+    const rec = bimiR.find(r => r.data?.includes('v=BIMI1'));
+    if (rec) {
+      const val = rec.data.replace(/"/g,'');
+      const hasLogo = /l=https?:/i.test(val);
+      const hasVmc = /a=https?:/i.test(val);
+      checks.push({ id:'bimi', name:'BIMI Record', s: hasLogo?'pass':'warn',
+        badge: hasLogo?(hasVmc?'Logo + VMC':'Logo found'):'No logo URL',
+        desc: hasLogo ? `BIMI configured${hasVmc?' with VMC certificate':' (logo, no VMC yet)'}.` : 'BIMI record found but no logo URL (l=) set.',
+        value: val, rec: hasLogo && !hasVmc ? '<b>Next step:</b> Add a VMC (Verified Mark Certificate) from Entrust or DigiCert to display your logo in Gmail and Apple Mail.' : null,
+        why: 'BIMI displays your brand logo next to emails in supporting clients (Gmail, Apple Mail, Yahoo). Requires DMARC p=reject or p=quarantine and a hosted SVG logo.' });
+    }
+  } else {
+    checks.push({ id:'bimi', name:'BIMI Record', s:'info', badge:'Not configured',
+      desc:'No BIMI record — brand logo not shown in email clients.',
+      value:null, rec:`<b>Optional next step:</b> After achieving DMARC p=reject, add: <code>default._bimi.${d}</code> TXT <code>"v=BIMI1; l=https://${d}/logo.svg"</code>`,
+      why:'BIMI is the final layer after SPF, DKIM, and DMARC p=reject. It lets you display a verified brand logo in Gmail and Apple Mail.' });
+  }
+
+  // MTA-STS
+  emit('Checking MTA-STS…');
+  const stsR = await doh('_mta-sts.' + d, 'TXT');
+  if (stsR?.length) {
+    const rec = stsR.find(r => r.data?.includes('v=STSv1'));
+    if (rec) {
+      const val = rec.data.replace(/"/g,'');
+      const id = val.match(/id=([^;\s]+)/i)?.[1];
+      checks.push({ id:'mtasts', name:'MTA-STS Policy', s:'pass', badge:`v=STSv1${id?' id='+id:''}`,
+        desc:'MTA-STS TXT record found. Enforces TLS on inbound SMTP.',
+        value: val, rec:null,
+        why:'MTA-STS forces sending servers to use TLS when delivering email to your domain, preventing downgrade attacks. Works alongside SMTP TLS reporting (TLS-RPT).' });
+    }
+  } else {
+    checks.push({ id:'mtasts', name:'MTA-STS Policy', s:'info', badge:'Not configured',
+      desc:'No MTA-STS — TLS not enforced on inbound delivery.',
+      value:null, rec:`<b>Optional:</b> Publish <code>_mta-sts.${d}</code> TXT <code>"v=STSv1; id=YYYYMMDD01"</code> and host a policy file at <code>https://mta-sts.${d}/.well-known/mta-sts.txt</code>`,
+      why:'MTA-STS prevents SMTP downgrade attacks by requiring TLS for inbound mail. It\'s part of the recommended M365 hardening stack.' });
+  }
+
   return checks;
+}
+
+// ══════════════════════════════════════════════
+//  SPF DEPTH ANALYZER
+// ══════════════════════════════════════════════
+async function analyzeSPFDepth(domain, spfValue, depth, visited, lookupCount={n:0}) {
+  const results = [];
+  if (depth > 5 || visited.has(domain)) return { total: lookupCount.n, items: results };
+  visited.add(domain);
+
+  const includes = [...spfValue.matchAll(/include:([^\s"]+)/gi)].map(m=>m[1]);
+  const redirect = spfValue.match(/redirect=([^\s"]+)/i)?.[1];
+  const mechanisms = ['a','mx','ptr','exists'].filter(m => new RegExp('\\b'+m+'\\b').test(spfValue));
+
+  mechanisms.forEach(m => { lookupCount.n++; results.push({type:m.toUpperCase(),domain,lookups:1,children:[]}); });
+
+  for (const inc of includes) {
+    lookupCount.n++;
+    results.push({type:'include',domain:inc,lookups:1,children:[]});
+    try {
+      const recs = await doh(inc, 'TXT');
+      const incSpf = recs?.find(r=>r.data?.replace(/"/g,'').trim().startsWith('v=spf1'))?.data?.replace(/"/g,'');
+      if (incSpf) {
+        const sub = await analyzeSPFDepth(inc, incSpf, depth+1, visited, lookupCount);
+        results[results.length-1].children = sub.items;
+      }
+    } catch {}
+  }
+
+  if (redirect) {
+    lookupCount.n++;
+    results.push({type:'redirect',domain:redirect,lookups:1,children:[]});
+    try {
+      const recs = await doh(redirect, 'TXT');
+      const rSpf = recs?.find(r=>r.data?.replace(/"/g,'').trim().startsWith('v=spf1'))?.data?.replace(/"/g,'');
+      if (rSpf) {
+        const sub = await analyzeSPFDepth(redirect, rSpf, depth+1, visited, lookupCount);
+        results[results.length-1].children = sub.items;
+      }
+    } catch {}
+  }
+
+  return { total: lookupCount.n, items: results };
+}
+
+function renderSPFTree(depth) {
+  if (!depth) return '';
+  const pct = Math.min(100, Math.round(depth.total/10*100));
+  const cls = depth.total >= 10 ? 'over' : depth.total >= 7 ? 'warn' : 'ok';
+  const color = depth.total >= 10 ? 'var(--red)' : depth.total >= 7 ? 'var(--amber)' : 'var(--green)';
+
+  function renderItems(items, indent) {
+    return items.map(item => {
+      const prefix = indent > 0 ? '  '.repeat(indent) + '└─ ' : '';
+      const typeColor = item.type==='include'?'var(--accent)':item.type==='redirect'?'var(--purple)':'var(--amber)';
+      let html = `<div class="spf-tree-item"><span class="ti">${prefix}<span style="color:${typeColor};font-weight:600">${item.type}:</span></span><span class="td">${item.domain}</span><span class="tc">+1 lookup</span></div>`;
+      if (item.children?.length) html += renderItems(item.children, indent+1);
+      return html;
+    }).join('');
+  }
+
+  return `<div class="spf-tree">
+    <div style="font-size:10px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">SPF Include Chain</div>
+    ${renderItems(depth.items, 0)}
+  </div>
+  <div class="spf-depth-bar">
+    <span style="font-size:11px;color:var(--text-secondary);white-space:nowrap">DNS Lookups: <strong style="color:${color}">${depth.total}/10</strong></span>
+    <div class="spf-depth-track"><div class="spf-depth-fill ${cls}" style="width:${pct}%"></div></div>
+    <span style="font-size:10px;color:${color};white-space:nowrap">${depth.total>=10?'Over limit':depth.total>=7?'Near limit':'OK'}</span>
+  </div>`;
 }
 
 // ══════════════════════════════════════════════
@@ -957,12 +1145,13 @@ function renderChecks(checks, containerId) {
       <div class="check-header">
         <div class="check-icon ${c.s}">${ico[c.s]}</div>
         <div class="check-info"><div class="check-name">${c.name}</div><div class="check-desc">${c.desc}</div></div>
-        <span class="risk-badge risk-${c.s}"><span class="risk-dot"></span>${c.badge}</span>
+        <span class="risk-badge risk-${c.s}" data-tip="${c.desc.replace(/<[^>]+>/g,'')}"><span class="risk-dot"></span>${c.badge}</span>
         <svg class="chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
       </div>
       <div class="check-detail">
         ${c.why?`<div class="explain-box"><div class="eb-title">What this means</div><p>${c.why}</p></div>`:''}
         ${c.value?`<div class="detail-value">${c.value}<span class="copy-float">${mkCopy(c.value)}</span></div>`:''}
+        ${c.id==='spf'&&c._spfDepth?renderSPFTree(c._spfDepth):''}
         ${c.rec?`<div class="rec-box">${c.rec}</div>`:''}
       </div>
     </div>`;
@@ -1021,7 +1210,10 @@ async function runDomain() {
   renderChecks(checks,'domainChecksList');
   document.getElementById('domainResults').style.display='';
   document.getElementById('clearBtn').style.display='inline-flex';
+  document.getElementById('shareBtn').style.display='inline-flex';
+  document.getElementById('printBtn').style.display='inline-flex';
   document.getElementById('domainEmpty').style.display='none';
+  updateUrlHash(d);
 }
 
 // Header analysis
@@ -1488,7 +1680,7 @@ function generatePS(d, checks) {
   lines.push(comment(`Email Spoof Checker — PowerShell Fix Script`));
   lines.push(comment(`Domain: ${d}`));
   lines.push(comment(`Generated: ${new Date().toLocaleDateString('sv-SE')}`));
-  lines.push(comment(`Great IT Nordic · great-it-nordic.github.io/m365-ps-toolkit/`));
+  lines.push(comment(`Great IT Nordic · greatit.se/en/`));
   lines.push('');
 
   // SPF
@@ -1615,6 +1807,54 @@ function copyPsOutput() {
 }
 
 // ══════════════════════════════════════════════
+//  SHARE + PRINT + URL PARAMS
+// ══════════════════════════════════════════════
+function updateUrlHash(domain) {
+  try {
+    const url = new URL(window.location.href);
+    url.searchParams.set('domain', domain);
+    window.history.replaceState({}, '', url);
+  } catch {}
+}
+
+function shareResults() {
+  const url = window.location.href;
+  navigator.clipboard.writeText(url).then(() => {
+    showToast('Link copied — anyone opening it will auto-run the same domain check');
+  }).catch(() => {
+    showToast('Copy this URL: ' + url);
+  });
+}
+
+function showToast(msg, duration=3000) {
+  const t = document.getElementById('shareToast');
+  document.getElementById('shareToastMsg').textContent = msg;
+  t.classList.add('visible');
+  setTimeout(() => t.classList.remove('visible'), duration);
+}
+
+function printReport() {
+  // Expand all check cards for printing
+  document.querySelectorAll('.check-card').forEach(c => c.classList.add('expanded'));
+  // Update print header
+  const domain = document.getElementById('domainInput').value || 'Domain Check';
+  document.getElementById('printMeta').textContent =
+    `Domain: ${domain} · Generated: ${new Date().toLocaleDateString('sv-SE')} · Great IT Nordic Email Spoof Checker`;
+  window.print();
+}
+
+function checkUrlParams() {
+  try {
+    const url = new URL(window.location.href);
+    const domain = url.searchParams.get('domain');
+    if (domain) {
+      document.getElementById('domainInput').value = domain;
+      setTimeout(runDomain, 400);
+    }
+  } catch {}
+}
+
+// ══════════════════════════════════════════════
 //  BACK TO TOP
 // ══════════════════════════════════════════════
 window.addEventListener('scroll',()=>{
@@ -1628,7 +1868,17 @@ if(window.innerWidth<=860){
   document.getElementById('sidebar').classList.add('hidden');
   document.getElementById('main').classList.add('full');
 }
+// Restore saved theme
+try {
+  const savedTheme = localStorage.getItem('esc_theme');
+  if (savedTheme === 'light') {
+    dark = false;
+    document.documentElement.setAttribute('data-theme','light');
+    document.getElementById('themeBtn').textContent = '🌙 Dark';
+  }
+} catch {}
 loadVtKey();
+checkUrlParams();
 </script>
 </body>
 </html>
