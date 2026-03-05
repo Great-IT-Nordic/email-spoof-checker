@@ -674,14 +674,6 @@ code{font-family:var(--font-mono);font-size:11px;background:var(--bg-code);paddi
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
           <div><div class="section-title">Phishing URL Scanner</div><div class="section-sub">Check a suspicious link against 90+ antivirus engines via VirusTotal</div></div>
         </div>
-        <div class="api-key-row" id="vtKeyRow">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;color:var(--amber)"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
-          <span>Requires a free VirusTotal API key — <a href="https://www.virustotal.com/gui/join-us" target="_blank">get one here (free)</a></span>
-        </div>
-        <div class="label-row"><label>VirusTotal API Key</label><span style="font-size:11px;color:var(--text-dim)">Stored in browser only</span></div>
-        <div class="input-row" style="margin-bottom:12px">
-          <input type="password" class="param-input" id="vtApiKey" placeholder="Paste your VirusTotal API key here" oninput="saveVtKey()">
-        </div>
         <div class="label-row"><label>Suspicious URL</label></div>
         <div class="input-row">
           <input type="text" class="param-input" id="urlInput" placeholder="https://suspicious-link.example.com/login?redirect=..." onkeydown="if(event.key==='Enter')runUrlScan()">
@@ -689,11 +681,11 @@ code{font-family:var(--font-mono);font-size:11px;background:var(--bg-code);paddi
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>Scan
           </button>
         </div>
-        <div class="input-hint">Copy the link from the suspicious email (do NOT visit it). Right-click → Copy link address in most email clients.</div>
+        <div class="input-hint">Paste the link and click Scan — opens VirusTotal in a new tab showing results from 90+ engines. No API key needed.</div>
       </div>
       <div class="loading-row" id="urlLoading" style="display:none"><div class="spinner"></div><span id="urlLoadingText">Submitting to VirusTotal…</span></div>
       <div id="urlResults" style="display:none"></div>
-      <div class="empty" id="urlEmpty"><div class="icon">🔗</div><div class="title">Paste a suspicious URL to scan it</div><div class="sub">Checks against 90+ antivirus and URL reputation engines — requires a free VirusTotal API key</div></div>
+      <div class="empty" id="urlEmpty"><div class="icon">🔗</div><div class="title">Paste a suspicious URL to scan it</div><div class="sub">Opens VirusTotal in a new tab — no API key needed</div></div>
     </div>
 
     <!-- ═══ VIEW: HASH CHECK ═══ -->
@@ -704,8 +696,8 @@ code{font-family:var(--font-mono);font-size:11px;background:var(--bg-code);paddi
           <div><div class="section-title">Attachment Hash Checker</div><div class="section-sub">Check a file hash (MD5/SHA-1/SHA-256) against VirusTotal — no file upload needed</div></div>
         </div>
         <div class="api-key-row">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;color:var(--amber)"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
-          <span>Uses the same VirusTotal API key as the URL Scanner — <a href="https://www.virustotal.com/gui/join-us" target="_blank">get a free key here</a></span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;color:var(--accent)"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span>Enter the hash below — opens VirusTotal directly in a new tab. No API key needed.</span>
         </div>
         <div class="label-row"><label>File Hash (MD5, SHA-1, or SHA-256)</label></div>
         <div class="input-row">
@@ -722,7 +714,7 @@ code{font-family:var(--font-mono);font-size:11px;background:var(--bg-code);paddi
       </div>
       <div class="loading-row" id="hashLoading" style="display:none"><div class="spinner"></div><span>Looking up hash on VirusTotal…</span></div>
       <div id="hashResults" style="display:none"></div>
-      <div class="empty" id="hashEmpty"><div class="icon">🔐</div><div class="title">Enter a file hash to check it against VirusTotal</div><div class="sub">MD5, SHA-1, or SHA-256 — no file upload, just the hash. Safe to check from any device.</div></div>
+      <div class="empty" id="hashEmpty"><div class="icon">🔐</div><div class="title">Enter a file hash to check it</div><div class="sub">MD5, SHA-1, or SHA-256 — opens VirusTotal in a new tab. No API key needed.</div></div>
     </div>
 
     <!-- ═══ VIEW: POWERSHELL GENERATOR ═══ -->
@@ -1447,65 +1439,40 @@ function loadVtKey() {
   try { const k=localStorage.getItem('esc_vt_key'); if(k) document.getElementById('vtApiKey').value=k; } catch {}
 }
 
-async function runUrlScan() {
+function runUrlScan() {
   const url = document.getElementById('urlInput').value.trim();
-  const key = document.getElementById('vtApiKey').value.trim();
   if (!url) return;
-  if (!key) { alert('Please enter your VirusTotal API key first. Get a free key at virustotal.com'); return; }
 
-  document.getElementById('urlResults').style.display='none';
   document.getElementById('urlEmpty').style.display='none';
-  document.getElementById('urlRunBtn').disabled=true;
-  document.getElementById('urlLoading').style.display='flex';
-  document.getElementById('urlLoadingText').textContent='Submitting URL to VirusTotal…';
+  document.getElementById('urlResults').style.display='none';
 
+  // Encode URL to base64 for VT direct link
+  let vtUrl;
   try {
-    // Submit URL
-    const vtBody = new URLSearchParams();
-    vtBody.append('url', url);
-    const submitResp = await fetch('https://www.virustotal.com/api/v3/urls', {
-      method:'POST',
-      headers:{ 'x-apikey':key },
-      body: vtBody
-    });
-    if (!submitResp.ok) throw new Error('Submit failed: '+submitResp.status);
-    const submitData = await submitResp.json();
-    const analysisId = submitData.data?.id;
-
-    // Poll for results
-    document.getElementById('urlLoadingText').textContent='Waiting for analysis results…';
-    let result = null;
-    for (let i=0;i<8;i++) {
-      await new Promise(r=>setTimeout(r,3000));
-      const r = await fetch(`https://www.virustotal.com/api/v3/analyses/${analysisId}`,
-        { headers:{ 'x-apikey':key } });
-      const d = await r.json();
-      if (d.data?.attributes?.status === 'completed') { result = d.data.attributes; break; }
-      document.getElementById('urlLoadingText').textContent=`Analyzing… (${(i+1)*3}s)`;
-    }
-    document.getElementById('urlLoading').style.display='none';
-    document.getElementById('urlRunBtn').disabled=false;
-
-    if (!result) { document.getElementById('urlResults').innerHTML='<div class="api-key-row">Analysis timed out. Try again or check directly on virustotal.com.</div>'; document.getElementById('urlResults').style.display=''; return; }
-
-    renderUrlResult(url, result);
+    const b64 = btoa(url).replace(/=/g, '');
+    vtUrl = `https://www.virustotal.com/gui/url/${b64}/detection`;
   } catch(e) {
-    document.getElementById('urlLoading').style.display='none';
-    document.getElementById('urlRunBtn').disabled=false;
-    const isFileProt = window.location.protocol === 'file:';
-    console.error('VT URL scan error:', e);
-    const vtLink = `https://www.virustotal.com/gui/home/url`;
-    const msg = isFileProt
-      ? `<div style="font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:6px">⚠️ CORS restriction — open via web server to use this feature</div>
-         <div style="font-size:12px;color:var(--text-secondary);line-height:1.7;margin-bottom:10px">Browsers block direct API calls when opening an HTML file locally. This feature works when the tool is served from <strong>GitHub Pages</strong> or any web server.</div>
-         <div style="font-size:12px;color:var(--text-secondary);margin-bottom:10px">In the meantime, check the URL directly on VirusTotal:</div>
-         <a href="${vtLink}" target="_blank" class="run-btn" style="display:inline-flex;text-decoration:none">Open VirusTotal ↗</a>`
-      : `<div style="font-size:13px;font-weight:600;color:var(--red);margin-bottom:4px">Error: ${e.message}</div>
-         <div style="font-size:12px;color:var(--text-secondary);margin-top:6px">Possible causes: incorrect API key, rate limit exceeded (4 req/min on free tier), or a temporary VirusTotal outage.</div>
-         <div style="font-size:12px;margin-top:8px"><a href="https://www.virustotal.com/gui/my-apikey" target="_blank" style="color:var(--accent)">Check your API key ↗</a> &nbsp;·&nbsp; <a href="https://www.virustotal.com/gui/home/url" target="_blank" style="color:var(--accent)">Open VirusTotal directly ↗</a></div>`;
-    document.getElementById('urlResults').innerHTML=`<div class="vt-result">${msg}</div>`;
-    document.getElementById('urlResults').style.display='';
+    vtUrl = `https://www.virustotal.com/gui/home/url`;
   }
+
+  const html = `<div class="vt-result">
+    <div style="font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:10px">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" style="vertical-align:-2px;margin-right:5px"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+      Ready to scan
+    </div>
+    <div style="font-family:var(--font-mono);font-size:11px;color:var(--text-dim);background:var(--bg-code);padding:8px 12px;border-radius:var(--radius-sm);border:1px solid var(--border);margin-bottom:14px;word-break:break-all">${url.slice(0,120)}${url.length>120?'…':''}</div>
+    <div style="font-size:12px;color:var(--text-secondary);margin-bottom:14px;line-height:1.7">
+      Click below to check this URL against 90+ antivirus engines on VirusTotal. The result page opens in a new tab — no API key required.
+    </div>
+    <a href="${vtUrl}" target="_blank" rel="noopener noreferrer" class="run-btn" style="display:inline-flex;text-decoration:none;margin-right:8px">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      Check on VirusTotal ↗
+    </a>
+    <div style="font-size:11px;color:var(--text-dim);margin-top:12px">Results open directly on virustotal.com showing all engine verdicts, URL category, and detection history.</div>
+  </div>`;
+
+  document.getElementById('urlResults').innerHTML = html;
+  document.getElementById('urlResults').style.display = '';
 }
 
 function renderUrlResult(url, r) {
@@ -1552,49 +1519,34 @@ function renderUrlResult(url, r) {
 // ══════════════════════════════════════════════
 //  VIRUSTOTAL — HASH CHECKER
 // ══════════════════════════════════════════════
-async function runHashCheck() {
+function runHashCheck() {
   const hash = document.getElementById('hashInput').value.trim().toLowerCase();
-  const key = document.getElementById('vtApiKey').value.trim() || (function(){try{return localStorage.getItem('esc_vt_key')||'';}catch{return '';}}());
   if (!hash) return;
-  if (!key) { alert('Please enter your VirusTotal API key in the URL Scanner tab first.'); setView('urlscan'); return; }
 
-  document.getElementById('hashResults').style.display='none';
   document.getElementById('hashEmpty').style.display='none';
-  document.getElementById('hashRunBtn').disabled=true;
-  document.getElementById('hashLoading').style.display='flex';
+  document.getElementById('hashResults').style.display='none';
 
-  try {
-    const resp = await fetch(`https://www.virustotal.com/api/v3/files/${hash}`,
-      { headers:{ 'x-apikey':key } });
-    document.getElementById('hashLoading').style.display='none';
-    document.getElementById('hashRunBtn').disabled=false;
+  const vtUrl = `https://www.virustotal.com/gui/file/${hash}/detection`;
 
-    if (resp.status===404) {
-      document.getElementById('hashResults').innerHTML='<div class="vt-result"><div style="color:var(--text-secondary);font-size:13px">Hash not found in VirusTotal database. The file has not been submitted before, or the hash is incorrect.</div></div>';
-      document.getElementById('hashResults').style.display='';
-      return;
-    }
-    if (!resp.ok) throw new Error('API error: '+resp.status);
+  const html = `<div class="vt-result">
+    <div style="font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:10px">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" style="vertical-align:-2px;margin-right:5px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      Ready to check
+    </div>
+    <div style="font-family:var(--font-mono);font-size:11px;color:var(--text-dim);background:var(--bg-code);padding:8px 12px;border-radius:var(--radius-sm);border:1px solid var(--border);margin-bottom:14px;word-break:break-all">${hash}</div>
+    <div style="font-size:12px;color:var(--text-secondary);margin-bottom:14px;line-height:1.7">
+      Click below to look up this hash on VirusTotal. The result page opens in a new tab showing file name, type, detection history, and all engine verdicts.
+    </div>
+    <a href="${vtUrl}" target="_blank" rel="noopener noreferrer" class="run-btn" style="display:inline-flex;text-decoration:none">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      Check on VirusTotal ↗
+    </a>
+    <div style="font-size:11px;color:var(--text-dim);margin-top:12px">Opens virustotal.com — no API key needed. If the hash is not in their database, the page will say so.</div>
+  </div>`;
 
-    const data = (await resp.json()).data?.attributes;
-    renderHashResult(hash, data);
-  } catch(e) {
-    document.getElementById('hashLoading').style.display='none';
-    document.getElementById('hashRunBtn').disabled=false;
-    const isFileProt = window.location.protocol === 'file:';
-    console.error('VT URL scan error:', e);
-    const msg = isFileProt
-      ? `<div style="font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:6px">⚠️ CORS restriction — open via web server to use this feature</div>
-         <div style="font-size:12px;color:var(--text-secondary);line-height:1.7;margin-bottom:10px">Browsers block direct API calls when opening an HTML file locally. This works when served from <strong>GitHub Pages</strong> or any web server.</div>
-         <a href="https://www.virustotal.com/gui/home/search" target="_blank" class="run-btn" style="display:inline-flex;text-decoration:none">Search on VirusTotal ↗</a>`
-      : `<div style="font-size:13px;font-weight:600;color:var(--red);margin-bottom:4px">Error: ${e.message}</div>
-         <div style="font-size:12px;color:var(--text-secondary);margin-top:6px">Possible causes: incorrect API key, rate limit exceeded, or the hash format is wrong (MD5/SHA-1/SHA-256 only).</div>
-         <div style="font-size:12px;margin-top:8px"><a href="https://www.virustotal.com/gui/my-apikey" target="_blank" style="color:var(--accent)">Check your API key ↗</a> &nbsp;·&nbsp; <a href="https://www.virustotal.com/gui/home/search" target="_blank" style="color:var(--accent)">Open VirusTotal directly ↗</a></div>`;
-    document.getElementById('hashResults').innerHTML=`<div class="vt-result">${msg}</div>`;
-    document.getElementById('hashResults').style.display='';
-  }
+  document.getElementById('hashResults').innerHTML = html;
+  document.getElementById('hashResults').style.display = '';
 }
-
 function renderHashResult(hash, a) {
   const stats=a.last_analysis_stats||{};
   const mal=stats.malicious||0, sus=stats.suspicious||0;
@@ -1901,15 +1853,7 @@ try {
 } catch {}
 loadVtKey();
 checkUrlParams();
-// Warn if opened as local file — VT API calls will be blocked by CORS
-if (window.location.protocol === 'file:') {
-  const corsBanner = `<div class="api-key-row" style="margin-bottom:14px">
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;color:var(--amber)"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-    <span>URL Scanner and Hash Checker require the tool to be served from a web server (e.g. GitHub Pages). API calls are blocked by the browser when opening a local file. All DNS features work normally.</span>
-  </div>`;
-  document.querySelector('#view-urlscan .section-card').insertAdjacentHTML('afterend', corsBanner);
-  document.querySelector('#view-hashcheck .section-card').insertAdjacentHTML('afterend', corsBanner);
-}
+
 </script>
 </body>
 </html>
