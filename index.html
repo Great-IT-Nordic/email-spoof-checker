@@ -1461,12 +1461,12 @@ async function runUrlScan() {
 
   try {
     // Submit URL
-    const vtForm = new FormData();
-    vtForm.append('url', url);
+    const vtBody = new URLSearchParams();
+    vtBody.append('url', url);
     const submitResp = await fetch('https://www.virustotal.com/api/v3/urls', {
       method:'POST',
       headers:{ 'x-apikey':key },
-      body: vtForm
+      body: vtBody
     });
     if (!submitResp.ok) throw new Error('Submit failed: '+submitResp.status);
     const submitData = await submitResp.json();
