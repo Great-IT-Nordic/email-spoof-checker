@@ -1,0 +1,1634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Email Spoof Checker · Great IT Nordic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg-root:#06080d;--bg-surface:#0b0f18;--bg-card:#0f1420;--bg-elevated:#151b2b;--bg-code:#080b12;
+  --border:#1a2035;--border-hover:#2a3555;
+  --text-primary:#e4e8f0;--text-secondary:#7a8599;--text-dim:#4a5568;
+  --accent:#3b82f6;--accent-glow:rgba(59,130,246,0.15);
+  --green:#34d399;--green-glow:rgba(52,211,153,0.15);
+  --amber:#f59e0b;--amber-glow:rgba(245,158,11,0.12);
+  --red:#ef4444;--red-glow:rgba(239,68,68,0.10);
+  --purple:#a78bfa;--purple-glow:rgba(167,139,250,0.12);
+  --font-body:'DM Sans',system-ui,sans-serif;
+  --font-mono:'IBM Plex Mono','Cascadia Code','Consolas',monospace;
+  --radius:10px;--radius-sm:6px;
+}
+[data-theme="light"]{
+  --bg-root:#f5f7fa;--bg-surface:#ffffff;--bg-card:#ffffff;--bg-elevated:#f0f2f5;--bg-code:#f6f8fa;
+  --border:#d1d9e0;--border-hover:#a8b5c4;
+  --text-primary:#1a202c;--text-secondary:#4a5568;--text-dim:#8899aa;
+  --accent:#2563eb;--accent-glow:rgba(37,99,235,0.1);
+  --green:#059669;--green-glow:rgba(5,150,105,0.1);
+  --amber:#d97706;--amber-glow:rgba(217,119,6,0.08);
+  --red:#dc2626;--red-glow:rgba(220,38,38,0.08);
+  --purple:#7c3aed;--purple-glow:rgba(124,58,237,0.08);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg-root);color:var(--text-primary);font-family:var(--font-body);line-height:1.5;}
+::-webkit-scrollbar{width:6px;height:6px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+::-webkit-scrollbar-thumb:hover{background:var(--border-hover);}
+
+/* ── LAYOUT ── */
+.app{display:flex;min-height:100vh;}
+.sidebar{width:280px;background:var(--bg-surface);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:50;transition:transform 0.3s;overflow-y:auto;}
+.sidebar.hidden{transform:translateX(-100%);}
+.main{flex:1;margin-left:280px;min-width:0;transition:margin-left 0.3s;}
+.main.full{margin-left:0;}
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:49;}
+.sidebar-overlay.visible{display:block;}
+
+/* ── SIDEBAR ── */
+.sidebar-header{padding:20px 16px 16px;border-bottom:1px solid var(--border);}
+.sidebar-logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;color:var(--text-primary);text-decoration:none;}
+.sidebar-logo svg{color:var(--accent);flex-shrink:0;}
+.sidebar-sub{font-size:11px;color:var(--text-dim);margin-top:4px;}
+.sidebar-brand{display:flex;align-items:center;gap:8px;text-decoration:none;padding:8px;border-radius:var(--radius-sm);margin-top:10px;transition:all 0.15s;border:1px solid transparent;}
+.sidebar-brand:hover{background:var(--accent-glow);border-color:rgba(59,130,246,0.2);}
+.sidebar-brand-icon{width:26px;height:26px;background:var(--accent);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.sidebar-brand-text{font-size:12px;font-weight:600;color:var(--text-secondary);}
+.sidebar-brand-sub{font-size:10px;color:var(--text-dim);}
+.sidebar-nav{flex:1;padding:10px 8px;}
+.nav-section-title{font-size:10px;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:1.5px;padding:12px 12px 6px;user-select:none;}
+.nav-item{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:var(--radius-sm);font-size:13px;color:var(--text-secondary);cursor:pointer;transition:all 0.15s;user-select:none;border:1px solid transparent;}
+.nav-item:hover{background:var(--bg-elevated);color:var(--text-primary);}
+.nav-item.active{background:var(--accent-glow);color:var(--accent);border-color:rgba(59,130,246,0.2);}
+.nav-item .badge{margin-left:auto;font-size:9px;font-weight:700;padding:2px 6px;border-radius:8px;background:var(--bg-elevated);color:var(--text-dim);text-transform:uppercase;letter-spacing:0.5px;}
+.nav-item.active .badge{background:rgba(59,130,246,0.15);color:var(--accent);}
+.nav-item .new-badge{font-size:9px;font-weight:700;padding:1px 5px;border-radius:4px;background:rgba(167,139,250,0.2);color:var(--purple);text-transform:uppercase;margin-left:auto;}
+.sidebar-footer{padding:12px 16px;border-top:1px solid var(--border);}
+.sidebar-links{display:flex;flex-direction:column;gap:3px;}
+.sidebar-link{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text-secondary);text-decoration:none;padding:5px 8px;border-radius:var(--radius-sm);transition:all 0.15s;}
+.sidebar-link:hover{color:var(--accent);background:var(--accent-glow);}
+
+/* ── TOOLBAR ── */
+.toolbar{display:flex;align-items:center;gap:12px;padding:12px 24px;border-bottom:1px solid var(--border);background:var(--bg-surface);position:sticky;top:0;z-index:40;}
+.toolbar-toggle{display:flex;background:none;border:1px solid var(--border);border-radius:var(--radius-sm);padding:6px 8px;color:var(--text-secondary);cursor:pointer;transition:all 0.15s;}
+.toolbar-toggle:hover{background:var(--bg-elevated);}
+.toolbar-title{font-size:15px;font-weight:700;color:var(--text-primary);}
+.toolbar-sub{font-size:12px;color:var(--text-dim);margin-left:2px;}
+.toolbar-actions{display:flex;gap:8px;margin-left:auto;align-items:center;}
+.tool-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-secondary);font-size:12px;font-family:var(--font-body);font-weight:500;cursor:pointer;transition:all 0.15s;white-space:nowrap;}
+.tool-btn:hover{background:var(--bg-elevated);color:var(--text-primary);border-color:var(--border-hover);}
+.tool-btn.primary{background:var(--accent);color:#fff;border-color:var(--accent);}
+.tool-btn.primary:hover{opacity:0.88;}
+.tool-btn.green{background:rgba(52,211,153,0.12);color:var(--green);border-color:rgba(52,211,153,0.25);}
+.tool-btn.green:hover{background:rgba(52,211,153,0.2);}
+
+/* ── CONTENT ── */
+.content{padding:20px 24px 80px;max-width:940px;}
+.view{display:none;}
+.view.active{display:block;animation:fadeIn 0.15s ease;}
+
+/* ── SECTION CARDS ── */
+.section-card{background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px 22px;margin-bottom:20px;}
+.section-header{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+.section-title{font-size:14px;font-weight:700;color:var(--text-primary);}
+.section-sub{font-size:12px;color:var(--text-dim);margin-top:2px;}
+
+/* ── INPUTS ── */
+.input-row{display:flex;gap:8px;align-items:flex-start;}
+.param-input{flex:1;padding:9px 12px;background:var(--bg-code);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--accent);font-size:13px;font-family:var(--font-mono);outline:none;width:100%;transition:border-color 0.15s;}
+.param-input:focus{border-color:var(--accent);}
+.param-input::placeholder{color:var(--text-dim);}
+textarea.param-input{min-height:110px;resize:vertical;line-height:1.6;color:var(--text-primary);font-size:11.5px;}
+.input-hint{font-size:11px;color:var(--text-dim);margin-top:8px;line-height:1.65;}
+.run-btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;background:var(--accent);border:none;border-radius:var(--radius-sm);color:#fff;font-size:13px;font-family:var(--font-body);font-weight:600;cursor:pointer;transition:opacity 0.15s;white-space:nowrap;flex-shrink:0;}
+.run-btn:hover{opacity:0.88;}
+.run-btn:disabled{opacity:0.35;cursor:not-allowed;}
+
+/* Tab switcher */
+.tab-row{display:flex;gap:4px;margin-bottom:16px;}
+.tab-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-secondary);font-size:12px;font-family:var(--font-body);font-weight:500;cursor:pointer;transition:all 0.15s;}
+.tab-btn:hover{border-color:var(--border-hover);color:var(--text-primary);}
+.tab-btn.active{background:var(--accent-glow);color:var(--accent);border-color:rgba(59,130,246,0.3);}
+
+/* ── LOADING ── */
+.loading-row{display:flex;align-items:center;gap:10px;padding:14px 0;font-size:13px;color:var(--text-dim);}
+.spinner{width:15px;height:15px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 0.7s linear infinite;flex-shrink:0;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* ── VERDICT ── */
+.verdict-card{border-radius:var(--radius);padding:14px 18px;display:flex;align-items:center;gap:14px;margin-bottom:14px;border:1px solid;}
+.verdict-card.pass{background:var(--green-glow);border-color:rgba(52,211,153,0.25);}
+.verdict-card.warn{background:var(--amber-glow);border-color:rgba(245,158,11,0.22);}
+.verdict-card.fail{background:var(--red-glow);border-color:rgba(239,68,68,0.22);}
+.verdict-icon{font-size:24px;flex-shrink:0;}
+.verdict-title{font-size:14px;font-weight:700;color:var(--text-primary);}
+.verdict-sub{font-size:12px;color:var(--text-secondary);margin-top:1px;}
+.verdict-score{margin-left:auto;font-family:var(--font-mono);font-size:20px;font-weight:600;flex-shrink:0;}
+.verdict-score.pass{color:var(--green);}
+.verdict-score.warn{color:var(--amber);}
+.verdict-score.fail{color:var(--red);}
+
+/* ── STATS BAR ── */
+.stats-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;}
+.stat-chip{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;border:1px solid;}
+.stat-chip.pass{background:rgba(52,211,153,0.08);color:var(--green);border-color:rgba(52,211,153,0.2);}
+.stat-chip.warn{background:rgba(245,158,11,0.08);color:var(--amber);border-color:rgba(245,158,11,0.2);}
+.stat-chip.fail{background:rgba(239,68,68,0.08);color:var(--red);border-color:rgba(239,68,68,0.2);}
+.stat-chip.info{background:var(--accent-glow);color:var(--accent);border-color:rgba(59,130,246,0.2);}
+
+/* ── CHECK CARDS ── */
+.cat-title{font-size:11px;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:1.5px;padding-bottom:8px;margin-bottom:8px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.check-card{border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-card);margin-bottom:4px;border-left:3px solid var(--text-dim);transition:all 0.15s;overflow:hidden;}
+.check-card:hover{border-color:var(--border-hover);}
+.check-card.pass{border-left-color:var(--green);}
+.check-card.warn{border-left-color:var(--amber);}
+.check-card.fail{border-left-color:var(--red);}
+.check-card.info{border-left-color:var(--accent);}
+.check-header{display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer;user-select:none;}
+.check-header:hover{background:rgba(255,255,255,0.012);}
+.check-icon{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;}
+.check-icon.pass{background:rgba(52,211,153,0.15);color:var(--green);}
+.check-icon.warn{background:rgba(245,158,11,0.15);color:var(--amber);}
+.check-icon.fail{background:rgba(239,68,68,0.15);color:var(--red);}
+.check-icon.info{background:var(--accent-glow);color:var(--accent);}
+.check-info{flex:1;min-width:0;}
+.check-name{font-size:13px;font-weight:600;color:var(--text-primary);}
+.check-desc{font-size:11px;color:var(--text-dim);margin-top:1px;}
+.risk-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;padding:2px 7px;border-radius:4px;flex-shrink:0;}
+.risk-pass{background:rgba(52,211,153,0.12);color:#34d399;border:1px solid rgba(52,211,153,0.25);}
+.risk-warn{background:rgba(245,158,11,0.10);color:#f59e0b;border:1px solid rgba(245,158,11,0.2);}
+.risk-fail{background:rgba(239,68,68,0.10);color:#ef4444;border:1px solid rgba(239,68,68,0.2);}
+.risk-info{background:var(--accent-glow);color:var(--accent);border:1px solid rgba(59,130,246,0.2);}
+.risk-dot{width:6px;height:6px;border-radius:50%;}
+.risk-pass .risk-dot{background:#34d399;}
+.risk-warn .risk-dot{background:#f59e0b;}
+.risk-fail .risk-dot{background:#ef4444;}
+.risk-info .risk-dot{background:var(--accent);}
+.chevron{transition:transform 0.2s;color:var(--text-dim);flex-shrink:0;}
+.check-card.expanded .chevron{transform:rotate(90deg);}
+.check-detail{padding:0 14px 14px;border-top:1px solid var(--border);display:none;}
+.check-card.expanded .check-detail{display:block;}
+.explain-box{margin-top:10px;padding:10px 14px;background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);}
+.explain-box .eb-title{font-size:10px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:5px;}
+.explain-box p{font-size:12px;color:var(--text-secondary);line-height:1.7;}
+.explain-box code{background:var(--bg-code);padding:1px 5px;border-radius:3px;font-family:var(--font-mono);font-size:11px;color:var(--green);}
+.detail-value{background:var(--bg-code);border:1px solid var(--border);border-radius:8px;padding:10px 14px;margin-top:8px;font-family:var(--font-mono);font-size:11px;color:var(--text-primary);overflow-x:auto;white-space:pre-wrap;line-height:1.6;word-break:break-all;position:relative;}
+.copy-float{position:absolute;top:7px;right:8px;}
+.rec-box{margin-top:8px;padding:10px 14px;background:linear-gradient(135deg,var(--amber-glow),transparent);border:1px solid rgba(245,158,11,0.2);border-radius:var(--radius-sm);font-size:12px;color:var(--text-secondary);line-height:1.65;}
+.rec-box b{color:var(--amber);}
+.rec-box code{background:var(--bg-code);padding:1px 5px;border-radius:3px;font-family:var(--font-mono);font-size:11px;color:var(--green);}
+
+/* ── COPY BTN ── */
+.cb{display:inline-flex;align-items:center;gap:4px;padding:4px 9px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg-elevated);color:var(--text-dim);font-size:11px;font-family:var(--font-body);font-weight:500;cursor:pointer;transition:all 0.15s;white-space:nowrap;}
+.cb:hover{color:var(--text-secondary);border-color:var(--border-hover);}
+.cb.copied{color:var(--green);border-color:rgba(52,211,153,0.3);}
+
+/* ── BULK CHECKER ── */
+.bulk-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:14px;}
+.bulk-table th{text-align:left;padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-dim);border-bottom:2px solid var(--border);}
+.bulk-table td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:middle;}
+.bulk-table tr:hover td{background:rgba(255,255,255,0.012);}
+.bulk-table .domain-cell{font-family:var(--font-mono);font-size:11px;color:var(--text-primary);}
+.bulk-pill{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;border:1px solid;}
+.bp-pass{background:rgba(52,211,153,0.08);color:var(--green);border-color:rgba(52,211,153,0.2);}
+.bp-warn{background:rgba(245,158,11,0.08);color:var(--amber);border-color:rgba(245,158,11,0.2);}
+.bp-fail{background:rgba(239,68,68,0.08);color:var(--red);border-color:rgba(239,68,68,0.2);}
+.bp-pend{background:var(--bg-elevated);color:var(--text-dim);border-color:var(--border);}
+.bulk-progress{height:3px;background:var(--border);border-radius:2px;margin-bottom:14px;overflow:hidden;}
+.bulk-progress-bar{height:100%;background:var(--accent);border-radius:2px;transition:width 0.3s;}
+.bulk-summary{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+
+/* ── HISTORY ── */
+.history-entry{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:8px;transition:all 0.15s;}
+.history-entry:hover{border-color:var(--border-hover);}
+.history-header{display:flex;align-items:center;gap:12px;}
+.history-domain{font-family:var(--font-mono);font-size:13px;font-weight:600;color:var(--text-primary);}
+.history-time{font-size:11px;color:var(--text-dim);}
+.history-pills{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px;}
+.history-change{font-size:11px;padding:4px 10px;border-radius:var(--radius-sm);background:rgba(167,139,250,0.1);color:var(--purple);border:1px solid rgba(167,139,250,0.2);margin-top:6px;display:inline-flex;align-items:center;gap:5px;}
+
+/* ── URL SCANNER ── */
+.vt-result{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-top:12px;}
+.vt-score-row{display:flex;align-items:center;gap:16px;margin-bottom:14px;}
+.vt-score-circle{width:64px;height:64px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;border:3px solid;flex-shrink:0;}
+.vt-score-circle.clean{border-color:var(--green);background:var(--green-glow);}
+.vt-score-circle.suspicious{border-color:var(--amber);background:var(--amber-glow);}
+.vt-score-circle.malicious{border-color:var(--red);background:var(--red-glow);}
+.vt-score-num{font-family:var(--font-mono);font-size:18px;font-weight:700;}
+.vt-score-lbl{font-size:9px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.5px;}
+.vt-engines{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:6px;margin-top:10px;max-height:240px;overflow-y:auto;}
+.vt-engine{display:flex;align-items:center;gap:8px;padding:6px 10px;background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);font-size:11px;}
+.vt-engine-name{flex:1;color:var(--text-secondary);font-weight:500;}
+.vt-engine-result{font-family:var(--font-mono);font-size:10px;}
+.vt-engine.mal .vt-engine-result{color:var(--red);}
+.vt-engine.clean .vt-engine-result{color:var(--green);}
+.vt-engine.undetected .vt-engine-result{color:var(--text-dim);}
+.api-key-row{display:flex;gap:8px;align-items:center;padding:10px 14px;background:var(--amber-glow);border:1px solid rgba(245,158,11,0.2);border-radius:var(--radius-sm);margin-bottom:14px;font-size:12px;color:var(--text-secondary);}
+.api-key-row a{color:var(--amber);text-decoration:none;}
+.api-key-row a:hover{text-decoration:underline;}
+
+/* ── HASH CHECKER ── */
+.hash-meta{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin-top:10px;}
+.hash-meta-item{background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;}
+.hash-meta-lbl{font-size:10px;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;}
+.hash-meta-val{font-family:var(--font-mono);font-size:11px;color:var(--text-primary);word-break:break-all;}
+
+/* ── POWERSHELL GENERATOR ── */
+.ps-output{background:var(--bg-code);border:1px solid var(--border);border-radius:var(--radius);padding:16px;font-family:var(--font-mono);font-size:12px;line-height:1.75;overflow-x:auto;white-space:pre-wrap;position:relative;min-height:80px;}
+.ps-comment{color:var(--text-dim);}
+.ps-cmdlet{color:#60a5fa;}
+.ps-param{color:#a78bfa;}
+.ps-string{color:#86efac;}
+.ps-variable{color:#fbbf24;}
+.ps-section{color:var(--green);font-weight:600;}
+.ps-empty{color:var(--text-dim);font-style:italic;font-family:var(--font-body);font-size:13px;text-align:center;padding:20px;}
+.fix-required{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:var(--red-glow);border:1px solid rgba(239,68,68,0.2);border-radius:var(--radius-sm);font-size:11px;color:var(--red);margin-bottom:12px;}
+
+/* ── GUIDE PANELS ── */
+.guide-toggle{display:flex;align-items:center;gap:10px;padding:13px 16px;background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;margin-bottom:12px;transition:all 0.2s;}
+.guide-toggle:hover{border-color:var(--accent);background:var(--accent-glow);}
+.guide-toggle .g-icon{font-size:17px;flex-shrink:0;}
+.guide-toggle .g-label{font-size:14px;font-weight:600;color:var(--text-primary);}
+.guide-toggle .g-sub{font-size:12px;color:var(--text-secondary);margin-left:auto;}
+.guide-toggle .g-chev{color:var(--text-dim);transition:transform 0.2s;flex-shrink:0;}
+.guide-toggle.open .g-chev{transform:rotate(90deg);}
+.guide-panel{display:none;background:var(--bg-card);border:1px solid var(--border);border-top:none;border-radius:0 0 var(--radius) var(--radius);padding:20px;margin-bottom:20px;}
+.guide-panel.visible{display:block;animation:slideDown 0.2s ease;}
+.guide-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:16px;}
+.guide-tab{padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer;color:var(--text-dim);border-bottom:2px solid transparent;transition:all 0.15s;background:none;border-top:none;border-left:none;border-right:none;font-family:var(--font-body);}
+.guide-tab:hover{color:var(--text-secondary);}
+.guide-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+.guide-pane{display:none;}
+.guide-pane.active{display:block;animation:fadeIn 0.15s ease;}
+.guide-section{background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:8px;}
+.guide-section h5{font-size:13px;font-weight:700;color:var(--accent);margin-bottom:8px;}
+.guide-section p,.guide-section li{font-size:12px;color:var(--text-secondary);line-height:1.75;}
+.guide-section ul,.guide-section ol{padding-left:18px;}
+.guide-section li{margin-bottom:3px;}
+.guide-section code{background:var(--bg-code);padding:1px 5px;border-radius:3px;font-family:var(--font-mono);font-size:11px;color:var(--green);}
+.guide-section pre{background:var(--bg-code);padding:10px 14px;border-radius:var(--radius-sm);border:1px solid var(--border);font-family:var(--font-mono);font-size:11px;color:var(--text-primary);overflow-x:auto;margin:8px 0;line-height:1.6;white-space:pre-wrap;}
+.note{font-size:11px;color:var(--text-dim);margin-top:8px;font-style:italic;}
+.spoofed-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:8px;}
+.spoof-sign{background:var(--bg-code);border:1px solid var(--border);border-left:3px solid var(--red);border-radius:var(--radius-sm);padding:10px 12px;}
+.spoof-sign.amber{border-left-color:var(--amber);}
+.spoof-sign h6{font-size:12px;font-weight:700;color:var(--text-primary);margin-bottom:4px;}
+.spoof-sign p{font-size:12px;color:var(--text-secondary);line-height:1.6;}
+.spoof-sign code{background:var(--bg-elevated);padding:1px 4px;border-radius:3px;font-family:var(--font-mono);font-size:11px;color:var(--text-secondary);}
+
+/* ── EMPTY STATE ── */
+.empty{text-align:center;padding:48px 20px;color:var(--text-dim);}
+.empty .icon{font-size:36px;margin-bottom:10px;opacity:0.5;}
+.empty .title{font-size:14px;color:var(--text-secondary);margin-bottom:4px;}
+.empty .sub{font-size:12px;}
+
+/* ── FOOTER ── */
+.app-footer{padding:22px;border-top:1px solid var(--border);text-align:center;font-size:11px;color:var(--text-dim);}
+.app-footer a{color:var(--text-secondary);text-decoration:none;}
+.app-footer a:hover{color:var(--accent);}
+.footer-brand{display:inline-flex;align-items:center;gap:8px;margin-bottom:8px;text-decoration:none;}
+.footer-brand-icon{width:28px;height:28px;background:var(--accent);border-radius:7px;display:flex;align-items:center;justify-content:center;}
+.footer-brand-name{font-size:13px;font-weight:700;color:var(--text-secondary);}
+
+/* ── BACK TO TOP ── */
+.back-to-top{position:fixed;bottom:22px;right:22px;z-index:60;width:38px;height:38px;border-radius:50%;background:var(--accent);color:#fff;border:none;cursor:pointer;display:none;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,0.3);transition:all 0.3s;}
+.back-to-top.visible{display:flex;}
+.back-to-top:hover{transform:translateY(-2px);}
+
+/* ── UTILS ── */
+code{font-family:var(--font-mono);font-size:11px;background:var(--bg-code);padding:2px 5px;border-radius:3px;color:var(--green);}
+.divider{height:1px;background:var(--border);margin:16px 0;}
+.label-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.label-row label{font-size:12px;font-weight:600;color:var(--text-secondary);}
+@media(max-width:860px){.sidebar{transform:translateX(-100%);}.sidebar.visible{transform:translateX(0);}.main{margin-left:0;}}
+@keyframes slideDown{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="sidebar-overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+<!-- ═══ SIDEBAR ═══ -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <a class="sidebar-logo" href="https://great-it-nordic.github.io/m365-ps-toolkit/" target="_blank">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      Email Spoof Checker
+    </a>
+    <div class="sidebar-sub">Great IT Nordic · Security Tools v2.0</div>
+    <a class="sidebar-brand" href="https://great-it-nordic.github.io/m365-ps-toolkit/" target="_blank">
+      <div class="sidebar-brand-icon">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+      </div>
+      <div><div class="sidebar-brand-text">Great IT Nordic</div><div class="sidebar-brand-sub">M365 PS Toolkit →</div></div>
+    </a>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-section-title">Check Mode</div>
+    <div class="nav-item active" id="nav-domain" onclick="setView('domain')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      Domain DNS Check
+      <span class="badge">SPF·DMARC·DKIM</span>
+    </div>
+    <div class="nav-item" id="nav-headers" onclick="setView('headers')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      Header Analysis
+      <span class="badge">Raw Headers</span>
+    </div>
+    <div class="nav-item" id="nav-bulk" onclick="setView('bulk')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+      Bulk Domain Checker
+      <span class="new-badge">NEW</span>
+    </div>
+    <div class="nav-item" id="nav-history" onclick="setView('history')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      History &amp; Changes
+      <span class="new-badge">NEW</span>
+    </div>
+    <div class="nav-item" id="nav-urlscan" onclick="setView('urlscan')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+      Phishing URL Scanner
+      <span class="new-badge">NEW</span>
+    </div>
+    <div class="nav-item" id="nav-hashcheck" onclick="setView('hashcheck')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      Attachment Hash Check
+      <span class="new-badge">NEW</span>
+    </div>
+    <div class="nav-item" id="nav-psgen" onclick="setView('psgen')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+      PowerShell Fix Generator
+      <span class="new-badge">NEW</span>
+    </div>
+
+    <div class="nav-section-title" style="margin-top:6px">Learn</div>
+    <div class="nav-item" onclick="openLearnPanel('records')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+      What are SPF/DKIM/DMARC?
+    </div>
+    <div class="nav-item" onclick="openLearnPanel('headers-guide')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      How to extract headers
+    </div>
+    <div class="nav-item" onclick="openLearnPanel('spoofed')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      Spotting a spoofed email
+    </div>
+
+    <div class="nav-section-title" style="margin-top:6px">Resources</div>
+    <div class="sidebar-links">
+      <a class="sidebar-link" href="https://great-it-nordic.github.io/m365-ps-toolkit/" target="_blank">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>M365 PS Toolkit
+      </a>
+      <a class="sidebar-link" href="https://github.com/great-it-nordic" target="_blank">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>GitHub
+      </a>
+      <a class="sidebar-link" href="https://mxtoolbox.com/" target="_blank">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/></svg>MXToolbox
+      </a>
+      <a class="sidebar-link" href="https://dmarcian.com/dmarc-inspector/" target="_blank">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>DMARC Inspector
+      </a>
+      <a class="sidebar-link" href="https://www.virustotal.com" target="_blank">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>VirusTotal
+      </a>
+    </div>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div style="font-size:11px;color:var(--text-dim);line-height:1.7;">DNS via Cloudflare DoH · VirusTotal API<br>No email data stored server-side</div>
+  </div>
+</aside>
+
+<!-- ═══ MAIN ═══ -->
+<div class="main" id="main">
+  <div class="toolbar">
+    <button class="toolbar-toggle" onclick="toggleSidebar()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+    <span class="toolbar-title">Email Spoof Checker</span>
+    <span class="toolbar-sub" id="toolbarSub">· Domain DNS Check</span>
+    <div class="toolbar-actions">
+      <button class="tool-btn" id="exportCsvBtn" onclick="exportCSV()" style="display:none">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Export CSV
+      </button>
+      <button class="tool-btn" id="clearBtn" onclick="clearCurrent()" style="display:none">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.51"/></svg>
+        Clear
+      </button>
+      <button class="tool-btn" id="themeBtn" onclick="toggleTheme()">☀ Light</button>
+    </div>
+  </div>
+
+  <div class="content" id="content">
+
+    <!-- ═══ VIEW: DOMAIN CHECK ═══ -->
+    <div class="view active" id="view-domain">
+      <!-- Learn panels -->
+      <div class="guide-toggle" id="gt-records" onclick="togglePanel('records')">
+        <span class="g-icon">📚</span><span class="g-label">What are SPF, DKIM, DMARC and MX records?</span>
+        <span class="g-sub">Learn</span>
+        <svg class="g-chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+      <div class="guide-panel" id="gp-records">
+        <div class="guide-tabs">
+          <button class="guide-tab active" onclick="switchTab(this,'spf-p')">SPF</button>
+          <button class="guide-tab" onclick="switchTab(this,'dkim-p')">DKIM</button>
+          <button class="guide-tab" onclick="switchTab(this,'dmarc-p')">DMARC</button>
+          <button class="guide-tab" onclick="switchTab(this,'mx-p')">MX</button>
+        </div>
+        <div id="spf-p" class="guide-pane active"><div class="guide-section"><h5>🛡️ SPF — Sender Policy Framework</h5>
+          <p><strong style="color:var(--text-primary)">What it does:</strong> SPF is a DNS TXT record listing which servers are authorized to send email on behalf of your domain. Receiving servers check the sending IP against this list.</p>
+          <pre>v=spf1 include:spf.protection.outlook.com -all</pre>
+          <p style="margin-top:8px"><strong style="color:var(--text-primary)">The <code>all</code> policy is critical:</strong></p>
+          <ul style="margin-top:5px"><li><code>-all</code> Hard fail — unauthorized servers rejected. <strong style="color:var(--green)">Best.</strong></li><li><code>~all</code> Soft fail — accepted but flagged as suspicious.</li><li><code>+all</code> Pass all — everyone allowed. <strong style="color:var(--red)">Never use this.</strong></li><li><code>?all</code> Neutral — no protection.</li></ul>
+          <p class="note">Without SPF: anyone can send email from your domain with no DNS check failing.</p>
+        </div></div>
+        <div id="dkim-p" class="guide-pane"><div class="guide-section"><h5>🔑 DKIM — DomainKeys Identified Mail</h5>
+          <p><strong style="color:var(--text-primary)">What it does:</strong> DKIM adds a cryptographic signature to outgoing email. The receiving server verifies it using a public key in DNS. Tampering breaks the signature.</p>
+          <pre>selector1._domainkey.contoso.com TXT "v=DKIM1; k=rsa; p=MIGf..."</pre>
+          <ul style="margin-top:8px"><li><strong>Selector</strong> — a label allowing multiple keys (Exchange uses <code>selector1</code>/<code>selector2</code>, Google uses <code>google</code>)</li><li><strong>Signing</strong> — private key signs emails; only your server holds it</li><li><strong>Verification</strong> — receiver fetches public key from DNS and checks the signature</li></ul>
+          <p class="note">Without DKIM: emails can be forged or altered in transit without detection.</p>
+        </div></div>
+        <div id="dmarc-p" class="guide-pane"><div class="guide-section"><h5>🏛️ DMARC — Domain-based Message Authentication, Reporting &amp; Conformance</h5>
+          <p><strong style="color:var(--text-primary)">What it does:</strong> DMARC tells receivers what to do with email that fails SPF/DKIM. It also enables reporting — you receive XML reports showing who sends on your behalf.</p>
+          <pre>_dmarc.contoso.com TXT "v=DMARC1; p=reject; rua=mailto:dmarc@contoso.com"</pre>
+          <ul style="margin-top:8px"><li><code>p=none</code> Monitor only — failing emails still delivered</li><li><code>p=quarantine</code> Failing mail → spam/junk folder</li><li><code>p=reject</code> Failing mail blocked outright <strong style="color:var(--green)">(goal)</strong></li></ul>
+          <p class="note">Path: none → quarantine → reject. Without DMARC there is no enforcement regardless of SPF/DKIM.</p>
+        </div></div>
+        <div id="mx-p" class="guide-pane"><div class="guide-section"><h5>📬 MX — Mail Exchanger Records</h5>
+          <p><strong style="color:var(--text-primary)">What it does:</strong> MX records tell the world where to deliver inbound email for your domain.</p>
+          <pre>contoso.com MX 10 contoso-com.mail.protection.outlook.com</pre>
+          <ul style="margin-top:8px"><li>Exchange Online: ends in <code>.mail.protection.outlook.com</code></li><li>Google Workspace: <code>aspmx.l.google.com</code></li><li>No MX = domain can't receive email — but CAN still be used in a spoofed From address</li></ul>
+          <p class="note">Non-sending domains should still publish <code>v=spf1 -all</code> and DMARC <code>p=reject</code> to block abuse of their name.</p>
+        </div></div>
+      </div>
+
+      <div class="guide-toggle" id="gt-headers-guide" onclick="togglePanel('headers-guide')">
+        <span class="g-icon">📋</span><span class="g-label">How to extract email headers from Outlook, Gmail &amp; others</span>
+        <span class="g-sub">Learn</span>
+        <svg class="g-chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+      <div class="guide-panel" id="gp-headers-guide">
+        <div class="guide-tabs">
+          <button class="guide-tab active" onclick="switchTab(this,'h-ew')">Outlook Desktop</button>
+          <button class="guide-tab" onclick="switchTab(this,'h-owa')">OWA</button>
+          <button class="guide-tab" onclick="switchTab(this,'h-gm')">Gmail</button>
+          <button class="guide-tab" onclick="switchTab(this,'h-am')">Apple Mail</button>
+        </div>
+        <div id="h-ew" class="guide-pane active"><div class="guide-section"><h5>🖥️ Outlook Desktop (Windows)</h5>
+          <ol><li>Open the email.</li><li>Go to <strong style="color:var(--text-primary)">File → Properties</strong> (or press <code>Alt+Enter</code>).</li><li>Scroll to the <strong style="color:var(--text-primary)">Internet headers</strong> box at the bottom.</li><li>Click inside → <code>Ctrl+A</code> → <code>Ctrl+C</code>.</li><li>Paste into the Header Analysis tab.</li></ol>
+          <p class="note">New Outlook for Windows: open email in a new window first (double-click), then File → Properties.</p>
+        </div></div>
+        <div id="h-owa" class="guide-pane"><div class="guide-section"><h5>🌐 Outlook Web Access (OWA)</h5>
+          <ol><li>Open the email in OWA.</li><li>Click <strong style="color:var(--text-primary)">⋯ (three dots)</strong> top-right of the email.</li><li>Select <strong style="color:var(--text-primary)">"View message source"</strong> or <strong style="color:var(--text-primary)">"View message details"</strong>.</li><li>Copy the headers section (everything before the first blank line).</li></ol>
+        </div></div>
+        <div id="h-gm" class="guide-pane"><div class="guide-section"><h5>📧 Gmail</h5>
+          <ol><li>Open the email in Gmail.</li><li>Click <strong style="color:var(--text-primary)">⋮ (three dots)</strong> next to the Reply button.</li><li>Select <strong style="color:var(--text-primary)">"Show original"</strong>.</li><li>Click <strong style="color:var(--text-primary)">"Copy to clipboard"</strong> at the top of the new tab.</li><li>Paste into the Header Analysis tab.</li></ol>
+          <p class="note">Gmail's Show original page also has a built-in SPF/DKIM/DMARC summary at the top.</p>
+        </div></div>
+        <div id="h-am" class="guide-pane"><div class="guide-section"><h5>🍎 Apple Mail</h5>
+          <ol><li>Open the email.</li><li>Menu: <strong style="color:var(--text-primary)">View → Message → All Headers</strong> (or <code>Shift+Cmd+H</code>).</li><li>Select and copy all header text.</li><li>Paste into the Header Analysis tab.</li></ol>
+        </div></div>
+      </div>
+
+      <div class="guide-toggle" id="gt-spoofed" onclick="togglePanel('spoofed')">
+        <span class="g-icon">🚨</span><span class="g-label">What to look for in a spoofed or phishing email</span>
+        <span class="g-sub">Learn</span>
+        <svg class="g-chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+      <div class="guide-panel" id="gp-spoofed">
+        <p style="font-size:12px;color:var(--text-secondary);margin-bottom:12px">Common warning signs — you do not need to be technical to spot most of these.</p>
+        <div class="spoofed-grid">
+          <div class="spoof-sign"><h6>🔍 From address looks right but isn't</h6><p>Lookalike domains: <code>contoso.com</code> vs <code>contoso-secure.com</code>. Always reveal the actual email address behind the display name.</p></div>
+          <div class="spoof-sign"><h6>↩️ Reply goes to a different domain</h6><p>The From says <code>hr@contoso.com</code> but Reply-To is <code>payroll@gmail.com</code>. Replies go to the attacker. This tool checks for this automatically.</p></div>
+          <div class="spoof-sign"><h6>⚡ Manufactured urgency</h6><p>"Your account suspends in 24h", "Urgent CEO request". Pressure to act fast without thinking is one of the most reliable phishing signals.</p></div>
+          <div class="spoof-sign"><h6>🔗 Links don't go where they say</h6><p>Hover before clicking. Display text says <code>microsoft.com</code>, real link goes to <code>micr0soft-login.ru</code>. On mobile, long-press to preview.</p></div>
+          <div class="spoof-sign amber"><h6>📎 Unexpected attachments</h6><p>Especially .zip, .iso, .html, .docm, .xlsm. Verify by phone before opening — even from known senders if the context is odd.</p></div>
+          <div class="spoof-sign amber"><h6>🏦 Requests for money or credentials</h6><p>Verify any request to change bank details, wire money, or share passwords by phone — using a number you already know, not one from the email.</p></div>
+          <div class="spoof-sign amber"><h6>✉️ Business email from free provider</h6><p>Legitimate businesses use their own domain. Email from <code>@gmail.com</code> or <code>@hotmail.com</code> claiming to be a supplier is always worth scrutinising.</p></div>
+          <div class="spoof-sign"><h6>🔐 Authentication failures in headers</h6><p>SPF, DKIM, or DMARC failing in Authentication-Results is the strongest technical indicator of spoofing. Exactly what this tool checks.</p></div>
+        </div>
+        <div class="guide-section" style="margin-top:12px"><h5>💡 Quick checklist before acting on a suspicious email</h5>
+          <ol><li>Does the email address exactly match the claimed company domain?</li><li>Was this email expected? Did anyone tell you it was coming?</li><li>Does the request make sense for this person's role?</li><li>Is there urgency or pressure to act without verifying?</li><li>Can you confirm by phone (using a known number) if money or credentials are involved?</li></ol>
+        </div>
+      </div>
+
+      <!-- Input -->
+      <div class="section-card">
+        <div class="section-header">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <div><div class="section-title" id="domainPanelTitle">Domain DNS Check</div><div class="section-sub" id="domainPanelSub">Live SPF, DMARC, DKIM and MX lookup via Cloudflare DNS-over-HTTPS</div></div>
+        </div>
+        <div class="tab-row">
+          <button class="tab-btn active" id="tab-domain" onclick="switchDomainMode('domain')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>Domain Check
+          </button>
+          <button class="tab-btn" id="tab-hdrs" onclick="switchDomainMode('headers')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>Header Analysis
+          </button>
+        </div>
+        <div id="domainArea">
+          <div class="input-row">
+            <input type="text" class="param-input" id="domainInput" placeholder="e.g. microsoft.com or contoso.onmicrosoft.com" onkeydown="if(event.key==='Enter')runDomain()">
+            <button class="run-btn" id="runDomainBtn" onclick="runDomain()">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>Analyze
+            </button>
+          </div>
+          <div class="input-hint">Enter any domain — no login required. DNS records are public. Example: <code>microsoft.com</code>, <code>google.com</code>, or your organization's domain.</div>
+        </div>
+        <div id="headerArea" style="display:none">
+          <textarea class="param-input" id="headerInput" placeholder="Paste full email headers here...&#10;&#10;Received: from mail.example.com...&#10;From: Sender &lt;sender@example.com&gt;&#10;Return-Path: &lt;bounce@otherdomain.com&gt;&#10;Reply-To: attacker@phishing.com&#10;Authentication-Results: mx.google.com; spf=fail; dkim=pass; dmarc=fail"></textarea>
+          <div class="input-row" style="margin-top:8px">
+            <button class="run-btn" onclick="runHeaders()">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>Analyze Headers
+            </button>
+          </div>
+          <div class="input-hint"><strong style="color:var(--text-secondary)">Get headers:</strong> Gmail → ⋮ → Show original · Outlook → File → Properties → Internet headers · OWA → ⋯ → View message source</div>
+        </div>
+      </div>
+
+      <div class="loading-row" id="domainLoading" style="display:none"><div class="spinner"></div><span id="loadingText">Querying DNS…</span></div>
+
+      <div id="domainResults" style="display:none">
+        <div id="domainVerdict" class="verdict-card pass"></div>
+        <div class="stats-bar" id="domainStats"></div>
+        <div class="cat-title">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span id="domainChecksLabel">Authentication Checks</span>
+          <span style="font-size:11px;font-weight:400;letter-spacing:0;text-transform:none;color:var(--text-dim)">(click to expand)</span>
+        </div>
+        <div id="domainChecksList"></div>
+        <div style="margin-top:14px">
+          <button class="tool-btn green" onclick="openPsGenFromResults()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            Generate PowerShell Fixes
+          </button>
+        </div>
+      </div>
+      <div class="empty" id="domainEmpty"><div class="icon">🔍</div><div class="title">Enter a domain or paste email headers</div><div class="sub">Use the learning panels above if you're not sure where to start</div></div>
+    </div>
+
+    <!-- ═══ VIEW: BULK ═══ -->
+    <div class="view" id="view-bulk">
+      <div class="section-card">
+        <div class="section-header">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+          <div><div class="section-title">Bulk Domain Checker</div><div class="section-sub">Check SPF, DMARC and DKIM for multiple domains at once — ideal for supplier audits or client portfolios</div></div>
+        </div>
+        <div class="label-row"><label>Domains (one per line, up to 50)</label></div>
+        <textarea class="param-input" id="bulkInput" style="min-height:130px" placeholder="microsoft.com&#10;google.com&#10;contoso.onmicrosoft.com&#10;supplier-company.se&#10;..."></textarea>
+        <div class="input-row" style="margin-top:10px;gap:8px">
+          <button class="run-btn" id="bulkRunBtn" onclick="runBulk()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>Run Bulk Check
+          </button>
+          <button class="tool-btn" id="bulkStopBtn" onclick="stopBulk()" style="display:none">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/></svg>Stop
+          </button>
+        </div>
+        <div class="input-hint">Results export to CSV automatically. Each domain runs sequentially to respect DNS rate limits (~3s per domain).</div>
+      </div>
+      <div id="bulkProgress" style="display:none">
+        <div class="bulk-progress"><div class="bulk-progress-bar" id="bulkBar" style="width:0%"></div></div>
+        <div class="loading-row" style="padding:0 0 12px"><div class="spinner"></div><span id="bulkStatusText">Checking…</span></div>
+      </div>
+      <div id="bulkSummary" class="bulk-summary" style="display:none"></div>
+      <div id="bulkTableWrap" style="display:none;overflow-x:auto">
+        <table class="bulk-table" id="bulkTable">
+          <thead><tr>
+            <th>Domain</th><th>SPF</th><th>DMARC</th><th>DKIM</th><th>MX</th><th>Score</th>
+          </tr></thead>
+          <tbody id="bulkTbody"></tbody>
+        </table>
+      </div>
+      <div class="empty" id="bulkEmpty"><div class="icon">📋</div><div class="title">Paste a list of domains to get started</div><div class="sub">One domain per line — great for supplier lists and client portfolios</div></div>
+    </div>
+
+    <!-- ═══ VIEW: HISTORY ═══ -->
+    <div class="view" id="view-history">
+      <div class="section-card" style="margin-bottom:12px">
+        <div class="section-header" style="margin-bottom:0">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <div><div class="section-title">Check History &amp; Change Detection</div><div class="section-sub">Results stored locally in your browser. Re-run a domain to detect configuration changes.</div></div>
+          <button class="tool-btn" onclick="clearHistory()" style="margin-left:auto;color:var(--red);border-color:rgba(239,68,68,0.2)">Clear All</button>
+        </div>
+      </div>
+      <div id="historyList"></div>
+      <div class="empty" id="historyEmpty"><div class="icon">🕐</div><div class="title">No history yet</div><div class="sub">Run a Domain Check — results are automatically saved here for change detection</div></div>
+    </div>
+
+    <!-- ═══ VIEW: URL SCANNER ═══ -->
+    <div class="view" id="view-urlscan">
+      <div class="section-card">
+        <div class="section-header">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          <div><div class="section-title">Phishing URL Scanner</div><div class="section-sub">Check a suspicious link against 90+ antivirus engines via VirusTotal</div></div>
+        </div>
+        <div class="api-key-row" id="vtKeyRow">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;color:var(--amber)"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+          <span>Requires a free VirusTotal API key — <a href="https://www.virustotal.com/gui/join-us" target="_blank">get one here (free)</a></span>
+        </div>
+        <div class="label-row"><label>VirusTotal API Key</label><span style="font-size:11px;color:var(--text-dim)">Stored in browser only</span></div>
+        <div class="input-row" style="margin-bottom:12px">
+          <input type="password" class="param-input" id="vtApiKey" placeholder="Paste your VirusTotal API key here" oninput="saveVtKey()">
+        </div>
+        <div class="label-row"><label>Suspicious URL</label></div>
+        <div class="input-row">
+          <input type="text" class="param-input" id="urlInput" placeholder="https://suspicious-link.example.com/login?redirect=..." onkeydown="if(event.key==='Enter')runUrlScan()">
+          <button class="run-btn" id="urlRunBtn" onclick="runUrlScan()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>Scan
+          </button>
+        </div>
+        <div class="input-hint">Copy the link from the suspicious email (do NOT visit it). Right-click → Copy link address in most email clients.</div>
+      </div>
+      <div class="loading-row" id="urlLoading" style="display:none"><div class="spinner"></div><span id="urlLoadingText">Submitting to VirusTotal…</span></div>
+      <div id="urlResults" style="display:none"></div>
+      <div class="empty" id="urlEmpty"><div class="icon">🔗</div><div class="title">Paste a suspicious URL to scan it</div><div class="sub">Checks against 90+ antivirus and URL reputation engines — requires a free VirusTotal API key</div></div>
+    </div>
+
+    <!-- ═══ VIEW: HASH CHECK ═══ -->
+    <div class="view" id="view-hashcheck">
+      <div class="section-card">
+        <div class="section-header">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <div><div class="section-title">Attachment Hash Checker</div><div class="section-sub">Check a file hash (MD5/SHA-1/SHA-256) against VirusTotal — no file upload needed</div></div>
+        </div>
+        <div class="api-key-row">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;color:var(--amber)"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+          <span>Uses the same VirusTotal API key as the URL Scanner — <a href="https://www.virustotal.com/gui/join-us" target="_blank">get a free key here</a></span>
+        </div>
+        <div class="label-row"><label>File Hash (MD5, SHA-1, or SHA-256)</label></div>
+        <div class="input-row">
+          <input type="text" class="param-input" id="hashInput" placeholder="e.g. 44d88612fea8a8f36de82e1278abb02f" onkeydown="if(event.key==='Enter')runHashCheck()">
+          <button class="run-btn" id="hashRunBtn" onclick="runHashCheck()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>Check
+          </button>
+        </div>
+        <div class="input-hint">
+          <strong style="color:var(--text-secondary)">How to get a file hash:</strong><br>
+          PowerShell: <code>Get-FileHash .\suspicious.docx | Select Algorithm,Hash</code><br>
+          Or right-click the file → Properties → Details tab (if hash tools are installed).
+        </div>
+      </div>
+      <div class="loading-row" id="hashLoading" style="display:none"><div class="spinner"></div><span>Looking up hash on VirusTotal…</span></div>
+      <div id="hashResults" style="display:none"></div>
+      <div class="empty" id="hashEmpty"><div class="icon">🔐</div><div class="title">Enter a file hash to check it against VirusTotal</div><div class="sub">MD5, SHA-1, or SHA-256 — no file upload, just the hash. Safe to check from any device.</div></div>
+    </div>
+
+    <!-- ═══ VIEW: POWERSHELL GENERATOR ═══ -->
+    <div class="view" id="view-psgen">
+      <div class="section-card">
+        <div class="section-header">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          <div><div class="section-title">PowerShell Fix Generator</div><div class="section-sub">Generates ready-to-run Exchange Online PowerShell and DNS record fixes based on what's missing or misconfigured</div></div>
+        </div>
+        <div class="label-row"><label>Domain to generate fixes for</label></div>
+        <div class="input-row">
+          <input type="text" class="param-input" id="psGenDomain" placeholder="e.g. contoso.com" onkeydown="if(event.key==='Enter')runPsGen()">
+          <button class="run-btn" id="psGenRunBtn" onclick="runPsGen()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>Generate
+          </button>
+        </div>
+        <div class="input-hint">First checks the domain live, then generates targeted fixes for everything that's missing or misconfigured. Also auto-loads results from a previous Domain Check if available.</div>
+      </div>
+      <div class="loading-row" id="psGenLoading" style="display:none"><div class="spinner"></div><span id="psGenLoadText">Scanning domain…</span></div>
+      <div id="psGenResults" style="display:none">
+        <div id="psGenFixBadge" class="fix-required" style="display:none">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <span id="psGenFixCount"></span>
+        </div>
+        <div class="label-row">
+          <label>Generated PowerShell &amp; DNS Fix Script</label>
+          <button class="cb" id="psCopyBtn" onclick="copyPsOutput()">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy Script
+          </button>
+        </div>
+        <div class="ps-output" id="psOutput"></div>
+      </div>
+      <div class="empty" id="psGenEmpty"><div class="icon">⚙️</div><div class="title">Enter a domain to generate targeted fixes</div><div class="sub">Scans the domain live and generates Exchange Online PowerShell commands and DNS records for everything that needs fixing</div></div>
+    </div>
+
+  </div><!-- /content -->
+
+  <!-- Footer -->
+  <div class="app-footer">
+    <div style="display:flex;justify-content:center;margin-bottom:8px">
+      <a class="footer-brand" href="https://great-it-nordic.github.io/m365-ps-toolkit/" target="_blank">
+        <div class="footer-brand-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+        <span class="footer-brand-name">Great IT Nordic</span>
+      </a>
+    </div>
+    Email Spoof Checker v2.0 · Part of the <a href="https://great-it-nordic.github.io/m365-ps-toolkit/" target="_blank">Great IT Nordic Security Toolset</a><br>
+    <span style="margin-top:4px;display:inline-block">DNS via <a href="https://cloudflare-dns.com" target="_blank">Cloudflare DoH</a> · Threat intel via <a href="https://virustotal.com" target="_blank">VirusTotal</a> · <a href="https://github.com/great-it-nordic" target="_blank">GitHub</a></span>
+  </div>
+</div>
+</div>
+
+<button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+</button>
+
+<script>
+// ══════════════════════════════════════════════
+//  THEME
+// ══════════════════════════════════════════════
+let dark = true;
+function toggleTheme() {
+  dark = !dark;
+  document.documentElement.setAttribute('data-theme', dark ? '' : 'light');
+  document.getElementById('themeBtn').textContent = dark ? '☀ Light' : '🌙 Dark';
+}
+
+// ══════════════════════════════════════════════
+//  SIDEBAR
+// ══════════════════════════════════════════════
+function toggleSidebar() {
+  const sb = document.getElementById('sidebar'), ov = document.getElementById('overlay'), main = document.getElementById('main');
+  if (window.innerWidth <= 860) { sb.classList.toggle('visible'); ov.classList.toggle('visible'); }
+  else { sb.classList.toggle('hidden'); main.classList.toggle('full'); }
+}
+
+// ══════════════════════════════════════════════
+//  VIEW ROUTING
+// ══════════════════════════════════════════════
+const viewTitles = {
+  domain: 'Domain DNS Check', headers: 'Header Analysis',
+  bulk: 'Bulk Domain Checker', history: 'History & Changes',
+  urlscan: 'Phishing URL Scanner', hashcheck: 'Attachment Hash Check',
+  psgen: 'PowerShell Fix Generator'
+};
+let currentView = 'domain';
+function setView(v) {
+  currentView = v;
+  document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  document.getElementById('view-' + (v === 'headers' ? 'domain' : v)).classList.add('active');
+  document.getElementById('nav-' + v)?.classList.add('active');
+  document.getElementById('toolbarSub').textContent = '· ' + (viewTitles[v] || '');
+  document.getElementById('exportCsvBtn').style.display = v === 'bulk' && bulkData.length ? 'inline-flex' : 'none';
+  document.getElementById('clearBtn').style.display = 'none';
+  if (v === 'history') renderHistory();
+  if (v === 'headers') { switchDomainMode('headers'); document.getElementById('nav-domain').classList.remove('active'); document.getElementById('nav-headers').classList.add('active'); }
+  if (v === 'domain') { switchDomainMode('domain'); }
+  window.scrollTo(0, 0);
+}
+
+// ══════════════════════════════════════════════
+//  GUIDE PANELS
+// ══════════════════════════════════════════════
+const panelMap = { records:'gp-records', 'headers-guide':'gp-headers-guide', spoofed:'gp-spoofed' };
+const toggleMap = { records:'gt-records', 'headers-guide':'gt-headers-guide', spoofed:'gt-spoofed' };
+function togglePanel(k) {
+  document.getElementById(panelMap[k]).classList.toggle('visible');
+  document.getElementById(toggleMap[k]).classList.toggle('open');
+}
+function openLearnPanel(k) {
+  setView('domain');
+  setTimeout(() => {
+    document.getElementById(panelMap[k]).classList.add('visible');
+    document.getElementById(toggleMap[k]).classList.add('open');
+    document.getElementById(toggleMap[k]).scrollIntoView({ behavior:'smooth', block:'start' });
+  }, 80);
+}
+function switchTab(btn, pId) {
+  const c = btn.closest('.guide-panel') || btn.closest('.section-card');
+  c.querySelectorAll('.guide-tab').forEach(t => t.classList.remove('active'));
+  c.querySelectorAll('.guide-pane').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(pId).classList.add('active');
+}
+
+// ══════════════════════════════════════════════
+//  COPY / UTILS
+// ══════════════════════════════════════════════
+let _cb = 0;
+const svgCopy = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`;
+function mkCopy(text, label='Copy') {
+  const id = 'cb' + (++_cb);
+  const s = text.replace(/\\/g,'\\\\').replace(/`/g,'\\`').replace(/\$/g,'\\$');
+  return `<button class="cb" id="${id}" onclick="event.stopPropagation();doCopy(\`${s}\`,'${id}')">${svgCopy} ${label}</button>`;
+}
+function doCopy(text, id) {
+  navigator.clipboard.writeText(text).then(() => {
+    const b = document.getElementById(id);
+    if (!b) return;
+    b.classList.add('copied');
+    b.innerHTML = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Copied`;
+    setTimeout(() => { b.classList.remove('copied'); b.innerHTML = svgCopy + ' Copy'; }, 1800);
+  });
+}
+function toggleCard(id) { document.getElementById(id).classList.toggle('expanded'); }
+function clearCurrent() {
+  document.getElementById('domainResults').style.display = 'none';
+  document.getElementById('domainEmpty').style.display = '';
+  document.getElementById('clearBtn').style.display = 'none';
+}
+
+// ══════════════════════════════════════════════
+//  DNS OVER HTTPS
+// ══════════════════════════════════════════════
+async function doh(name, type) {
+  try {
+    const r = await fetch(`https://cloudflare-dns.com/dns-query?name=${encodeURIComponent(name)}&type=${type}`,
+      { headers:{ Accept:'application/dns-json' } });
+    return (await r.json()).Answer || [];
+  } catch { return null; }
+}
+
+// ══════════════════════════════════════════════
+//  DOMAIN CHECK ENGINE
+// ══════════════════════════════════════════════
+async function checkDomain(d, onProgress) {
+  const checks = [];
+  const emit = (msg) => onProgress && onProgress(msg);
+
+  // SPF
+  emit('Checking SPF…');
+  const spfR = await doh(d, 'TXT');
+  if (!spfR) {
+    checks.push({ id:'spf', name:'SPF Record', s:'warn', badge:'DNS Error', desc:'DNS lookup failed.', value:null, rec:null, why:'SPF lists authorized sending servers. Without it, anyone can spoof your domain.' });
+  } else {
+    const raw = spfR.find(r => r.data?.replace(/"/g,'').trim().startsWith('v=spf1'));
+    if (!raw) {
+      checks.push({ id:'spf', name:'SPF Record', s:'fail', badge:'Missing', desc:'No SPF record — any server can spoof this domain.',
+        value:null, rec:`<b>Fix:</b> Add DNS TXT record: <code>v=spf1 include:spf.protection.outlook.com -all</code>`,
+        why:'Without SPF, receiving mail servers cannot verify if a message was sent by an authorized server for this domain.' });
+    } else {
+      const spf = raw.data.replace(/"/g,'');
+      const p = spf.match(/[-~+?]all\b/)?.[0];
+      let s, badge, desc, rec = null;
+      if (p==='-all') { s='pass'; badge='Hard Fail (−all)'; desc='SPF hard fail — unauthorized senders rejected.'; }
+      else if (p==='~all') { s='warn'; badge='Soft Fail (~all)'; desc='SPF soft fail — unauthorized senders flagged but not blocked.'; rec='<b>Upgrade to:</b> <code>-all</code> once all legitimate senders are confirmed.'; }
+      else if (p==='+all') { s='fail'; badge='Pass-All (+all)'; desc='SPF +all — every server allowed. Zero protection.'; rec='<b>Fix immediately:</b> Change <code>+all</code> to <code>-all</code>.'; }
+      else { s='warn'; badge='No All Policy'; desc='SPF found but missing all policy — no enforcement for unknown senders.'; rec='<b>Fix:</b> Add <code>-all</code> to end of SPF record.'; }
+      checks.push({ id:'spf', name:'SPF Record', s, badge, desc, value:spf, rec, why:'The <code>all</code> policy determines what happens to emails from unlisted servers. <code>-all</code> rejects them. <code>~all</code> flags them. <code>+all</code> allows everyone.' });
+    }
+  }
+
+  // DMARC
+  emit('Checking DMARC…');
+  const dmR = await doh('_dmarc.' + d, 'TXT');
+  if (!dmR) {
+    checks.push({ id:'dmarc', name:'DMARC Policy', s:'warn', badge:'DNS Error', desc:'DNS lookup failed.', value:null, rec:null, why:'DMARC enforces what happens to emails failing authentication.' });
+  } else {
+    const raw = dmR.find(r => r.data?.includes('v=DMARC1'));
+    if (!raw) {
+      checks.push({ id:'dmarc', name:'DMARC Policy', s:'fail', badge:'Missing', desc:'No DMARC — spoofed emails delivered even if SPF/DKIM fail.',
+        value:null, rec:`<b>Fix:</b> Add DNS TXT at <code>_dmarc.${d}</code>: <code>v=DMARC1; p=none; rua=mailto:dmarc@${d}</code> to start, then move to quarantine → reject.`,
+        why:'Without DMARC there is no enforcement policy. Even SPF/DKIM failures do not block spoofed email.' });
+    } else {
+      const val = raw.data.replace(/"/g,'');
+      const policy = val.match(/p=([^;\s]+)/i)?.[1]?.toLowerCase() || 'none';
+      const rua = val.match(/rua=([^;\s]+)/i)?.[1];
+      const pct = val.match(/pct=(\d+)/i)?.[1];
+      const sp = val.match(/sp=([^;\s]+)/i)?.[1];
+      let s, badge, desc, rec = null;
+      if (policy==='reject') { s='pass'; badge='Reject'; desc=`DMARC p=reject — spoofed mail blocked.${pct?` (${pct}% of mail)`:''}`; }
+      else if (policy==='quarantine') { s='warn'; badge='Quarantine'; desc=`DMARC p=quarantine — failing mail → spam.${pct?` (${pct}%)`:''}`; rec='<b>Next step:</b> Move to <code>p=reject</code> for full enforcement.'; }
+      else { s='fail'; badge='None (monitor only)'; desc=`DMARC p=none — monitoring only, spoofed mail still delivered.${rua?'':' No reporting address set.'}`;
+        rec=`<b>Next step:</b> ${rua?'Review reports, then':'Add rua=mailto:dmarc@'+d+' then'} move to <code>p=quarantine</code> → <code>p=reject</code>.`; }
+      if (rua) desc += ` Reports → ${rua}.`;
+      if (sp) desc += ` Subdomain policy: sp=${sp}.`;
+      checks.push({ id:'dmarc', name:'DMARC Policy', s, badge, desc, value:val, rec, why:'<code>p=none</code>=monitor. <code>p=quarantine</code>=spam folder. <code>p=reject</code>=blocked. Goal: reject with both SPF and DKIM working.' });
+    }
+  }
+
+  // DKIM
+  emit('Probing DKIM selectors…');
+  const sels = ['default','google','mail','selector1','selector2','k1','dkim','proofpoint','mimecast','s1','s2','smtp','mandrill','sendgrid'];
+  let dkimFound = false;
+  for (const sel of sels) {
+    const recs = await doh(`${sel}._domainkey.${d}`, 'TXT');
+    if (recs?.length) {
+      const rec = recs.find(r => r.data?.includes('v=DKIM1') || r.data?.includes('p='));
+      if (rec) {
+        dkimFound = true;
+        const val = rec.data.replace(/"/g,'');
+        checks.push({ id:'dkim', name:'DKIM Key', s:'pass', badge:`Selector: ${sel}`,
+          desc:`DKIM public key found (selector: <code>${sel}</code>). Signing configured.`,
+          value: val.length > 120 ? val.slice(0,120)+'…' : val, rec:null,
+          why:'DKIM uses public/private key crypto. The private key signs outgoing mail; the public key (shown) is in DNS for receivers to verify the signature.' });
+        break;
+      }
+    }
+  }
+  if (!dkimFound) {
+    checks.push({ id:'dkim', name:'DKIM Key', s:'warn', badge:'Not Found',
+      desc:'No DKIM key found for common selectors. May use a custom selector or not be configured.',
+      value:null, rec:'<b>Exchange Online:</b> Run <code>Enable-DkimSigning -DomainName ' + d + '</code> in EXO PowerShell.<br><b>Note:</b> Custom selectors won\'t be detected by this probe.',
+      why:'DKIM provides cryptographic proof that email came from an authorized server and was not modified in transit.' });
+  }
+
+  // MX
+  emit('Checking MX records…');
+  const mxR = await doh(d, 'MX');
+  if (!mxR || !mxR.length) {
+    checks.push({ id:'mx', name:'MX Records', s:'info', badge:'None Found',
+      desc:'No MX — domain cannot receive email, but can still be spoofed as sender.',
+      value:null, rec:'<b>Note:</b> Publish <code>v=spf1 -all</code> and DMARC <code>p=reject</code> to prevent name abuse even if the domain doesn\'t send mail.',
+      why:'No MX means no inbound email, but the domain name can still appear in spoofed From addresses.' });
+  } else {
+    checks.push({ id:'mx', name:'MX Records', s:'pass', badge:`${mxR.length} record(s)`,
+      desc:`${mxR.length} MX record(s). Domain is configured for inbound email.`,
+      value: mxR.map(r=>r.data).sort().join('\n'), rec:null,
+      why:'MX records point to the servers accepting inbound mail. Exchange Online uses .mail.protection.outlook.com; Google Workspace uses aspmx.l.google.com.' });
+  }
+
+  return checks;
+}
+
+// ══════════════════════════════════════════════
+//  SCORE + RENDER
+// ══════════════════════════════════════════════
+function scoreOf(checks) {
+  let s = 100;
+  checks.forEach(c => { if(c.s==='fail') s-=28; else if(c.s==='warn') s-=12; });
+  return Math.max(0,Math.min(100,s));
+}
+const ico = { pass:'✓', fail:'✗', warn:'!', info:'·' };
+
+function renderChecks(checks, containerId) {
+  document.getElementById(containerId).innerHTML = checks.map((c,i) => {
+    const id = containerId + '_c' + i;
+    return `<div class="check-card ${c.s}" id="${id}" onclick="toggleCard('${id}')">
+      <div class="check-header">
+        <div class="check-icon ${c.s}">${ico[c.s]}</div>
+        <div class="check-info"><div class="check-name">${c.name}</div><div class="check-desc">${c.desc}</div></div>
+        <span class="risk-badge risk-${c.s}"><span class="risk-dot"></span>${c.badge}</span>
+        <svg class="chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+      <div class="check-detail">
+        ${c.why?`<div class="explain-box"><div class="eb-title">What this means</div><p>${c.why}</p></div>`:''}
+        ${c.value?`<div class="detail-value">${c.value}<span class="copy-float">${mkCopy(c.value)}</span></div>`:''}
+        ${c.rec?`<div class="rec-box">${c.rec}</div>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderVerdict(checks, verdictId, statsId, labelId, label) {
+  const sc = scoreOf(checks);
+  const cl = sc>=72?'pass':sc>=45?'warn':'fail';
+  const vd = {
+    pass:['🛡️','Looks Legitimate','Authentication is properly configured.'],
+    warn:['⚠️','Review Carefully','Authentication gaps detected.'],
+    fail:['🚨','High Spoof Risk','Multiple failures — treat with extreme caution.']
+  };
+  const [vi,vt,vs] = vd[cl];
+  const vc = document.getElementById(verdictId);
+  vc.className='verdict-card '+cl;
+  vc.innerHTML=`<div class="verdict-icon">${vi}</div><div><div class="verdict-title">${vt}</div><div class="verdict-sub">${vs}</div></div><div class="verdict-score ${cl}">${sc}%</div>`;
+  const cnt={pass:0,warn:0,fail:0,info:0};
+  checks.forEach(c=>cnt[c.s]++);
+  document.getElementById(statsId).innerHTML=Object.entries(cnt).filter(([,v])=>v>0)
+    .map(([k,v])=>`<span class="stat-chip ${k}">${{pass:'✓',warn:'!',fail:'✗',info:'·'}[k]} ${v} ${k.charAt(0).toUpperCase()+k.slice(1)}</span>`).join('');
+  document.getElementById(labelId).innerHTML=`${checks.length} checks · ${label}`;
+}
+
+// ══════════════════════════════════════════════
+//  DOMAIN CHECK VIEW
+// ══════════════════════════════════════════════
+let lastDomainChecks = null, lastDomainName = '';
+function switchDomainMode(mode) {
+  document.getElementById('domainArea').style.display = mode==='domain' ? '' : 'none';
+  document.getElementById('headerArea').style.display = mode==='headers' ? '' : 'none';
+  document.getElementById('tab-domain').classList.toggle('active', mode==='domain');
+  document.getElementById('tab-hdrs').classList.toggle('active', mode==='headers');
+  if (mode==='domain') { document.getElementById('domainPanelTitle').textContent='Domain DNS Check'; document.getElementById('domainPanelSub').textContent='Live SPF, DMARC, DKIM and MX lookup via Cloudflare DNS-over-HTTPS'; }
+  else { document.getElementById('domainPanelTitle').textContent='Header Analysis'; document.getElementById('domainPanelSub').textContent='Parse raw email headers for authentication failures and phishing indicators'; }
+}
+
+async function runDomain() {
+  const raw = document.getElementById('domainInput').value.trim();
+  if (!raw) return;
+  const d = raw.replace(/^https?:\/\//i,'').replace(/\/.*$/,'').toLowerCase();
+  document.getElementById('domainResults').style.display='none';
+  document.getElementById('domainEmpty').style.display='none';
+  document.getElementById('runDomainBtn').disabled=true;
+  document.getElementById('domainLoading').style.display='flex';
+  document.getElementById('clearBtn').style.display='none';
+
+  const checks = await checkDomain(d, t => document.getElementById('loadingText').textContent=t);
+  document.getElementById('domainLoading').style.display='none';
+  document.getElementById('runDomainBtn').disabled=false;
+
+  lastDomainChecks = checks; lastDomainName = d;
+  saveHistory(d, checks);
+  renderVerdict(checks,'domainVerdict','domainStats','domainChecksLabel',d);
+  renderChecks(checks,'domainChecksList');
+  document.getElementById('domainResults').style.display='';
+  document.getElementById('clearBtn').style.display='inline-flex';
+  document.getElementById('domainEmpty').style.display='none';
+}
+
+// Header analysis
+function parseH(raw) {
+  const h={}, lines=raw.replace(/\r\n/g,'\n').split('\n'); let cur=null;
+  for (const l of lines) {
+    if (/^\s+/.test(l)&&cur) h[cur]=(h[cur]||'')+' '+l.trim();
+    else { const m=l.match(/^([\w-]+):\s*(.*)/i); if(m){cur=m[1].toLowerCase();h[cur]=m[2];} }
+  }
+  return h;
+}
+function domOf(s){ return s?.match(/@([\w.-]+)/)?.[1]?.toLowerCase()||null; }
+
+function analyzeHeaders(raw) {
+  const c=[], h=parseH(raw);
+  const from=h['from']||'', fromD=domOf(from);
+  if(fromD) c.push({id:'from',name:'From Header',s:'pass',badge:'Parsed',desc:`From domain: <code>${fromD}</code>`,value:from,rec:null,why:'The From header is what appears as the sender. Anyone can set this freely — SPF/DKIM/DMARC exist to authenticate it.'});
+  else c.push({id:'from',name:'From Header',s:'fail',badge:'Parse Error',desc:'Could not parse domain from From header.',value:from||null,rec:null,why:'A malformed From header is unusual and may indicate a spoofed or broken email.'});
+
+  const rp=h['return-path']||'', rpD=domOf(rp);
+  if(rpD&&fromD&&rpD!==fromD) c.push({id:'rp',name:'Return-Path Alignment',s:'fail',badge:'Domain Mismatch',
+    desc:`Return-Path domain (<code>${rpD}</code>) ≠ From domain (<code>${fromD}</code>). Classic spoofing indicator.`,value:rp,
+    rec:`<b>Spoofing indicator:</b> Legitimate email aligns Return-Path with From. This email was sent by a server for <code>${rpD}</code> while claiming to be from <code>${fromD}</code>.`,
+    why:'Return-Path is set by the actual sending server and is harder to forge. DMARC alignment checks compare Return-Path against From.'});
+  else if(rpD&&fromD) c.push({id:'rp',name:'Return-Path Alignment',s:'pass',badge:'Aligned',desc:`Return-Path matches From domain (<code>${fromD}</code>).`,value:rp,rec:null,why:'Aligned Return-Path and From means the email passes DMARC SPF alignment.'});
+  else c.push({id:'rp',name:'Return-Path Alignment',s:'info',badge:'Not Found',desc:'No Return-Path header found.',value:null,rec:null,why:'May have been excluded from the pasted headers. Try pasting the complete raw headers.'});
+
+  const rt=h['reply-to']||'', rtD=domOf(rt);
+  if(rtD&&fromD&&rtD!==fromD) c.push({id:'rt',name:'Reply-To Mismatch',s:'warn',badge:'Different Domain',
+    desc:`Reply-To → <code>${rtD}</code>, From → <code>${fromD}</code>. Replies go to a different domain.`,value:rt,
+    rec:'<b>Phishing technique:</b> Email appears from a trusted source (From) but replies land with the attacker (Reply-To). Always check before replying to sensitive emails.',
+    why:'Attackers set Reply-To so victims believe they are replying to a legitimate sender while their response goes to the attacker.'});
+  else if(rtD) c.push({id:'rt',name:'Reply-To Header',s:'pass',badge:'Aligned',desc:'Reply-To matches From domain.',value:rt,rec:null,why:'Aligned Reply-To means replies go to the same domain.'});
+  else c.push({id:'rt',name:'Reply-To Header',s:'info',badge:'Not Set',desc:'No Reply-To — replies go to From address.',value:null,rec:null,why:'Normal. No Reply-To means your client replies directly to From.'});
+
+  const auth=h['authentication-results']||'';
+  if(auth) {
+    const spfP=/spf=pass/i.test(auth),dkimP=/dkim=pass/i.test(auth),dmarcP=/dmarc=pass/i.test(auth);
+    const spfF=/spf=fail/i.test(auth),dkimF=/dkim=fail/i.test(auth),dmarcF=/dmarc=fail/i.test(auth);
+    const failed=[spfF&&'SPF',dkimF&&'DKIM',dmarcF&&'DMARC'].filter(Boolean);
+    if(dmarcP&&spfP&&dkimP) c.push({id:'auth',name:'Authentication-Results',s:'pass',badge:'All Pass',desc:'SPF, DKIM, DMARC all passed per the receiving server.',value:auth.slice(0,200)+(auth.length>200?'…':''),rec:null,why:'Authentication-Results is written by the receiving server — it cannot be faked by the sender. All three passing = authorized sender, not modified in transit.'});
+    else if(failed.length) c.push({id:'auth',name:'Authentication-Results',s:'fail',badge:`${failed.join('+')} Failed`,
+      desc:`${failed.join(' and ')} failed per the receiving server. Email may not be from who it claims.`,
+      value:auth.slice(0,200)+(auth.length>200?'…':''),rec:'<b>Caution:</b> Authentication failures are the strongest technical indicator of spoofing.',
+      why:'Authentication-Results is stamped by your receiving server. Unlike From, it is written by infrastructure you trust — not by the sender.'});
+    else c.push({id:'auth',name:'Authentication-Results',s:'warn',badge:'Partial',desc:'Not all of SPF, DKIM, DMARC confirmed passing.',value:auth.slice(0,200)+(auth.length>200?'…':''),rec:null,why:'Partial authentication may indicate a partial setup or forwarding service breaking SPF.'});
+  } else {
+    c.push({id:'auth',name:'Authentication-Results',s:'info',badge:'Not Found',desc:'No Authentication-Results header. Headers may be incomplete.',value:null,rec:null,why:'Added by the receiving server. Missing may mean truncated headers or only a partial copy.'});
+  }
+
+  const hops=(raw.toLowerCase().split('\nreceived:').length-1);
+  if(hops>0) c.push({id:'hops',name:'Mail Hop Count',s:hops>8?'warn':'pass',badge:`${hops} hop(s)`,
+    desc:`${hops} server hop(s). Normal: 2–5.${hops>8?' High count may indicate obfuscation.':''}`,
+    value:null,rec:hops>8?'<b>Note:</b> High hop counts can be used to obscure the true origin of an email.':null,
+    why:'Each Received: header is added by a mail server. Reading bottom to top shows the original path.'});
+
+  const mailer=h['x-mailer']||h['user-agent']||'';
+  if(mailer) c.push({id:'mailer',name:'Sending Client',s:'info',badge:'Identified',desc:`Client: <code>${mailer.trim().slice(0,80)}</code>`,value:null,rec:null,why:'X-Mailer identifies the sending software. Bulk tools, scripts, or unknown clients are worth noting.'});
+  return c;
+}
+
+function runHeaders() {
+  const raw = document.getElementById('headerInput').value.trim();
+  if (!raw) return;
+  const checks = analyzeHeaders(raw);
+  renderVerdict(checks,'domainVerdict','domainStats','domainChecksLabel','email headers');
+  renderChecks(checks,'domainChecksList');
+  document.getElementById('domainResults').style.display='';
+  document.getElementById('domainEmpty').style.display='none';
+  document.getElementById('clearBtn').style.display='inline-flex';
+}
+
+// ══════════════════════════════════════════════
+//  BULK CHECKER
+// ══════════════════════════════════════════════
+let bulkData = [], bulkStopped = false;
+async function runBulk() {
+  const lines = document.getElementById('bulkInput').value.split('\n').map(l=>l.trim().replace(/^https?:\/\//i,'').replace(/\/.*$/,'').toLowerCase()).filter(Boolean);
+  if (!lines.length) return;
+  const domains = [...new Set(lines)].slice(0,50);
+
+  bulkData = []; bulkStopped = false;
+  document.getElementById('bulkProgress').style.display='';
+  document.getElementById('bulkSummary').style.display='none';
+  document.getElementById('bulkTableWrap').style.display='none';
+  document.getElementById('bulkEmpty').style.display='none';
+  document.getElementById('bulkRunBtn').disabled=true;
+  document.getElementById('bulkStopBtn').style.display='inline-flex';
+  document.getElementById('exportCsvBtn').style.display='none';
+
+  const tbody = document.getElementById('bulkTbody');
+  tbody.innerHTML = domains.map(d=>`<tr id="btr-${d.replace(/\./g,'_')}"><td class="domain-cell">${d}</td><td colspan="5" style="color:var(--text-dim);font-size:11px">Pending…</td></tr>`).join('');
+  document.getElementById('bulkTableWrap').style.display='';
+
+  let done = 0;
+  for (const d of domains) {
+    if (bulkStopped) break;
+    document.getElementById('bulkStatusText').textContent=`Checking ${d} (${done+1}/${domains.length})…`;
+    document.getElementById('bulkBar').style.width=`${Math.round(done/domains.length*100)}%`;
+    const rowId = 'btr-'+d.replace(/\./g,'_');
+    document.getElementById(rowId).cells[1].colSpan=1;
+    document.getElementById(rowId).innerHTML = `<td class="domain-cell">${d}</td>` + ['SPF','DMARC','DKIM','MX'].map(()=>`<td><span class="bulk-pill bp-pend">…</span></td>`).join('') + `<td><span class="bulk-pill bp-pend">…</span></td>`;
+
+    const checks = await checkDomain(d);
+    const sc = scoreOf(checks);
+    const getCheck = id => checks.find(c=>c.id===id);
+    const pill = (c) => {
+      if (!c) return `<span class="bulk-pill bp-pend">—</span>`;
+      const cls = c.s==='pass'?'bp-pass':c.s==='fail'?'bp-fail':c.s==='warn'?'bp-warn':'bp-pend';
+      const lbl = c.s==='pass'?'✓ Pass':c.s==='fail'?'✗ Fail':c.s==='warn'?'! Warn':'·';
+      return `<span class="bulk-pill ${cls}">${lbl}</span>`;
+    };
+    const scCls = sc>=72?'bp-pass':sc>=45?'bp-warn':'bp-fail';
+    document.getElementById(rowId).innerHTML = `<td class="domain-cell">${d}</td>${['spf','dmarc','dkim','mx'].map(id=>`<td>${pill(getCheck(id))}</td>`).join('')}<td><span class="bulk-pill ${scCls}">${sc}%</span></td>`;
+    bulkData.push({ domain:d, checks, score:sc });
+    done++;
+  }
+
+  document.getElementById('bulkBar').style.width='100%';
+  document.getElementById('bulkProgress').style.display='none';
+  document.getElementById('bulkRunBtn').disabled=false;
+  document.getElementById('bulkStopBtn').style.display='none';
+
+  if (bulkData.length) {
+    const pass=bulkData.filter(r=>r.score>=72).length, warn=bulkData.filter(r=>r.score>=45&&r.score<72).length, fail=bulkData.filter(r=>r.score<45).length;
+    document.getElementById('bulkSummary').style.display='flex';
+    document.getElementById('bulkSummary').innerHTML=`<span class="stat-chip pass">✓ ${pass} Pass</span><span class="stat-chip warn">! ${warn} Warning</span><span class="stat-chip fail">✗ ${fail} Fail</span><span class="stat-chip info">${bulkData.length} total domains</span>`;
+    document.getElementById('exportCsvBtn').style.display='inline-flex';
+  }
+}
+
+function stopBulk() { bulkStopped=true; }
+
+function exportCSV() {
+  if (!bulkData.length) return;
+  const rows = [['Domain','SPF','DMARC','DKIM','MX','Score']];
+  bulkData.forEach(r => {
+    const g = id => { const c=r.checks.find(x=>x.id===id); return c?c.s:'—'; };
+    rows.push([r.domain,g('spf'),g('dmarc'),g('dkim'),g('mx'),r.score+'%']);
+  });
+  const csv = rows.map(r=>r.join(',')).join('\n');
+  const a = document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  a.download=`email-spoof-check-${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+}
+
+// ══════════════════════════════════════════════
+//  HISTORY
+// ══════════════════════════════════════════════
+function saveHistory(domain, checks) {
+  try {
+    const key = 'esc_hist_' + domain;
+    const prev = JSON.parse(localStorage.getItem(key)||'null');
+    const entry = { domain, checks, score:scoreOf(checks), ts:Date.now(), prev: prev ? { score:prev.score, ts:prev.ts, spf:prev.checks?.find(c=>c.id==='spf')?.badge, dmarc:prev.checks?.find(c=>c.id==='dmarc')?.badge } : null };
+    localStorage.setItem(key, JSON.stringify(entry));
+    const idx = JSON.parse(localStorage.getItem('esc_history_idx')||'[]').filter(d=>d!==domain);
+    idx.unshift(domain);
+    localStorage.setItem('esc_history_idx', JSON.stringify(idx.slice(0,30)));
+  } catch {}
+}
+
+function renderHistory() {
+  try {
+    const idx = JSON.parse(localStorage.getItem('esc_history_idx')||'[]');
+    const entries = idx.map(d => JSON.parse(localStorage.getItem('esc_hist_'+d)||'null')).filter(Boolean);
+    const list = document.getElementById('historyList');
+    const empty = document.getElementById('historyEmpty');
+    if (!entries.length) { list.innerHTML=''; empty.style.display=''; return; }
+    empty.style.display='none';
+
+    list.innerHTML = entries.map(e => {
+      const sc = e.score; const cl = sc>=72?'pass':sc>=45?'warn':'fail';
+      const scCls = cl==='pass'?'stat-chip pass':cl==='warn'?'stat-chip warn':'stat-chip fail';
+      const ago = msAgo(Date.now()-e.ts);
+      const getPill = (id) => {
+        const c=e.checks?.find(x=>x.id===id); if(!c) return '';
+        const cls=c.s==='pass'?'bp-pass':c.s==='fail'?'bp-fail':c.s==='warn'?'bp-warn':'bp-pend';
+        return `<span class="bulk-pill ${cls}" title="${c.badge}">${c.id.toUpperCase()}: ${c.s==='pass'?'✓':c.s==='fail'?'✗':'!'}</span>`;
+      };
+      let changeHtml='';
+      if (e.prev) {
+        const prevCl=e.prev.score>=72?'pass':e.prev.score>=45?'warn':'fail';
+        if (e.prev.score !== e.score) {
+          const dir = e.score>e.prev.score?'↑ Improved':'↓ Degraded';
+          changeHtml=`<div class="history-change"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>${dir}: ${e.prev.score}% → ${e.score}% since last check</div>`;
+        }
+      }
+      return `<div class="history-entry">
+        <div class="history-header">
+          <span class="history-domain">${e.domain}</span>
+          <span class="${scCls}">${sc}%</span>
+          <span class="history-time" style="margin-left:auto">${ago}</span>
+          <button class="tool-btn" onclick="reRunFromHistory('${e.domain}')" style="margin-left:8px;font-size:11px;padding:4px 10px">Re-check</button>
+        </div>
+        <div class="history-pills">${['spf','dmarc','dkim','mx'].map(getPill).join('')}</div>
+        ${changeHtml}
+      </div>`;
+    }).join('');
+  } catch(err) { console.error(err); }
+}
+
+function msAgo(ms) {
+  const m=Math.floor(ms/60000), h=Math.floor(m/60), d=Math.floor(h/24);
+  if(d>0) return `${d}d ago`; if(h>0) return `${h}h ago`; if(m>0) return `${m}m ago`; return 'just now';
+}
+
+function clearHistory() {
+  if(!confirm('Clear all history? This cannot be undone.')) return;
+  try {
+    const idx=JSON.parse(localStorage.getItem('esc_history_idx')||'[]');
+    idx.forEach(d=>localStorage.removeItem('esc_hist_'+d));
+    localStorage.removeItem('esc_history_idx');
+    renderHistory();
+  } catch {}
+}
+
+async function reRunFromHistory(domain) {
+  setView('domain');
+  document.getElementById('domainInput').value = domain;
+  await runDomain();
+}
+
+// ══════════════════════════════════════════════
+//  VIRUSTOTAL — URL SCANNER
+// ══════════════════════════════════════════════
+function saveVtKey() {
+  try { localStorage.setItem('esc_vt_key', document.getElementById('vtApiKey').value.trim()); } catch {}
+}
+function loadVtKey() {
+  try { const k=localStorage.getItem('esc_vt_key'); if(k) document.getElementById('vtApiKey').value=k; } catch {}
+}
+
+async function runUrlScan() {
+  const url = document.getElementById('urlInput').value.trim();
+  const key = document.getElementById('vtApiKey').value.trim();
+  if (!url) return;
+  if (!key) { alert('Please enter your VirusTotal API key first. Get a free key at virustotal.com'); return; }
+
+  document.getElementById('urlResults').style.display='none';
+  document.getElementById('urlEmpty').style.display='none';
+  document.getElementById('urlRunBtn').disabled=true;
+  document.getElementById('urlLoading').style.display='flex';
+  document.getElementById('urlLoadingText').textContent='Submitting URL to VirusTotal…';
+
+  try {
+    // Submit URL
+    const submitResp = await fetch('https://www.virustotal.com/api/v3/urls', {
+      method:'POST',
+      headers:{ 'x-apikey':key, 'Content-Type':'application/x-www-form-urlencoded' },
+      body:'url='+encodeURIComponent(url)
+    });
+    if (!submitResp.ok) throw new Error('Submit failed: '+submitResp.status);
+    const submitData = await submitResp.json();
+    const analysisId = submitData.data?.id;
+
+    // Poll for results
+    document.getElementById('urlLoadingText').textContent='Waiting for analysis results…';
+    let result = null;
+    for (let i=0;i<8;i++) {
+      await new Promise(r=>setTimeout(r,3000));
+      const r = await fetch(`https://www.virustotal.com/api/v3/analyses/${analysisId}`,
+        { headers:{ 'x-apikey':key } });
+      const d = await r.json();
+      if (d.data?.attributes?.status === 'completed') { result = d.data.attributes; break; }
+      document.getElementById('urlLoadingText').textContent=`Analyzing… (${(i+1)*3}s)`;
+    }
+    document.getElementById('urlLoading').style.display='none';
+    document.getElementById('urlRunBtn').disabled=false;
+
+    if (!result) { document.getElementById('urlResults').innerHTML='<div class="api-key-row">Analysis timed out. Try again or check directly on virustotal.com.</div>'; document.getElementById('urlResults').style.display=''; return; }
+
+    renderUrlResult(url, result);
+  } catch(e) {
+    document.getElementById('urlLoading').style.display='none';
+    document.getElementById('urlRunBtn').disabled=false;
+    document.getElementById('urlResults').innerHTML=`<div class="api-key-row" style="border-color:rgba(239,68,68,0.25);background:var(--red-glow)">Error: ${e.message}. Check your API key and try again.</div>`;
+    document.getElementById('urlResults').style.display='';
+  }
+}
+
+function renderUrlResult(url, r) {
+  const stats = r.stats || {};
+  const malicious = stats.malicious||0, suspicious = stats.suspicious||0, harmless = (stats.harmless||0)+(stats.undetected||0);
+  const total = malicious+suspicious+harmless;
+  const cl = malicious>0?'malicious':suspicious>0?'suspicious':'clean';
+  const clLabel = malicious>0?'Malicious':suspicious>0?'Suspicious':'Clean';
+  const verdictColor = malicious>0?'var(--red)':suspicious>0?'var(--amber)':'var(--green)';
+
+  const engines = Object.entries(r.results||{}).sort(([,a],[,b])=>{
+    const rank=x=>x.category==='malicious'?0:x.category==='suspicious'?1:2;
+    return rank(a)-rank(b);
+  });
+
+  const html=`<div class="vt-result">
+    <div class="vt-score-row">
+      <div class="vt-score-circle ${cl}">
+        <span class="vt-score-num" style="color:${verdictColor}">${malicious+suspicious}</span>
+        <span class="vt-score-lbl">/ ${total}</span>
+      </div>
+      <div>
+        <div style="font-size:15px;font-weight:700;color:${verdictColor}">${clLabel}</div>
+        <div style="font-size:12px;color:var(--text-secondary);margin-top:3px">${malicious} malicious · ${suspicious} suspicious · ${harmless} clean</div>
+        <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);margin-top:6px;word-break:break-all;max-width:400px">${url.slice(0,80)}${url.length>80?'…':''}</div>
+      </div>
+      <a href="https://www.virustotal.com/gui/url/${btoa(url).replace(/=/g,'')}" target="_blank" class="tool-btn" style="margin-left:auto;flex-shrink:0">View on VT ↗</a>
+    </div>
+    ${malicious>0?`<div class="rec-box" style="background:linear-gradient(135deg,var(--red-glow),transparent);border-color:rgba(239,68,68,0.2)"><b>⚠️ Warning:</b> This URL is flagged as malicious by ${malicious} engine(s). Do not visit this link. Report it to your IT security team.</div>`:''}
+    <div style="font-size:11px;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Engine Results</div>
+    <div class="vt-engines">${engines.map(([name,res])=>{
+      const ec=res.category==='malicious'?'mal':res.category==='suspicious'?'mal':'clean';
+      return `<div class="vt-engine ${res.category==='undetected'?'undetected':ec}">
+        <span class="vt-engine-name">${name}</span>
+        <span class="vt-engine-result">${res.result||res.category}</span>
+      </div>`;
+    }).join('')}</div>
+  </div>`;
+
+  document.getElementById('urlResults').innerHTML=html;
+  document.getElementById('urlResults').style.display='';
+}
+
+// ══════════════════════════════════════════════
+//  VIRUSTOTAL — HASH CHECKER
+// ══════════════════════════════════════════════
+async function runHashCheck() {
+  const hash = document.getElementById('hashInput').value.trim().toLowerCase();
+  const key = document.getElementById('vtApiKey').value.trim() || (function(){try{return localStorage.getItem('esc_vt_key')||'';}catch{return '';}}());
+  if (!hash) return;
+  if (!key) { alert('Please enter your VirusTotal API key in the URL Scanner tab first.'); setView('urlscan'); return; }
+
+  document.getElementById('hashResults').style.display='none';
+  document.getElementById('hashEmpty').style.display='none';
+  document.getElementById('hashRunBtn').disabled=true;
+  document.getElementById('hashLoading').style.display='flex';
+
+  try {
+    const resp = await fetch(`https://www.virustotal.com/api/v3/files/${hash}`,
+      { headers:{ 'x-apikey':key } });
+    document.getElementById('hashLoading').style.display='none';
+    document.getElementById('hashRunBtn').disabled=false;
+
+    if (resp.status===404) {
+      document.getElementById('hashResults').innerHTML='<div class="vt-result"><div style="color:var(--text-secondary);font-size:13px">Hash not found in VirusTotal database. The file has not been submitted before, or the hash is incorrect.</div></div>';
+      document.getElementById('hashResults').style.display='';
+      return;
+    }
+    if (!resp.ok) throw new Error('API error: '+resp.status);
+
+    const data = (await resp.json()).data?.attributes;
+    renderHashResult(hash, data);
+  } catch(e) {
+    document.getElementById('hashLoading').style.display='none';
+    document.getElementById('hashRunBtn').disabled=false;
+    document.getElementById('hashResults').innerHTML=`<div class="api-key-row" style="border-color:rgba(239,68,68,0.25);background:var(--red-glow)">Error: ${e.message}</div>`;
+    document.getElementById('hashResults').style.display='';
+  }
+}
+
+function renderHashResult(hash, a) {
+  const stats=a.last_analysis_stats||{};
+  const mal=stats.malicious||0, sus=stats.suspicious||0;
+  const total=(stats.malicious||0)+(stats.suspicious||0)+(stats.harmless||0)+(stats.undetected||0);
+  const cl=mal>0?'malicious':sus>0?'suspicious':'clean';
+  const verdictColor=mal>0?'var(--red)':sus>0?'var(--amber)':'var(--green)';
+  const verdictLabel=mal>0?'Malicious':sus>0?'Suspicious':'Clean';
+
+  const engines=Object.entries(a.last_analysis_results||{}).sort(([,a],[,b])=>{
+    const r=x=>x.category==='malicious'?0:x.category==='suspicious'?1:2;
+    return r(a)-r(b);
+  });
+
+  const meta=[
+    {l:'File Name',v:a.meaningful_name||a.name||'Unknown'},
+    {l:'File Type',v:a.type_description||a.magic||'Unknown'},
+    {l:'File Size',v:a.size?formatBytes(a.size):'Unknown'},
+    {l:'MD5',v:a.md5||'—'},
+    {l:'SHA-1',v:a.sha1||'—'},
+    {l:'SHA-256',v:a.sha256||hash},
+    {l:'First Seen',v:a.first_submission_date?new Date(a.first_submission_date*1000).toLocaleDateString():'Unknown'},
+    {l:'Last Analysis',v:a.last_analysis_date?new Date(a.last_analysis_date*1000).toLocaleDateString():'Unknown'},
+  ];
+
+  const html=`<div class="vt-result">
+    <div class="vt-score-row">
+      <div class="vt-score-circle ${cl}">
+        <span class="vt-score-num" style="color:${verdictColor}">${mal+sus}</span>
+        <span class="vt-score-lbl">/ ${total}</span>
+      </div>
+      <div>
+        <div style="font-size:15px;font-weight:700;color:${verdictColor}">${verdictLabel}</div>
+        <div style="font-size:12px;color:var(--text-secondary);margin-top:3px">${mal} malicious · ${sus} suspicious · ${(stats.harmless||0)+(stats.undetected||0)} clean</div>
+        <div style="font-family:var(--font-mono);font-size:10px;color:var(--text-dim);margin-top:6px">${hash.slice(0,40)}…</div>
+      </div>
+      <a href="https://www.virustotal.com/gui/file/${a.sha256||hash}" target="_blank" class="tool-btn" style="margin-left:auto;flex-shrink:0">View on VT ↗</a>
+    </div>
+    ${mal>0?`<div class="rec-box" style="background:linear-gradient(135deg,var(--red-glow),transparent);border-color:rgba(239,68,68,0.2)"><b>⚠️ Do not open this file.</b> Flagged as malicious by ${mal} engine(s). Quarantine and report to your IT security team immediately.</div>`:''}
+    <div class="hash-meta">${meta.map(m=>`<div class="hash-meta-item"><div class="hash-meta-lbl">${m.l}</div><div class="hash-meta-val">${m.v}</div></div>`).join('')}</div>
+    <div style="font-size:11px;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;margin:12px 0 8px">Engine Results</div>
+    <div class="vt-engines">${engines.slice(0,40).map(([name,res])=>{
+      const ec=res.category==='malicious'||res.category==='suspicious'?'mal':'clean';
+      return `<div class="vt-engine ${res.category==='undetected'?'undetected':ec}">
+        <span class="vt-engine-name">${name}</span>
+        <span class="vt-engine-result">${res.result||res.category}</span>
+      </div>`;
+    }).join('')}${engines.length>40?`<div class="vt-engine"><span class="vt-engine-name" style="color:var(--text-dim)">+${engines.length-40} more engines…</span></div>`:''}</div>
+  </div>`;
+
+  document.getElementById('hashResults').innerHTML=html;
+  document.getElementById('hashResults').style.display='';
+}
+
+function formatBytes(b){if(b<1024)return b+'B';if(b<1048576)return (b/1024).toFixed(1)+'KB';return (b/1048576).toFixed(1)+'MB';}
+
+// ══════════════════════════════════════════════
+//  POWERSHELL FIX GENERATOR
+// ══════════════════════════════════════════════
+let lastPsChecks=null, lastPsDomain='';
+
+function openPsGenFromResults() {
+  if (lastDomainChecks && lastDomainName) {
+    lastPsChecks = lastDomainChecks;
+    lastPsDomain = lastDomainName;
+    setView('psgen');
+    document.getElementById('psGenDomain').value = lastDomainName;
+    generatePS(lastDomainName, lastDomainChecks);
+  } else {
+    setView('psgen');
+  }
+}
+
+async function runPsGen() {
+  const d = document.getElementById('psGenDomain').value.trim().replace(/^https?:\/\//i,'').replace(/\/.*$/,'').toLowerCase();
+  if (!d) return;
+
+  // If we have fresh results for this domain, use them
+  if (lastDomainName === d && lastDomainChecks) {
+    generatePS(d, lastDomainChecks);
+    return;
+  }
+
+  document.getElementById('psGenResults').style.display='none';
+  document.getElementById('psGenEmpty').style.display='none';
+  document.getElementById('psGenRunBtn').disabled=true;
+  document.getElementById('psGenLoading').style.display='flex';
+  const checks = await checkDomain(d, t=>document.getElementById('psGenLoadText').textContent=t);
+  document.getElementById('psGenLoading').style.display='none';
+  document.getElementById('psGenRunBtn').disabled=false;
+  lastPsChecks=checks; lastPsDomain=d;
+  generatePS(d, checks);
+}
+
+function generatePS(d, checks) {
+  const spf = checks.find(c=>c.id==='spf');
+  const dmarc = checks.find(c=>c.id==='dmarc');
+  const dkim = checks.find(c=>c.id==='dkim');
+  const mx = checks.find(c=>c.id==='mx');
+
+  const fixes=[], lines=[];
+  const comment = s => `<span class="ps-comment"># ${s}</span>`;
+  const section = s => `\n<span class="ps-section"># ════════════════════════════════════════</span>\n<span class="ps-section"># ${s}</span>\n<span class="ps-section"># ════════════════════════════════════════</span>`;
+  const cmd = (c,p) => `<span class="ps-cmdlet">${c}</span>${p?` <span class="ps-param">${p}</span>`:''}`;
+
+  lines.push(comment(`Email Spoof Checker — PowerShell Fix Script`));
+  lines.push(comment(`Domain: ${d}`));
+  lines.push(comment(`Generated: ${new Date().toLocaleDateString('sv-SE')}`));
+  lines.push(comment(`Great IT Nordic · great-it-nordic.github.io/m365-ps-toolkit/`));
+  lines.push('');
+
+  // SPF
+  if (spf?.s === 'fail' || spf?.s === 'warn') {
+    fixes.push('SPF');
+    lines.push(section('SPF RECORD FIX'));
+    if (spf.s==='fail' && spf.badge==='Missing') {
+      lines.push(comment('SPF record is MISSING. Add this DNS TXT record:'));
+      lines.push('');
+      lines.push(comment('DNS TXT record to add:'));
+      lines.push(`  Host/Name: <span class="ps-string">@</span>  (or ${d})`);
+      lines.push(`  Type:      <span class="ps-string">TXT</span>`);
+      lines.push(`  Value:     <span class="ps-string">"v=spf1 include:spf.protection.outlook.com -all"</span>`);
+      lines.push('');
+      lines.push(comment('Verify after DNS propagation (up to 48h):'));
+      lines.push(`${cmd('Resolve-DnsName')} <span class="ps-param">-Name</span> <span class="ps-string">"${d}"</span> <span class="ps-param">-Type</span> TXT | <span class="ps-cmdlet">Where-Object</span> { <span class="ps-variable">$_</span>.Strings <span class="ps-param">-match</span> <span class="ps-string">'v=spf1'</span> }`);
+    } else if (spf.badge?.includes('+all')) {
+      lines.push(comment('SPF uses +all — CRITICAL: This allows anyone to send as your domain.'));
+      lines.push(comment('Update your DNS TXT SPF record:'));
+      lines.push(`  Old value: <span class="ps-string">"${spf.value}"</span>`);
+      lines.push(`  Change:    Replace <span class="ps-string">"+all"</span> with <span class="ps-string">"-all"</span>`);
+    } else if (spf.badge?.includes('~all')) {
+      lines.push(comment('SPF uses soft fail (~all). Upgrade to hard fail:'));
+      lines.push(`  Current: <span class="ps-string">"${spf.value}"</span>`);
+      lines.push(`  Updated: <span class="ps-string">"${(spf.value||'').replace('~all','-all')}"</span>`);
+    }
+    lines.push('');
+  }
+
+  // DKIM
+  if (dkim?.s === 'warn' || dkim?.s === 'fail') {
+    fixes.push('DKIM');
+    lines.push(section('DKIM FIX — Exchange Online'));
+    lines.push(comment('Connect to Exchange Online first:'));
+    lines.push(`${cmd('Connect-ExchangeOnline')} <span class="ps-param">-UserPrincipalName</span> <span class="ps-string">"admin@${d}"</span>`);
+    lines.push('');
+    lines.push(comment('Enable DKIM signing for the domain:'));
+    lines.push(`${cmd('Set-DkimSigningConfig')} <span class="ps-param">-Identity</span> <span class="ps-string">"${d}"</span> <span class="ps-param">-Enabled</span> <span class="ps-variable">$true</span>`);
+    lines.push('');
+    lines.push(comment('If DKIM has never been configured, get the CNAME records to publish first:'));
+    lines.push(`${cmd('Get-DkimSigningConfig')} <span class="ps-param">-Identity</span> <span class="ps-string">"${d}"</span> | <span class="ps-cmdlet">Select-Object</span> Selector1CNAME,Selector2CNAME`);
+    lines.push('');
+    lines.push(comment('Publish CNAME records in DNS, then run:'));
+    lines.push(`${cmd('Enable-DkimSigning')} <span class="ps-param">-DomainName</span> <span class="ps-string">"${d}"</span>`);
+    lines.push('');
+    lines.push(comment('Verify:'));
+    lines.push(`${cmd('Get-DkimSigningConfig')} <span class="ps-param">-Identity</span> <span class="ps-string">"${d}"</span> | <span class="ps-cmdlet">Select-Object</span> Identity,Enabled,Status`);
+    lines.push('');
+  }
+
+  // DMARC
+  if (dmarc?.s === 'fail' || dmarc?.s === 'warn') {
+    fixes.push('DMARC');
+    lines.push(section('DMARC RECORD FIX'));
+    if (dmarc.badge==='Missing') {
+      lines.push(comment('DMARC record is MISSING. Add this DNS TXT record:'));
+      lines.push('');
+      lines.push(comment('Step 1 — Start with monitoring (p=none):'));
+      lines.push(`  Host/Name: <span class="ps-string">_dmarc.${d}</span>`);
+      lines.push(`  Type:      <span class="ps-string">TXT</span>`);
+      lines.push(`  Value:     <span class="ps-string">"v=DMARC1; p=none; rua=mailto:dmarc@${d}; ruf=mailto:dmarc@${d}; fo=1"</span>`);
+      lines.push('');
+      lines.push(comment('Step 2 — After 2-4 weeks reviewing reports, move to quarantine:'));
+      lines.push(`  Value:     <span class="ps-string">"v=DMARC1; p=quarantine; pct=100; rua=mailto:dmarc@${d}"</span>`);
+      lines.push('');
+      lines.push(comment('Step 3 — When confident, move to reject:'));
+      lines.push(`  Value:     <span class="ps-string">"v=DMARC1; p=reject; pct=100; rua=mailto:dmarc@${d}"</span>`);
+    } else if (dmarc.badge?.includes('None')) {
+      lines.push(comment('DMARC is set to p=none (monitoring only). Upgrade to enforcement:'));
+      lines.push('');
+      lines.push(comment('Update _dmarc.' + d + ' TXT record — move to quarantine:'));
+      lines.push(`  New value: <span class="ps-string">"v=DMARC1; p=quarantine; pct=100; rua=mailto:dmarc@${d}"</span>`);
+      lines.push('');
+      lines.push(comment('Then after verification, move to reject:'));
+      lines.push(`  New value: <span class="ps-string">"v=DMARC1; p=reject; pct=100; rua=mailto:dmarc@${d}"</span>`);
+    } else if (dmarc.badge==='Quarantine') {
+      lines.push(comment('DMARC is at quarantine. Final step — upgrade to reject:'));
+      lines.push(`  Update _dmarc.${d} TXT to: <span class="ps-string">"v=DMARC1; p=reject; pct=100; rua=mailto:dmarc@${d}"</span>`);
+    }
+    lines.push('');
+    lines.push(comment('Verify DMARC record after DNS propagation:'));
+    lines.push(`${cmd('Resolve-DnsName')} <span class="ps-param">-Name</span> <span class="ps-string">"_dmarc.${d}"</span> <span class="ps-param">-Type</span> TXT`);
+    lines.push('');
+  }
+
+  // Verification block (always)
+  lines.push(section('VERIFICATION — Run after implementing fixes'));
+  lines.push(comment('Check all authentication records from PowerShell:'));
+  lines.push(`${cmd('Resolve-DnsName')} <span class="ps-param">-Name</span> <span class="ps-string">"${d}"</span> <span class="ps-param">-Type</span> TXT`);
+  lines.push(`${cmd('Resolve-DnsName')} <span class="ps-param">-Name</span> <span class="ps-string">"_dmarc.${d}"</span> <span class="ps-param">-Type</span> TXT`);
+  lines.push(`${cmd('Resolve-DnsName')} <span class="ps-param">-Name</span> <span class="ps-string">"selector1._domainkey.${d}"</span> <span class="ps-param">-Type</span> TXT`);
+  lines.push(`${cmd('Resolve-DnsName')} <span class="ps-param">-Name</span> <span class="ps-string">"${d}"</span> <span class="ps-param">-Type</span> MX`);
+  lines.push('');
+  lines.push(comment('Test email authentication using Microsoft\'s Remote Connectivity Analyzer:'));
+  lines.push(`<span class="ps-comment"># https://testconnectivity.microsoft.com/tests/OutboundSMTP/input</span>`);
+  lines.push('');
+  lines.push(comment('Test DMARC compliance with an external tool:'));
+  lines.push(`<span class="ps-comment"># https://dmarcian.com/dmarc-inspector/?domain=${d}</span>`);
+
+  if (fixes.length===0) {
+    document.getElementById('psGenFixBadge').style.display='none';
+    lines.unshift('');
+    lines.unshift(comment('All checks passed! No critical fixes required.'));
+    lines.unshift(comment('Consider reviewing DMARC reports regularly and rotating DKIM keys annually.'));
+  } else {
+    document.getElementById('psGenFixBadge').style.display='inline-flex';
+    document.getElementById('psGenFixCount').textContent=`${fixes.length} issue(s) need fixing: ${fixes.join(', ')}`;
+  }
+
+  document.getElementById('psOutput').innerHTML = lines.join('\n');
+  document.getElementById('psGenResults').style.display='';
+  document.getElementById('psGenEmpty').style.display='none';
+}
+
+function copyPsOutput() {
+  const el = document.getElementById('psOutput');
+  const text = el.innerText || el.textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const b = document.getElementById('psCopyBtn');
+    b.classList.add('copied');
+    b.innerHTML=`<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Copied`;
+    setTimeout(()=>{b.classList.remove('copied');b.innerHTML=`${svgCopy} Copy Script`;},2000);
+  });
+}
+
+// ══════════════════════════════════════════════
+//  BACK TO TOP
+// ══════════════════════════════════════════════
+window.addEventListener('scroll',()=>{
+  document.getElementById('backToTop').classList.toggle('visible',window.scrollY>400);
+},{passive:true});
+
+// ══════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════
+if(window.innerWidth<=860){
+  document.getElementById('sidebar').classList.add('hidden');
+  document.getElementById('main').classList.add('full');
+}
+loadVtKey();
+</script>
+</body>
+</html>
