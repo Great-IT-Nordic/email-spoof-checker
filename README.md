@@ -193,4 +193,4 @@ Issues, pull requests and suggestions welcome. If you find a domain where DKIM i
 
 ---
 
-*Built with ❤️ by [Great IT Nordic](https://github.com/great-it-nordic)*
+*Built by [Great IT Nordic](https://github.com/great-it-nordic)*
