@@ -1461,10 +1461,12 @@ async function runUrlScan() {
 
   try {
     // Submit URL
+    const vtForm = new FormData();
+    vtForm.append('url', url);
     const submitResp = await fetch('https://www.virustotal.com/api/v3/urls', {
       method:'POST',
-      headers:{ 'x-apikey':key, 'Content-Type':'application/x-www-form-urlencoded' },
-      body:'url='+encodeURIComponent(url)
+      headers:{ 'x-apikey':key },
+      body: vtForm
     });
     if (!submitResp.ok) throw new Error('Submit failed: '+submitResp.status);
     const submitData = await submitResp.json();
@@ -1491,6 +1493,7 @@ async function runUrlScan() {
     document.getElementById('urlLoading').style.display='none';
     document.getElementById('urlRunBtn').disabled=false;
     const isFileProt = window.location.protocol === 'file:';
+    console.error('VT URL scan error:', e);
     const vtLink = `https://www.virustotal.com/gui/home/url`;
     const msg = isFileProt
       ? `<div style="font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:6px">⚠️ CORS restriction — open via web server to use this feature</div>
@@ -1498,7 +1501,8 @@ async function runUrlScan() {
          <div style="font-size:12px;color:var(--text-secondary);margin-bottom:10px">In the meantime, check the URL directly on VirusTotal:</div>
          <a href="${vtLink}" target="_blank" class="run-btn" style="display:inline-flex;text-decoration:none">Open VirusTotal ↗</a>`
       : `<div style="font-size:13px;font-weight:600;color:var(--red);margin-bottom:4px">Error: ${e.message}</div>
-         <div style="font-size:12px;color:var(--text-secondary)">Double-check your API key is correct and has not expired. <a href="https://www.virustotal.com/gui/my-apikey" target="_blank" style="color:var(--accent)">Check your key on VirusTotal ↗</a></div>`;
+         <div style="font-size:12px;color:var(--text-secondary);margin-top:6px">Possible causes: incorrect API key, rate limit exceeded (4 req/min on free tier), or a temporary VirusTotal outage.</div>
+         <div style="font-size:12px;margin-top:8px"><a href="https://www.virustotal.com/gui/my-apikey" target="_blank" style="color:var(--accent)">Check your API key ↗</a> &nbsp;·&nbsp; <a href="https://www.virustotal.com/gui/home/url" target="_blank" style="color:var(--accent)">Open VirusTotal directly ↗</a></div>`;
     document.getElementById('urlResults').innerHTML=`<div class="vt-result">${msg}</div>`;
     document.getElementById('urlResults').style.display='';
   }
@@ -1578,12 +1582,14 @@ async function runHashCheck() {
     document.getElementById('hashLoading').style.display='none';
     document.getElementById('hashRunBtn').disabled=false;
     const isFileProt = window.location.protocol === 'file:';
+    console.error('VT URL scan error:', e);
     const msg = isFileProt
       ? `<div style="font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:6px">⚠️ CORS restriction — open via web server to use this feature</div>
          <div style="font-size:12px;color:var(--text-secondary);line-height:1.7;margin-bottom:10px">Browsers block direct API calls when opening an HTML file locally. This works when served from <strong>GitHub Pages</strong> or any web server.</div>
          <a href="https://www.virustotal.com/gui/home/search" target="_blank" class="run-btn" style="display:inline-flex;text-decoration:none">Search on VirusTotal ↗</a>`
       : `<div style="font-size:13px;font-weight:600;color:var(--red);margin-bottom:4px">Error: ${e.message}</div>
-         <div style="font-size:12px;color:var(--text-secondary)">Double-check your API key. <a href="https://www.virustotal.com/gui/my-apikey" target="_blank" style="color:var(--accent)">Check your key ↗</a></div>`;
+         <div style="font-size:12px;color:var(--text-secondary);margin-top:6px">Possible causes: incorrect API key, rate limit exceeded, or the hash format is wrong (MD5/SHA-1/SHA-256 only).</div>
+         <div style="font-size:12px;margin-top:8px"><a href="https://www.virustotal.com/gui/my-apikey" target="_blank" style="color:var(--accent)">Check your API key ↗</a> &nbsp;·&nbsp; <a href="https://www.virustotal.com/gui/home/search" target="_blank" style="color:var(--accent)">Open VirusTotal directly ↗</a></div>`;
     document.getElementById('hashResults').innerHTML=`<div class="vt-result">${msg}</div>`;
     document.getElementById('hashResults').style.display='';
   }
