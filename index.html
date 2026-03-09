@@ -30,7 +30,7 @@
   --text-primary:#1a202c;--text-secondary:#4a5568;--text-dim:#8899aa;
   --accent:#1B6B8A;--accent-glow:rgba(27,107,138,0.1);
   --accent-gold:#8A7A3A;--accent-gold-glow:rgba(138,122,58,0.1);
-  --accent-burgundy:#732540;--sidebar-bg:#1B445A;--sidebar-border:#24607f;
+  --accent-burgundy:#611932;--sidebar-bg:#1B445A;--sidebar-border:#24607f;
   --green:#059669;--green-glow:rgba(5,150,105,0.1);
   --amber:#d97706;--amber-glow:rgba(217,119,6,0.08);
   --red:#dc2626;--red-glow:rgba(220,38,38,0.08);
@@ -53,7 +53,7 @@ body{background:var(--bg-root);color:var(--text-primary);font-family:'Calibri','
 .sidebar-overlay.visible{display:block;}
 
 /* ── SIDEBAR ── */
-.sidebar-header{padding:18px 16px 14px;border-bottom:1px solid rgba(255,255,255,0.1);border-top:4px solid #732540;}
+.sidebar-header{padding:18px 16px 14px;border-bottom:1px solid rgba(255,255,255,0.1);border-top:4px solid #BAAA5D;}
 .sidebar-logo{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:700;color:#ffffff !important;text-decoration:none !important;cursor:pointer;}
 .sidebar-logo:hover{color:#ffffff !important;}
 .sidebar-logo:visited{color:#ffffff !important;}
@@ -62,7 +62,7 @@ body{background:var(--bg-root);color:var(--text-primary);font-family:'Calibri','
 .sidebar-sub{font-size:11px;color:rgba(255,255,255,0.55);margin-top:4px;}
 
 .sidebar-nav{flex:1;padding:10px 8px;}
-.nav-section-title{font-size:10px;font-weight:600;color:rgba(186,170,93,0.7);text-transform:uppercase;letter-spacing:1.5px;padding:12px 12px 6px;user-select:none;}
+.nav-section-title{font-size:10px;font-weight:600;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:1.5px;padding:12px 12px 6px;user-select:none;}
 .nav-item{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:var(--radius-sm);font-size:13px;color:rgba(255,255,255,0.7);cursor:pointer;transition:all 0.15s;user-select:none;border:1px solid transparent;}
 .nav-item:hover{background:rgba(255,255,255,0.1);color:#ffffff;}
 .nav-item.active{background:rgba(186,170,93,0.15);color:#ffffff;border-left:3px solid #BAAA5D;padding-left:9px;}
@@ -75,12 +75,13 @@ body{background:var(--bg-root);color:var(--text-primary);font-family:'Calibri','
 .sidebar-link:hover{color:#BAAA5D;background:rgba(186,170,93,0.1);}
 
 /* ── TOOLBAR ── */
-.toolbar{display:flex;align-items:center;gap:12px;padding:12px 24px;border-bottom:3px solid #732540;background:var(--bg-surface);position:sticky;top:0;z-index:40;}
-.toolbar-toggle{display:flex;background:none;border:1px solid var(--border);border-radius:var(--radius-sm);padding:6px 8px;color:var(--text-secondary);cursor:pointer;transition:all 0.15s;}
-.toolbar-toggle:hover{background:var(--bg-elevated);}
-.toolbar-title{font-size:15px;font-weight:700;color:var(--text-primary);}
-.toolbar-sub{font-size:12px;color:var(--text-dim);margin-left:2px;}
+.toolbar{display:flex;align-items:center;gap:12px;padding:12px 24px;border-bottom:3px solid #BAAA5D;background:#1B445A;position:sticky;top:0;z-index:40;}
+.toolbar-toggle{display:flex;background:none;border:1px solid rgba(255,255,255,0.25);border-radius:var(--radius-sm);padding:6px 8px;color:rgba(255,255,255,0.8);cursor:pointer;transition:all 0.15s;}
+.toolbar-toggle:hover{background:rgba(255,255,255,0.1);}
+.toolbar-title{font-size:15px;font-weight:700;color:#ffffff;}
+.toolbar-sub{font-size:12px;color:rgba(255,255,255,0.55);margin-left:2px;}
 .toolbar-actions{display:flex;gap:8px;margin-left:auto;align-items:center;}
+#themeBtn{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.25);color:#ffffff;}
 .tool-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text-secondary);font-size:12px;font-family:var(--font-body);font-weight:500;cursor:pointer;transition:all 0.15s;white-space:nowrap;}
 .tool-btn:hover{background:var(--bg-elevated);color:var(--text-primary);border-color:var(--border-hover);}
 .tool-btn.primary{background:var(--accent);color:#fff;border-color:var(--accent);}
@@ -106,7 +107,7 @@ body{background:var(--bg-root);color:var(--text-primary);font-family:'Calibri','
 .param-input::placeholder{color:var(--text-dim);}
 textarea.param-input{min-height:110px;resize:vertical;line-height:1.6;color:var(--text-primary);font-size:11.5px;}
 .input-hint{font-size:11px;color:var(--text-dim);margin-top:8px;line-height:1.65;}
-.run-btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;background:#732540;border:none;border-radius:var(--radius-sm);color:#fff;font-size:13px;font-family:var(--font-body);font-weight:600;cursor:pointer;transition:opacity 0.15s;white-space:nowrap;flex-shrink:0;}
+.run-btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;background:#611932;border:none;border-radius:var(--radius-sm);color:#fff;font-size:13px;font-family:var(--font-body);font-weight:600;cursor:pointer;transition:opacity 0.15s;white-space:nowrap;flex-shrink:0;}
 .run-btn:hover{opacity:0.88;}
 .run-btn:disabled{opacity:0.35;cursor:not-allowed;}
 
@@ -222,6 +223,18 @@ textarea.param-input{min-height:110px;resize:vertical;line-height:1.6;color:var(
 .star-btn.starred{opacity:1;}
 .history-entry{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:8px;transition:all 0.15s;}
 .history-entry:hover{border-color:var(--border-hover);}
+[data-theme="light"] .section-title,
+[data-theme="light"] .check-name,
+[data-theme="light"] .verdict-title,
+[data-theme="light"] .section-header .section-title {
+  color: #1B445A !important;
+}
+.howto-tab{background:none;border:none;border-bottom:2px solid transparent;padding:7px 14px;font-size:12px;font-weight:600;color:var(--text-dim);cursor:pointer;transition:all 0.15s;white-space:nowrap;}
+.howto-tab:hover{color:var(--text-secondary);}
+.howto-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+.howto-panel{display:none;}
+.howto-panel.active{display:block;}
+.new-badge{font-size:9px;font-weight:700;background:#611932;color:#fff;padding:1px 5px;border-radius:8px;margin-left:4px;vertical-align:middle;letter-spacing:0.3px;}
 .history-header{display:flex;align-items:center;gap:12px;}
 .history-domain{font-family:var(--font-mono);font-size:13px;font-weight:600;color:var(--text-primary);}
 .history-time{font-size:11px;color:var(--text-dim);}
@@ -266,12 +279,12 @@ textarea.param-input{min-height:110px;resize:vertical;line-height:1.6;color:var(
 .fix-required{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:var(--red-glow);border:1px solid rgba(239,68,68,0.2);border-radius:var(--radius-sm);font-size:11px;color:var(--red);margin-bottom:12px;}
 
 /* ── GUIDE PANELS ── */
-.guide-toggle{display:flex;align-items:center;gap:10px;padding:13px 16px;background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;margin-bottom:12px;transition:all 0.2s;}
-.guide-toggle:hover{border-color:var(--accent);background:var(--accent-glow);}
+.guide-toggle{display:flex;align-items:center;gap:10px;padding:13px 16px;background:#1B445A;border:1px solid #24607f;border-radius:var(--radius);cursor:pointer;margin-bottom:12px;transition:all 0.2s;}
+.guide-toggle:hover{border-color:#BAAA5D;background:#1e4e68;}
 .guide-toggle .g-icon{font-size:17px;flex-shrink:0;}
-.guide-toggle .g-label{font-size:14px;font-weight:600;color:var(--text-primary);}
-.guide-toggle .g-sub{font-size:12px;color:var(--text-secondary);margin-left:auto;}
-.guide-toggle .g-chev{color:var(--text-dim);transition:transform 0.2s;flex-shrink:0;}
+.guide-toggle .g-label{font-size:14px;font-weight:600;color:#ffffff;}
+.guide-toggle .g-sub{font-size:12px;color:rgba(255,255,255,0.6);margin-left:auto;}
+.guide-toggle .g-chev{color:rgba(255,255,255,0.5);transition:transform 0.2s;flex-shrink:0;}
 .guide-toggle.open .g-chev{transform:rotate(90deg);}
 .guide-panel{display:none;background:var(--bg-card);border:1px solid var(--border);border-top:none;border-radius:0 0 var(--radius) var(--radius);padding:20px;margin-bottom:20px;}
 .guide-panel.visible{display:block;animation:slideDown 0.2s ease;}
@@ -441,7 +454,6 @@ code{font-family:var(--font-mono);font-size:11px;background:var(--bg-code);paddi
     <div class="nav-item" id="nav-dmarcxml" onclick="setView('dmarcxml')">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
       DMARC Report Parser
-      <span class="new-badge">NEW</span>
     </div>
 
     <div class="nav-section-title" style="margin-top:6px">Learn</div>
@@ -679,7 +691,115 @@ code{font-family:var(--font-mono);font-size:11px;background:var(--bg-code);paddi
           </button>
         </div>
       </div>
-      <div class="empty" id="domainEmpty"><div class="icon">🔍</div><div class="title">Enter a domain or paste email headers</div><div class="sub">Use the learning panels above if you're not sure where to start</div></div>
+      <div class="empty" id="domainEmpty">
+        <div style="max-width:700px;margin:0 auto;text-align:left">
+
+          <!-- Heading -->
+          <div style="text-align:center;margin-bottom:28px">
+            <div style="font-size:32px;margin-bottom:8px;opacity:0.65">🔍</div>
+            <div style="font-size:16px;font-weight:700;color:var(--text-primary);margin-bottom:4px">Check any domain in seconds</div>
+            <div style="font-size:13px;color:var(--text-dim)">No login · No installation · DNS via Cloudflare DoH</div>
+          </div>
+
+          <!-- 3-step flow -->
+          <div style="display:flex;gap:0;margin-bottom:28px;position:relative">
+            <div style="position:absolute;top:22px;left:18%;right:18%;height:2px;background:var(--border);z-index:0"></div>
+            <div style="flex:1;text-align:center;position:relative;z-index:1">
+              <div style="width:44px;height:44px;border-radius:50%;background:var(--bg-elevated);border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-size:14px;font-weight:800;color:var(--accent)">1</div>
+              <div style="font-size:12px;font-weight:600;color:var(--text-primary)">Type a domain</div>
+              <div style="font-size:11px;color:var(--text-dim);margin-top:3px">e.g. microsoft.com</div>
+            </div>
+            <div style="flex:1;text-align:center;position:relative;z-index:1">
+              <div style="width:44px;height:44px;border-radius:50%;background:var(--bg-elevated);border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-size:14px;font-weight:800;color:var(--accent)">2</div>
+              <div style="font-size:12px;font-weight:600;color:var(--text-primary)">Click Analyze</div>
+              <div style="font-size:11px;color:var(--text-dim);margin-top:3px">SPF · DMARC · DKIM · MX</div>
+            </div>
+            <div style="flex:1;text-align:center;position:relative;z-index:1">
+              <div style="width:44px;height:44px;border-radius:50%;background:var(--bg-elevated);border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-size:14px;font-weight:800;color:var(--accent)">3</div>
+              <div style="font-size:12px;font-weight:600;color:var(--text-primary)">Read the results</div>
+              <div style="font-size:11px;color:var(--text-dim);margin-top:3px">Score, verdict &amp; fixes</div>
+            </div>
+          </div>
+
+          <!-- Feature grid -->
+          <div style="font-size:11px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">All tools in this suite</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:8px;margin-bottom:24px">
+
+            <div onclick="setView('domain')" style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;cursor:pointer;transition:all 0.15s" onmouseover="this.style.borderColor='var(--border-hover)';this.style.background='var(--bg-card)'" onmouseout="this.style.borderColor='var(--border)';this.style.background='var(--bg-elevated)'">
+              <div style="font-size:18px;margin-bottom:5px">🌐</div>
+              <div style="font-size:12px;font-weight:700;color:var(--text-primary);margin-bottom:3px">Domain DNS Check</div>
+              <div style="font-size:11px;color:var(--text-dim);line-height:1.5">Live SPF, DMARC, DKIM, MX, BIMI &amp; MTA-STS lookup with a 0–100 security score</div>
+            </div>
+
+            <div onclick="setView('headers')" style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;cursor:pointer;transition:all 0.15s" onmouseover="this.style.borderColor='var(--border-hover)';this.style.background='var(--bg-card)'" onmouseout="this.style.borderColor='var(--border)';this.style.background='var(--bg-elevated)'">
+              <div style="font-size:18px;margin-bottom:5px">📧</div>
+              <div style="font-size:12px;font-weight:700;color:var(--text-primary);margin-bottom:3px">Header Analysis</div>
+              <div style="font-size:11px;color:var(--text-dim);line-height:1.5">Paste raw email headers to detect spoofing, trace delivery hops and check authentication results</div>
+            </div>
+
+            <div onclick="setView('bulk')" style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;cursor:pointer;transition:all 0.15s" onmouseover="this.style.borderColor='var(--border-hover)';this.style.background='var(--bg-card)'" onmouseout="this.style.borderColor='var(--border)';this.style.background='var(--bg-elevated)'">
+              <div style="font-size:18px;margin-bottom:5px">📋</div>
+              <div style="font-size:12px;font-weight:700;color:var(--text-primary);margin-bottom:3px">Bulk Domain Checker</div>
+              <div style="font-size:11px;color:var(--text-dim);line-height:1.5">Check up to 50 domains at once. Export results as CSV for audits and client reports</div>
+            </div>
+
+            <div onclick="setView('dmarcxml')" style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;cursor:pointer;transition:all 0.15s" onmouseover="this.style.borderColor='var(--border-hover)';this.style.background='var(--bg-card)'" onmouseout="this.style.borderColor='var(--border)';this.style.background='var(--bg-elevated)'">
+              <div style="font-size:18px;margin-bottom:5px">📊</div>
+              <div style="font-size:12px;font-weight:700;color:var(--text-primary);margin-bottom:3px">DMARC Report Parser</div>
+              <div style="font-size:11px;color:var(--text-dim);line-height:1.5">Paste an XML aggregate report to see pass rates, sending sources and failures at a glance</div>
+            </div>
+
+            <div onclick="setView('psgen')" style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;cursor:pointer;transition:all 0.15s" onmouseover="this.style.borderColor='var(--border-hover)';this.style.background='var(--bg-card)'" onmouseout="this.style.borderColor='var(--border)';this.style.background='var(--bg-elevated)'">
+              <div style="font-size:18px;margin-bottom:5px">⚙️</div>
+              <div style="font-size:12px;font-weight:700;color:var(--text-primary);margin-bottom:3px">PowerShell Fix Generator</div>
+              <div style="font-size:11px;color:var(--text-dim);line-height:1.5">Get ready-to-run Exchange Online and DNS fix scripts tailored to exactly what is wrong</div>
+            </div>
+
+            <div onclick="setView('urlscan')" style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;cursor:pointer;transition:all 0.15s" onmouseover="this.style.borderColor='var(--border-hover)';this.style.background='var(--bg-card)'" onmouseout="this.style.borderColor='var(--border)';this.style.background='var(--bg-elevated)'">
+              <div style="font-size:18px;margin-bottom:5px">🔗</div>
+              <div style="font-size:12px;font-weight:700;color:var(--text-primary);margin-bottom:3px">Phishing URL Scanner</div>
+              <div style="font-size:11px;color:var(--text-dim);line-height:1.5">Check a suspicious link against 90+ antivirus engines via VirusTotal</div>
+            </div>
+
+            <div onclick="setView('hashcheck')" style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;cursor:pointer;transition:all 0.15s" onmouseover="this.style.borderColor='var(--border-hover)';this.style.background='var(--bg-card)'" onmouseout="this.style.borderColor='var(--border)';this.style.background='var(--bg-elevated)'">
+              <div style="font-size:18px;margin-bottom:5px">🔐</div>
+              <div style="font-size:12px;font-weight:700;color:var(--text-primary);margin-bottom:3px">Hash Checker</div>
+              <div style="font-size:11px;color:var(--text-dim);line-height:1.5">Check a file hash against VirusTotal without uploading the file — safe on any device</div>
+            </div>
+
+            <div onclick="setView('history')" style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;cursor:pointer;transition:all 0.15s" onmouseover="this.style.borderColor='var(--border-hover)';this.style.background='var(--bg-card)'" onmouseout="this.style.borderColor='var(--border)';this.style.background='var(--bg-elevated)'">
+              <div style="font-size:18px;margin-bottom:5px">🕐</div>
+              <div style="font-size:12px;font-weight:700;color:var(--text-primary);margin-bottom:3px">History &amp; Changes</div>
+              <div style="font-size:11px;color:var(--text-dim);line-height:1.5">Every scan is saved locally. Re-check domains to detect SPF/DMARC changes over time</div>
+            </div>
+
+          </div>
+
+          <!-- Score guide -->
+          <div style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px">
+            <div style="font-size:11px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">How scoring works</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <div style="flex:1;min-width:120px;background:var(--green-glow);border:1px solid rgba(52,211,153,0.25);border-radius:var(--radius-sm);padding:10px 12px;text-align:center">
+                <div style="font-size:18px;font-weight:800;color:var(--green);font-family:var(--font-mono)">&#8805;72%</div>
+                <div style="font-size:11px;font-weight:700;color:var(--green);margin-top:2px">🛡️ Looks Legitimate</div>
+                <div style="font-size:10px;color:var(--text-dim);margin-top:4px;line-height:1.4">Strong or near-complete authentication. Low spoofing risk.</div>
+              </div>
+              <div style="flex:1;min-width:120px;background:var(--amber-glow);border:1px solid rgba(245,158,11,0.22);border-radius:var(--radius-sm);padding:10px 12px;text-align:center">
+                <div style="font-size:18px;font-weight:800;color:var(--amber);font-family:var(--font-mono)">45&#8211;71%</div>
+                <div style="font-size:11px;font-weight:700;color:var(--amber);margin-top:2px">⚠️ Review Carefully</div>
+                <div style="font-size:10px;color:var(--text-dim);margin-top:4px;line-height:1.4">Authentication gaps. Some spoofed emails may reach inboxes.</div>
+              </div>
+              <div style="flex:1;min-width:120px;background:var(--red-glow);border:1px solid rgba(239,68,68,0.22);border-radius:var(--radius-sm);padding:10px 12px;text-align:center">
+                <div style="font-size:18px;font-weight:800;color:var(--red);font-family:var(--font-mono)">&lt;45%</div>
+                <div style="font-size:11px;font-weight:700;color:var(--red);margin-top:2px">🚨 High Spoof Risk</div>
+                <div style="font-size:10px;color:var(--text-dim);margin-top:4px;line-height:1.4">Critical gaps. Domain can likely be freely impersonated.</div>
+              </div>
+            </div>
+            <div style="margin-top:10px;font-size:11px;color:var(--text-dim);line-height:1.5">Scoring is weighted by impact — SPF and DMARC missing each deduct 35 pts, DKIM 20 pts, MX 12 pts. A domain missing both SPF and DMARC scores 0% regardless of other checks.</div>
+          </div>
+
+        </div>
+      </div>
     </div>
 
     <!-- ═══ VIEW: BULK ═══ -->
@@ -2111,46 +2231,415 @@ function showHowTo() {
   const m = document.getElementById('howtoModal');
   m.style.display = 'flex';
   m.onclick = e => { if(e.target === m) m.style.display='none'; };
+  switchHowtoTab(0);
+}
+function switchHowtoTab(idx) {
+  document.querySelectorAll('.howto-tab').forEach((t,i) => t.classList.toggle('active', i===idx));
+  document.querySelectorAll('.howto-panel').forEach((p,i) => p.classList.toggle('active', i===idx));
 }
 
 </script>
 
 <!-- ═══ HOW-TO MODAL ═══ -->
-<div id="howtoModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:200;align-items:center;justify-content:center;padding:24px">
-  <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;max-width:640px;width:100%;max-height:80vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.4)">
-    <div style="padding:20px 24px;border-bottom:3px solid #732540;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg-card)">
-      <span style="font-size:15px;font-weight:700;color:var(--text-primary)">How to use the Email Spoof Checker</span>
-      <button onclick="document.getElementById('howtoModal').style.display='none'" style="background:none;border:none;color:var(--text-secondary);cursor:pointer;font-size:20px;line-height:1;padding:0 4px">&times;</button>
-    </div>
-    <div style="padding:20px 24px;font-size:13px;color:var(--text-secondary);line-height:1.7">
-      <div style="background:var(--bg-elevated);border-left:3px solid #BAAA5D;border-radius:4px;padding:10px 14px;margin-bottom:18px;color:var(--text-primary)">
-        Checks email authentication records for any domain. No login or installation required. All DNS queries go via Cloudflare DoH.
+<div id="howtoModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:200;align-items:center;justify-content:center;padding:20px" onclick="if(event.target===this)this.style.display='none'">
+  <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:14px;max-width:780px;width:100%;max-height:88vh;display:flex;flex-direction:column;box-shadow:0 24px 80px rgba(0,0,0,0.5)">
+
+    <!-- Header -->
+    <div style="padding:18px 24px 0;border-bottom:1px solid var(--border);flex-shrink:0">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:34px;height:34px;background:#611932;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px">🛡️</div>
+          <div>
+            <div style="font-size:15px;font-weight:700;color:var(--text-primary)">How to use the Email Spoof Checker</div>
+            <div style="font-size:11px;color:var(--text-dim)">No login · No installation · All DNS via Cloudflare DoH</div>
+          </div>
+        </div>
+        <button onclick="document.getElementById('howtoModal').style.display='none'" style="background:none;border:none;color:var(--text-secondary);cursor:pointer;font-size:22px;line-height:1;padding:0 4px;flex-shrink:0">&times;</button>
       </div>
-      <h4 style="color:var(--accent);margin-bottom:6px">Domain DNS Check</h4>
-      <p style="margin-bottom:4px">Enter any domain (e.g. <code style="background:var(--bg-elevated);padding:1px 5px;border-radius:3px">contoso.com</code>) and click Scan. Checks SPF, DMARC, DKIM, MX, BIMI and MTA-STS and returns a 0-100% security score with a plain-English risk summary.</p>
-      <h4 style="color:var(--accent);margin:14px 0 6px">Header Analysis</h4>
-      <p style="margin-bottom:4px">Paste raw email headers to trace the delivery path, detect spoofing, and see SPF/DKIM/DMARC pass/fail.</p>
-      <p style="margin-bottom:4px" style="color:var(--text-primary);font-weight:600">How to get raw headers:</p>
-      <ul style="margin:4px 0 12px 16px">
-        <li>Outlook desktop: File &rarr; Properties &rarr; Internet headers</li>
-        <li>Outlook Web: Three dots &rarr; View &rarr; View message source</li>
-        <li>Gmail: Three dots &rarr; Show original</li>
-        <li>M365 Admin Center: Message trace &rarr; select message &rarr; copy headers</li>
-      </ul>
-      <h4 style="color:var(--accent);margin:14px 0 6px">Bulk Checker</h4>
-      <p style="margin-bottom:12px">Paste or upload a list of domains (one per line) to scan up to 50 at once. Click column headers to sort. Use Export CSV to save results.</p>
-      <h4 style="color:var(--accent);margin:14px 0 6px">History &amp; Changes</h4>
-      <p style="margin-bottom:12px">Every scan is saved in your browser. Return later to see if records changed — useful for tracking remediation after fixing SPF/DMARC issues.</p>
-      <h4 style="color:var(--accent);margin:14px 0 6px">PowerShell Generator</h4>
-      <p style="margin-bottom:12px">After scanning a domain, switch here to get ready-made M365 fix scripts for missing records. Also generates SPF flattening advice and a full MTA-STS policy file.</p>
-      <h4 style="color:var(--accent);margin:14px 0 6px">URL &amp; Hash Scanner</h4>
-      <p style="margin-bottom:16px">Paste a suspicious URL or file hash to open it directly in VirusTotal for threat intel lookup.</p>
-      <div style="border-top:1px solid var(--border);padding-top:14px;display:flex;gap:16px;flex-wrap:wrap">
-        <a href="https://github.com/great-it-nordic/email-spoof-checker/issues/new?template=feature_request.md&title=[Feature+Request]&labels=enhancement" target="_blank" style="color:var(--accent);text-decoration:none;font-size:12px">+ Suggest a feature</a>
-        <a href="https://github.com/great-it-nordic/email-spoof-checker/issues/new?template=bug_report.md&title=[Bug]&labels=bug" target="_blank" style="color:var(--accent);text-decoration:none;font-size:12px">Report an issue</a>
-        <a href="https://github.com/great-it-nordic/email-spoof-checker" target="_blank" style="color:var(--accent);text-decoration:none;font-size:12px">View on GitHub</a>
+      <!-- Tabs -->
+      <div style="display:flex;gap:0" id="howtoTabs">
+        <button onclick="switchHowtoTab(0)" class="howto-tab active" data-tab="0">🚀 Quick Start</button>
+        <button onclick="switchHowtoTab(1)" class="howto-tab" data-tab="1">🧰 All Tools</button>
+        <button onclick="switchHowtoTab(2)" class="howto-tab" data-tab="2">📊 Understanding Results</button>
+        <button onclick="switchHowtoTab(3)" class="howto-tab" data-tab="3">📧 Getting Headers</button>
       </div>
     </div>
+
+    <!-- Body -->
+    <div style="overflow-y:auto;flex:1;padding:22px 24px" id="howtoBody">
+
+      <!-- TAB 0: Quick Start -->
+      <div class="howto-panel active" data-panel="0">
+        <div style="background:var(--bg-elevated);border-left:3px solid #BAAA5D;border-radius:6px;padding:10px 14px;margin-bottom:20px;font-size:13px;color:var(--text-primary)">
+          This tool checks whether a domain's email authentication is correctly configured — helping you spot spoofed emails and prove your own domain is secure.
+        </div>
+
+        <!-- 3 steps -->
+        <div style="font-size:11px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">Most common use case — Domain Check</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px">
+          <div style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius);padding:14px;position:relative">
+            <div style="width:28px;height:28px;border-radius:50%;background:#1B445A;border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--accent);margin-bottom:10px">1</div>
+            <div style="font-size:12px;font-weight:700;color:var(--text-primary);margin-bottom:5px">Enter a domain</div>
+            <div style="font-size:11px;color:var(--text-dim);line-height:1.5">Type any domain into the input at the top — <code style="background:var(--bg-card);padding:1px 5px;border-radius:3px;font-size:10px">contoso.com</code>, <code style="background:var(--bg-card);padding:1px 5px;border-radius:3px;font-size:10px">gmail.com</code>, a supplier, a client.</div>
+          </div>
+          <div style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius);padding:14px">
+            <div style="width:28px;height:28px;border-radius:50%;background:#1B445A;border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--accent);margin-bottom:10px">2</div>
+            <div style="font-size:12px;font-weight:700;color:var(--text-primary);margin-bottom:5px">Click Analyze</div>
+            <div style="font-size:11px;color:var(--text-dim);line-height:1.5">Runs live DNS lookups via Cloudflare. Checks SPF, DMARC, DKIM (30 selectors), MX, BIMI and MTA-STS in parallel. Takes 2–5 seconds.</div>
+          </div>
+          <div style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius);padding:14px">
+            <div style="width:28px;height:28px;border-radius:50%;background:#1B445A;border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--accent);margin-bottom:10px">3</div>
+            <div style="font-size:12px;font-weight:700;color:var(--text-primary);margin-bottom:5px">Read the results</div>
+            <div style="font-size:11px;color:var(--text-dim);line-height:1.5">A score ring shows 0–100%. Each check card explains what was found, what it means, and what to fix — in plain English.</div>
+          </div>
+        </div>
+
+        <!-- Common scenarios -->
+        <div style="font-size:11px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">Common scenarios</div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:24px">
+          <div style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;display:flex;gap:12px;align-items:flex-start">
+            <span style="font-size:18px;flex-shrink:0">🤔</span>
+            <div>
+              <div style="font-size:12px;font-weight:700;color:var(--text-primary);margin-bottom:3px">"Did this email really come from this company?"</div>
+              <div style="font-size:11px;color:var(--text-dim);line-height:1.5">Run a <strong style="color:var(--text-secondary)">Domain DNS Check</strong> on the sender's domain, then compare the score and policy with what the email headers show. Or paste the headers directly into <strong style="color:var(--text-secondary)">Header Analysis</strong> for a full trace.</div>
+            </div>
+          </div>
+          <div style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;display:flex;gap:12px;align-items:flex-start">
+            <span style="font-size:18px;flex-shrink:0">🔧</span>
+            <div>
+              <div style="font-size:12px;font-weight:700;color:var(--text-primary);margin-bottom:3px">"We need to fix our SPF/DMARC — where do I start?"</div>
+              <div style="font-size:11px;color:var(--text-dim);line-height:1.5">Run a <strong style="color:var(--text-secondary)">Domain DNS Check</strong> on your own domain, then switch to the <strong style="color:var(--text-secondary)">PowerShell Fix Generator</strong>. It produces ready-to-run Exchange Online commands and the exact DNS records to publish.</div>
+            </div>
+          </div>
+          <div style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;display:flex;gap:12px;align-items:flex-start">
+            <span style="font-size:18px;flex-shrink:0">📋</span>
+            <div>
+              <div style="font-size:12px;font-weight:700;color:var(--text-primary);margin-bottom:3px">"I need to audit 30 supplier domains for our security review"</div>
+              <div style="font-size:11px;color:var(--text-dim);line-height:1.5">Use the <strong style="color:var(--text-secondary)">Bulk Domain Checker</strong> — paste all domains at once, get a colour-coded table, and export as CSV for your report.</div>
+            </div>
+          </div>
+          <div style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;display:flex;gap:12px;align-items:flex-start">
+            <span style="font-size:18px;flex-shrink:0">😨</span>
+            <div>
+              <div style="font-size:12px;font-weight:700;color:var(--text-primary);margin-bottom:3px">"Someone got a phishing email — how do I investigate it?"</div>
+              <div style="font-size:11px;color:var(--text-dim);line-height:1.5">Paste the email headers into <strong style="color:var(--text-secondary)">Header Analysis</strong> to trace the delivery path and check authentication. Paste any suspicious link into the <strong style="color:var(--text-secondary)">URL Scanner</strong>. Check any attachment hash in the <strong style="color:var(--text-secondary)">Hash Checker</strong> before opening.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Keyboard shortcuts -->
+        <div style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px">
+          <div style="font-size:11px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Keyboard shortcuts</div>
+          <div style="display:flex;gap:24px;flex-wrap:wrap;font-size:11px;color:var(--text-secondary)">
+            <span><kbd style="background:var(--bg-card);border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-family:var(--font-mono);font-size:10px">Enter</kbd> Run scan</span>
+            <span><kbd style="background:var(--bg-card);border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-family:var(--font-mono);font-size:10px">Ctrl+K</kbd> Focus domain input</span>
+            <span><kbd style="background:var(--bg-card);border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-family:var(--font-mono);font-size:10px">Ctrl+P</kbd> Print / PDF report</span>
+            <span><kbd style="background:var(--bg-card);border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-family:var(--font-mono);font-size:10px">Esc</kbd> Close this dialog</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 1: All Tools -->
+      <div class="howto-panel" data-panel="1">
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px">
+
+          <div style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius);padding:14px">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+              <span style="font-size:18px">🌐</span>
+              <div style="font-size:12px;font-weight:700;color:var(--text-primary)">Domain DNS Check</div>
+            </div>
+            <div style="font-size:11px;color:var(--text-dim);line-height:1.6;margin-bottom:10px">Live lookup of all six email authentication records. Probes 30 DKIM selectors automatically. Returns an animated score ring with colour-coded check cards and plain-English explanations.</div>
+            <div style="font-size:10px;color:var(--accent);font-weight:600">Checks: SPF · DMARC · DKIM · MX · BIMI · MTA-STS</div>
+          </div>
+
+          <div style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius);padding:14px">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+              <span style="font-size:18px">📧</span>
+              <div style="font-size:12px;font-weight:700;color:var(--text-primary)">Header Analysis</div>
+            </div>
+            <div style="font-size:11px;color:var(--text-dim);line-height:1.6;margin-bottom:10px">Paste raw email headers to decode the full delivery chain. Detects From/Return-Path mismatches, Reply-To hijacking, suspicious mail hops, and bulk-sender fingerprints. Shows exactly what the receiving server recorded for SPF, DKIM and DMARC.</div>
+            <div style="font-size:10px;color:var(--accent);font-weight:600">Access: Domain Check tab → switch to Header Analysis</div>
+          </div>
+
+          <div style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius);padding:14px">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+              <span style="font-size:18px">📋</span>
+              <div style="font-size:12px;font-weight:700;color:var(--text-primary)">Bulk Domain Checker</div>
+            </div>
+            <div style="font-size:11px;color:var(--text-dim);line-height:1.6;margin-bottom:10px">Paste up to 50 domains (one per line) and scan them all at once. Results appear in a sortable, colour-coded table. Click any row to drill into the full check results. Export the whole table as CSV for audit reports.</div>
+            <div style="font-size:10px;color:var(--accent);font-weight:600">Tip: Sort by Score to find the riskiest domains first</div>
+          </div>
+
+          <div style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius);padding:14px">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+              <span style="font-size:18px">📊</span>
+              <div style="font-size:12px;font-weight:700;color:var(--text-primary)">DMARC Report Parser</div>
+            </div>
+            <div style="font-size:11px;color:var(--text-dim);line-height:1.6;margin-bottom:10px">DMARC aggregate reports arrive as XML email attachments at your <code style="background:var(--bg-card);padding:1px 4px;border-radius:3px;font-size:10px">rua=</code> address. Paste the XML here to get a human-readable breakdown: pass rate, every sending source, DKIM/SPF result per IP, and a highlighted failure callout. Entirely client-side.</div>
+            <div style="font-size:10px;color:var(--accent);font-weight:600">Reports come from Google, Microsoft, Yahoo and others</div>
+          </div>
+
+          <div style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius);padding:14px">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+              <span style="font-size:18px">🕐</span>
+              <div style="font-size:12px;font-weight:700;color:var(--text-primary)">History &amp; Change Detection</div>
+            </div>
+            <div style="font-size:11px;color:var(--text-dim);line-height:1.6;margin-bottom:10px">Every scan is stored in your browser's localStorage. Re-run a domain later to detect changes — a badge shows if records improved or degraded. Each entry has a score sparkline tracking the last 10 results. Star domains to build a watchlist and recheck all starred with one click.</div>
+            <div style="font-size:10px;color:var(--accent);font-weight:600">Data stays local — nothing is sent to any server</div>
+          </div>
+
+          <div style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius);padding:14px">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+              <span style="font-size:18px">⚙️</span>
+              <div style="font-size:12px;font-weight:700;color:var(--text-primary)">PowerShell Fix Generator</div>
+            </div>
+            <div style="font-size:11px;color:var(--text-dim);line-height:1.6;margin-bottom:10px">Scans a domain live then generates a ready-to-run script covering exactly what's broken: Exchange Online DKIM signing commands, exact SPF records to publish, a step-by-step DMARC upgrade path, and <code style="background:var(--bg-card);padding:1px 4px;border-radius:3px;font-size:10px">Resolve-DnsName</code> verification commands.</div>
+            <div style="font-size:10px;color:var(--accent);font-weight:600">For Microsoft 365 / Exchange Online environments</div>
+          </div>
+
+          <div style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius);padding:14px">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+              <span style="font-size:18px">🔗</span>
+              <div style="font-size:12px;font-weight:700;color:var(--text-primary)">Phishing URL Scanner</div>
+            </div>
+            <div style="font-size:11px;color:var(--text-dim);line-height:1.6;margin-bottom:10px">Paste a suspicious link to check it against 90+ antivirus and URL reputation engines via VirusTotal. Shows detection count, verdict, and links to the full VirusTotal report. Your API key is stored only in your browser and never sent to Great IT Nordic.</div>
+            <div style="font-size:10px;color:var(--accent);font-weight:600">Requires a free <a href="https://www.virustotal.com/gui/join-us" target="_blank" style="color:var(--accent)">VirusTotal API key</a></div>
+          </div>
+
+          <div style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius);padding:14px">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+              <span style="font-size:18px">🔐</span>
+              <div style="font-size:12px;font-weight:700;color:var(--text-primary)">Attachment Hash Checker</div>
+            </div>
+            <div style="font-size:11px;color:var(--text-dim);line-height:1.6;margin-bottom:10px">Enter a file hash (MD5, SHA-1 or SHA-256) to look it up in VirusTotal without uploading the file. Get the hash using PowerShell: <code style="background:var(--bg-card);padding:1px 4px;border-radius:3px;font-size:10px">Get-FileHash .\file.docx</code>. Safe to run on any shared or restricted device.</div>
+            <div style="font-size:10px;color:var(--accent);font-weight:600">No file upload — hash lookup only</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- TAB 2: Understanding Results -->
+      <div class="howto-panel" data-panel="2">
+
+        <!-- Score guide -->
+        <div style="font-size:11px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">Score and verdict</div>
+        <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap">
+          <div style="flex:1;min-width:140px;background:var(--green-glow);border:1px solid rgba(52,211,153,0.3);border-radius:var(--radius);padding:12px;text-align:center">
+            <div style="font-size:22px;font-weight:800;color:var(--green);font-family:var(--font-mono)">≥72%</div>
+            <div style="font-size:12px;font-weight:700;color:var(--green);margin:4px 0">🛡️ Looks Legitimate</div>
+            <div style="font-size:11px;color:var(--text-dim);line-height:1.4">Strong authentication. Low spoofing risk. Emails from this domain are likely trustworthy.</div>
+          </div>
+          <div style="flex:1;min-width:140px;background:var(--amber-glow);border:1px solid rgba(245,158,11,0.25);border-radius:var(--radius);padding:12px;text-align:center">
+            <div style="font-size:22px;font-weight:800;color:var(--amber);font-family:var(--font-mono)">45–71%</div>
+            <div style="font-size:12px;font-weight:700;color:var(--amber);margin:4px 0">⚠️ Review Carefully</div>
+            <div style="font-size:11px;color:var(--text-dim);line-height:1.4">Authentication gaps exist. Some spoofed emails may reach inboxes depending on receiver policy.</div>
+          </div>
+          <div style="flex:1;min-width:140px;background:var(--red-glow);border:1px solid rgba(239,68,68,0.25);border-radius:var(--radius);padding:12px;text-align:center">
+            <div style="font-size:22px;font-weight:800;color:var(--red);font-family:var(--font-mono)">&lt;45%</div>
+            <div style="font-size:12px;font-weight:700;color:var(--red);margin:4px 0">🚨 High Spoof Risk</div>
+            <div style="font-size:11px;color:var(--text-dim);line-height:1.4">Critical gaps. This domain can likely be freely impersonated. Do not trust emails from it without further verification.</div>
+          </div>
+        </div>
+
+        <!-- What each check means -->
+        <div style="font-size:11px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">What each check means</div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">
+
+          <div style="border:1px solid var(--border);border-radius:var(--radius);overflow:hidden">
+            <div style="background:var(--bg-elevated);padding:10px 14px;display:flex;gap:10px;align-items:flex-start">
+              <span style="font-family:var(--font-mono);font-size:10px;font-weight:700;background:#1B445A;color:var(--accent);padding:2px 7px;border-radius:4px;flex-shrink:0;margin-top:1px">SPF</span>
+              <div>
+                <div style="font-size:12px;font-weight:700;color:var(--text-primary);margin-bottom:3px">Sender Policy Framework <span style="font-weight:400;color:var(--text-dim)">— who is allowed to send email for this domain</span></div>
+                <div style="font-size:11px;color:var(--text-dim);line-height:1.6">A DNS TXT record listing every server authorised to send email on behalf of the domain. Receiving mail servers check this against the sending server's IP. <code style="background:var(--bg-card);padding:1px 4px;border-radius:3px;font-size:10px">-all</code> (hard fail, best) means anything not listed should be rejected. <code style="background:var(--bg-card);padding:1px 4px;border-radius:3px;font-size:10px">~all</code> (soft fail) means unlisted senders should be flagged. <code style="background:var(--bg-card);padding:1px 4px;border-radius:3px;font-size:10px">+all</code> (pass all) means anyone can send — this is dangerous.</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="border:1px solid var(--border);border-radius:var(--radius);overflow:hidden">
+            <div style="background:var(--bg-elevated);padding:10px 14px;display:flex;gap:10px;align-items:flex-start">
+              <span style="font-family:var(--font-mono);font-size:10px;font-weight:700;background:#1B445A;color:var(--accent);padding:2px 7px;border-radius:4px;flex-shrink:0;margin-top:1px">DMARC</span>
+              <div>
+                <div style="font-size:12px;font-weight:700;color:var(--text-primary);margin-bottom:3px">Domain-based Message Authentication <span style="font-weight:400;color:var(--text-dim)">— what to do with failures</span></div>
+                <div style="font-size:11px;color:var(--text-dim);line-height:1.6">Sits on top of SPF and DKIM and tells receivers what to do when both fail. <code style="background:var(--bg-card);padding:1px 4px;border-radius:3px;font-size:10px">p=none</code> means monitor only — nothing is blocked. <code style="background:var(--bg-card);padding:1px 4px;border-radius:3px;font-size:10px">p=quarantine</code> sends failures to spam. <code style="background:var(--bg-card);padding:1px 4px;border-radius:3px;font-size:10px">p=reject</code> (best) blocks them entirely. Without DMARC, SPF and DKIM failures are silently ignored by most receivers. DMARC also enables aggregate reports showing who is sending email as your domain.</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="border:1px solid var(--border);border-radius:var(--radius);overflow:hidden">
+            <div style="background:var(--bg-elevated);padding:10px 14px;display:flex;gap:10px;align-items:flex-start">
+              <span style="font-family:var(--font-mono);font-size:10px;font-weight:700;background:#1B445A;color:var(--accent);padding:2px 7px;border-radius:4px;flex-shrink:0;margin-top:1px">DKIM</span>
+              <div>
+                <div style="font-size:12px;font-weight:700;color:var(--text-primary);margin-bottom:3px">DomainKeys Identified Mail <span style="font-weight:400;color:var(--text-dim)">— cryptographic signature on each email</span></div>
+                <div style="font-size:11px;color:var(--text-dim);line-height:1.6">The mail server signs every outgoing email with a private key. The corresponding public key is published in DNS. Receiving servers verify the signature, confirming the email was not altered in transit and genuinely came from this domain's mail infrastructure. If DKIM is not found, it doesn't necessarily mean it's missing — this tool probes 30 common selector names but yours may use a different one.</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="border:1px solid var(--border);border-radius:var(--radius);overflow:hidden">
+            <div style="background:var(--bg-elevated);padding:10px 14px;display:flex;gap:10px;align-items:flex-start">
+              <span style="font-family:var(--font-mono);font-size:10px;font-weight:700;background:#1B445A;color:var(--accent);padding:2px 7px;border-radius:4px;flex-shrink:0;margin-top:1px">MX</span>
+              <div>
+                <div style="font-size:12px;font-weight:700;color:var(--text-primary);margin-bottom:3px">Mail Exchange Records <span style="font-weight:400;color:var(--text-dim)">— where to deliver inbound email</span></div>
+                <div style="font-size:11px;color:var(--text-dim);line-height:1.6">MX records point to the mail servers that should receive email for the domain. A domain with no MX records cannot receive email — this is normal for domains used only for outbound sending (e.g. a marketing subdomain), but unusual for a company's primary domain.</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="border:1px solid var(--border);border-radius:var(--radius);overflow:hidden">
+            <div style="background:var(--bg-elevated);padding:10px 14px;display:flex;gap:10px;align-items:flex-start">
+              <span style="font-family:var(--font-mono);font-size:10px;font-weight:700;background:#1B445A;color:var(--accent);padding:2px 7px;border-radius:4px;flex-shrink:0;margin-top:1px">MTA-STS</span>
+              <div>
+                <div style="font-size:12px;font-weight:700;color:var(--text-primary);margin-bottom:3px">MTA Strict Transport Security <span style="font-weight:400;color:var(--text-dim)">— enforces TLS for inbound email</span></div>
+                <div style="font-size:11px;color:var(--text-dim);line-height:1.6">Tells sending mail servers they must use TLS when delivering to this domain, and fail the delivery if a valid TLS connection can't be established. Prevents downgrade attacks where an attacker intercepts and strips encryption from SMTP connections. Less common than SPF/DMARC but increasingly expected for high-security environments.</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="border:1px solid var(--border);border-radius:var(--radius);overflow:hidden">
+            <div style="background:var(--bg-elevated);padding:10px 14px;display:flex;gap:10px;align-items:flex-start">
+              <span style="font-family:var(--font-mono);font-size:10px;font-weight:700;background:#1B445A;color:var(--accent);padding:2px 7px;border-radius:4px;flex-shrink:0;margin-top:1px">BIMI</span>
+              <div>
+                <div style="font-size:12px;font-weight:700;color:var(--text-primary);margin-bottom:3px">Brand Indicators for Message Identification <span style="font-weight:400;color:var(--text-dim)">— logo in email clients</span></div>
+                <div style="font-size:11px;color:var(--text-dim);line-height:1.6">Allows a domain to publish a logo that appears next to emails in supported clients (Gmail, Apple Mail, Yahoo). Requires DMARC <code style="background:var(--bg-card);padding:1px 4px;border-radius:3px;font-size:10px">p=reject</code> or <code style="background:var(--bg-card);padding:1px 4px;border-radius:3px;font-size:10px">p=quarantine</code> to be in place first. Not yet universally supported, but Google and others are adopting it. Missing BIMI has a small score impact.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scoring weights -->
+        <div style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius);padding:14px">
+          <div style="font-size:11px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">Score weighting</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:6px;margin-bottom:8px">
+            <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 10px;text-align:center">
+              <div style="font-size:12px;font-weight:700;font-family:var(--font-mono);color:var(--accent)">SPF</div>
+              <div style="font-size:11px;color:var(--red);margin-top:3px">−35 fail</div>
+              <div style="font-size:11px;color:var(--amber)">−15 warn</div>
+            </div>
+            <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 10px;text-align:center">
+              <div style="font-size:12px;font-weight:700;font-family:var(--font-mono);color:var(--accent)">DMARC</div>
+              <div style="font-size:11px;color:var(--red);margin-top:3px">−35 fail</div>
+              <div style="font-size:11px;color:var(--amber)">−15 warn</div>
+            </div>
+            <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 10px;text-align:center">
+              <div style="font-size:12px;font-weight:700;font-family:var(--font-mono);color:var(--accent)">DKIM</div>
+              <div style="font-size:11px;color:var(--red);margin-top:3px">−20 fail</div>
+              <div style="font-size:11px;color:var(--text-dim)">—</div>
+            </div>
+            <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 10px;text-align:center">
+              <div style="font-size:12px;font-weight:700;font-family:var(--font-mono);color:var(--accent)">MX</div>
+              <div style="font-size:11px;color:var(--red);margin-top:3px">−12 fail</div>
+              <div style="font-size:11px;color:var(--text-dim)">—</div>
+            </div>
+            <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 10px;text-align:center">
+              <div style="font-size:12px;font-weight:700;font-family:var(--font-mono);color:var(--accent)">BIMI</div>
+              <div style="font-size:11px;color:var(--red);margin-top:3px">−3 fail</div>
+              <div style="font-size:11px;color:var(--text-dim)">—</div>
+            </div>
+          </div>
+          <div style="font-size:11px;color:var(--text-dim);line-height:1.5">A domain missing both SPF and DMARC scores 0% — correctly reflecting that it can be freely impersonated regardless of other checks.</div>
+        </div>
+      </div>
+
+      <!-- TAB 3: Getting Headers -->
+      <div class="howto-panel" data-panel="3">
+        <div style="background:var(--bg-elevated);border-left:3px solid #BAAA5D;border-radius:6px;padding:10px 14px;margin-bottom:18px;font-size:12px;color:var(--text-primary)">
+          Raw email headers contain the full delivery path and authentication results recorded by each mail server. Here's how to extract them from every common client.
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:10px">
+
+          <div style="border:1px solid var(--border);border-radius:var(--radius);overflow:hidden">
+            <div style="background:#1B445A;padding:10px 14px;display:flex;align-items:center;gap:8px">
+              <span style="font-size:16px">📘</span>
+              <span style="font-size:12px;font-weight:700;color:#fff">Outlook Desktop (Windows)</span>
+            </div>
+            <div style="padding:12px 14px;font-size:11px;color:var(--text-secondary);line-height:1.7">
+              <div style="display:flex;flex-direction:column;gap:5px">
+                <div style="display:flex;gap:8px"><span style="background:#1B445A;color:var(--accent);font-weight:700;font-size:10px;padding:1px 7px;border-radius:10px;flex-shrink:0;line-height:18px">1</span><span>Double-click the email to open it in its own window</span></div>
+                <div style="display:flex;gap:8px"><span style="background:#1B445A;color:var(--accent);font-weight:700;font-size:10px;padding:1px 7px;border-radius:10px;flex-shrink:0;line-height:18px">2</span><span>Click <strong style="color:var(--text-primary)">File</strong> in the ribbon</span></div>
+                <div style="display:flex;gap:8px"><span style="background:#1B445A;color:var(--accent);font-weight:700;font-size:10px;padding:1px 7px;border-radius:10px;flex-shrink:0;line-height:18px">3</span><span>Click <strong style="color:var(--text-primary)">Properties</strong> (bottom of the left panel)</span></div>
+                <div style="display:flex;gap:8px"><span style="background:#1B445A;color:var(--accent);font-weight:700;font-size:10px;padding:1px 7px;border-radius:10px;flex-shrink:0;line-height:18px">4</span><span>Scroll down to the <strong style="color:var(--text-primary)">Internet headers</strong> box at the bottom</span></div>
+                <div style="display:flex;gap:8px"><span style="background:#1B445A;color:var(--accent);font-weight:700;font-size:10px;padding:1px 7px;border-radius:10px;flex-shrink:0;line-height:18px">5</span><span>Click inside the box, press <kbd style="background:var(--bg-card);border:1px solid var(--border);padding:0 5px;border-radius:3px">Ctrl+A</kbd> then <kbd style="background:var(--bg-card);border:1px solid var(--border);padding:0 5px;border-radius:3px">Ctrl+C</kbd> to copy all</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div style="border:1px solid var(--border);border-radius:var(--radius);overflow:hidden">
+            <div style="background:#1B445A;padding:10px 14px;display:flex;align-items:center;gap:8px">
+              <span style="font-size:16px">🌐</span>
+              <span style="font-size:12px;font-weight:700;color:#fff">Outlook on the Web (OWA / Microsoft 365)</span>
+            </div>
+            <div style="padding:12px 14px;font-size:11px;color:var(--text-secondary);line-height:1.7">
+              <div style="display:flex;flex-direction:column;gap:5px">
+                <div style="display:flex;gap:8px"><span style="background:#1B445A;color:var(--accent);font-weight:700;font-size:10px;padding:1px 7px;border-radius:10px;flex-shrink:0;line-height:18px">1</span><span>Open the email in the reading pane or full window</span></div>
+                <div style="display:flex;gap:8px"><span style="background:#1B445A;color:var(--accent);font-weight:700;font-size:10px;padding:1px 7px;border-radius:10px;flex-shrink:0;line-height:18px">2</span><span>Click the <strong style="color:var(--text-primary)">⋯ three dots</strong> (More actions) button</span></div>
+                <div style="display:flex;gap:8px"><span style="background:#1B445A;color:var(--accent);font-weight:700;font-size:10px;padding:1px 7px;border-radius:10px;flex-shrink:0;line-height:18px">3</span><span>Click <strong style="color:var(--text-primary)">View → View message source</strong></span></div>
+                <div style="display:flex;gap:8px"><span style="background:#1B445A;color:var(--accent);font-weight:700;font-size:10px;padding:1px 7px;border-radius:10px;flex-shrink:0;line-height:18px">4</span><span>Press <kbd style="background:var(--bg-card);border:1px solid var(--border);padding:0 5px;border-radius:3px">Ctrl+A</kbd> then <kbd style="background:var(--bg-card);border:1px solid var(--border);padding:0 5px;border-radius:3px">Ctrl+C</kbd> to copy the full source</span></div>
+                <div style="margin-left:28px;color:var(--text-dim)">Alternative: Three dots → <strong style="color:var(--text-secondary)">View message details</strong> shows a shorter summary with authentication results only</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="border:1px solid var(--border);border-radius:var(--radius);overflow:hidden">
+            <div style="background:#1B445A;padding:10px 14px;display:flex;align-items:center;gap:8px">
+              <span style="font-size:16px">📩</span>
+              <span style="font-size:12px;font-weight:700;color:#fff">Gmail</span>
+            </div>
+            <div style="padding:12px 14px;font-size:11px;color:var(--text-secondary);line-height:1.7">
+              <div style="display:flex;flex-direction:column;gap:5px">
+                <div style="display:flex;gap:8px"><span style="background:#1B445A;color:var(--accent);font-weight:700;font-size:10px;padding:1px 7px;border-radius:10px;flex-shrink:0;line-height:18px">1</span><span>Open the email</span></div>
+                <div style="display:flex;gap:8px"><span style="background:#1B445A;color:var(--accent);font-weight:700;font-size:10px;padding:1px 7px;border-radius:10px;flex-shrink:0;line-height:18px">2</span><span>Click the <strong style="color:var(--text-primary)">⋮ three dots</strong> next to the Reply button</span></div>
+                <div style="display:flex;gap:8px"><span style="background:#1B445A;color:var(--accent);font-weight:700;font-size:10px;padding:1px 7px;border-radius:10px;flex-shrink:0;line-height:18px">3</span><span>Click <strong style="color:var(--text-primary)">Show original</strong> — a new tab opens</span></div>
+                <div style="display:flex;gap:8px"><span style="background:#1B445A;color:var(--accent);font-weight:700;font-size:10px;padding:1px 7px;border-radius:10px;flex-shrink:0;line-height:18px">4</span><span>Click <strong style="color:var(--text-primary)">Copy to clipboard</strong> at the top of the page</span></div>
+                <div style="margin-left:28px;color:var(--text-dim)">The "Original Message" tab in Gmail also shows a visual breakdown of SPF, DKIM and DMARC pass/fail which you can compare with this tool's results</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="border:1px solid var(--border);border-radius:var(--radius);overflow:hidden">
+            <div style="background:#1B445A;padding:10px 14px;display:flex;align-items:center;gap:8px">
+              <span style="font-size:16px">🍎</span>
+              <span style="font-size:12px;font-weight:700;color:#fff">Apple Mail (macOS)</span>
+            </div>
+            <div style="padding:12px 14px;font-size:11px;color:var(--text-secondary);line-height:1.7">
+              <div style="display:flex;flex-direction:column;gap:5px">
+                <div style="display:flex;gap:8px"><span style="background:#1B445A;color:var(--accent);font-weight:700;font-size:10px;padding:1px 7px;border-radius:10px;flex-shrink:0;line-height:18px">1</span><span>Select the email</span></div>
+                <div style="display:flex;gap:8px"><span style="background:#1B445A;color:var(--accent);font-weight:700;font-size:10px;padding:1px 7px;border-radius:10px;flex-shrink:0;line-height:18px">2</span><span>In the menu bar click <strong style="color:var(--text-primary)">View → Message → All Headers</strong></span></div>
+                <div style="display:flex;gap:8px"><span style="background:#1B445A;color:var(--accent);font-weight:700;font-size:10px;padding:1px 7px;border-radius:10px;flex-shrink:0;line-height:18px">3</span><span>Or press <kbd style="background:var(--bg-card);border:1px solid var(--border);padding:0 5px;border-radius:3px">⇧⌘H</kbd> to toggle the full header view</span></div>
+                <div style="display:flex;gap:8px"><span style="background:#1B445A;color:var(--accent);font-weight:700;font-size:10px;padding:1px 7px;border-radius:10px;flex-shrink:0;line-height:18px">4</span><span>Select all the text and copy it</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div style="border:1px solid var(--border);border-radius:var(--radius);overflow:hidden">
+            <div style="background:#1B445A;padding:10px 14px;display:flex;align-items:center;gap:8px">
+              <span style="font-size:16px">⚙️</span>
+              <span style="font-size:12px;font-weight:700;color:#fff">Microsoft 365 Admin Center (Message Trace)</span>
+            </div>
+            <div style="padding:12px 14px;font-size:11px;color:var(--text-secondary);line-height:1.7">
+              <div style="display:flex;flex-direction:column;gap:5px">
+                <div style="display:flex;gap:8px"><span style="background:#1B445A;color:var(--accent);font-weight:700;font-size:10px;padding:1px 7px;border-radius:10px;flex-shrink:0;line-height:18px">1</span><span>Go to <strong style="color:var(--text-primary)">admin.microsoft.com → Exchange → Mail flow → Message trace</strong></span></div>
+                <div style="display:flex;gap:8px"><span style="background:#1B445A;color:var(--accent);font-weight:700;font-size:10px;padding:1px 7px;border-radius:10px;flex-shrink:0;line-height:18px">2</span><span>Search for the message by sender, recipient, or date range</span></div>
+                <div style="display:flex;gap:8px"><span style="background:#1B445A;color:var(--accent);font-weight:700;font-size:10px;padding:1px 7px;border-radius:10px;flex-shrink:0;line-height:18px">3</span><span>Click the message row to open its details</span></div>
+                <div style="display:flex;gap:8px"><span style="background:#1B445A;color:var(--accent);font-weight:700;font-size:10px;padding:1px 7px;border-radius:10px;flex-shrink:0;line-height:18px">4</span><span>Scroll to the bottom and click <strong style="color:var(--text-primary)">Message headers</strong> → copy the text</span></div>
+                <div style="margin-left:28px;color:var(--text-dim)">This method gives you the exact headers as received by Microsoft's servers — ideal for investigating delivery issues or spoofing reports</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div><!-- /body -->
+
+    <!-- Footer -->
+    <div style="padding:12px 24px;border-top:1px solid var(--border);display:flex;gap:16px;flex-wrap:wrap;flex-shrink:0;background:var(--bg-elevated);border-radius:0 0 14px 14px">
+      <a href="https://github.com/great-it-nordic/email-spoof-checker/issues/new?template=feature_request.md&title=[Feature+Request]&labels=enhancement" target="_blank" style="color:var(--accent);text-decoration:none;font-size:12px">+ Suggest a feature</a>
+      <a href="https://github.com/great-it-nordic/email-spoof-checker/issues/new?template=bug_report.md&title=[Bug]&labels=bug" target="_blank" style="color:var(--accent);text-decoration:none;font-size:12px">Report an issue</a>
+      <a href="https://github.com/great-it-nordic/email-spoof-checker" target="_blank" style="color:var(--accent);text-decoration:none;font-size:12px">View on GitHub</a>
+      <span style="margin-left:auto;font-size:11px;color:var(--text-dim)">Press Esc to close</span>
+    </div>
+
   </div>
 </div>
 </body>
