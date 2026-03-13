@@ -193,7 +193,8 @@ textarea.param-input{min-height:110px;resize:vertical;line-height:1.6;color:var(
 .explain-box code{background:var(--bg-code);padding:1px 5px;border-radius:3px;font-family:var(--font-mono);font-size:11px;color:var(--green);}
 .detail-value{background:var(--bg-code);border:1px solid var(--border);border-radius:8px;padding:10px 14px;margin-top:8px;font-family:var(--font-mono);font-size:11px;color:var(--text-primary);overflow-x:auto;white-space:pre-wrap;line-height:1.6;word-break:break-all;position:relative;}
 .copy-float{position:absolute;top:7px;right:8px;}
-.rec-box{margin-top:8px;padding:10px 14px;background:linear-gradient(135deg,var(--amber-glow),transparent);border:1px solid rgba(245,158,11,0.2);border-radius:var(--radius-sm);font-size:12px;color:var(--text-secondary);line-height:1.65;}
+.rec-box{margin-top:8px;padding:10px 14px 10px;background:rgba(245,158,11,0.07);border:1px solid rgba(245,158,11,0.28);border-left:3px solid var(--amber);border-radius:var(--radius-sm);font-size:12px;color:var(--text-secondary);line-height:1.65;}
+.rec-box::before{content:'🔧 Recommended Fix';display:block;font-size:10px;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:6px;}
 .rec-box b{color:var(--amber);}
 .rec-box code{background:var(--bg-code);padding:1px 5px;border-radius:3px;font-family:var(--font-mono);font-size:11px;color:var(--green);}
 
@@ -310,7 +311,7 @@ textarea.param-input{min-height:110px;resize:vertical;line-height:1.6;color:var(
 .spoof-sign code{background:var(--bg-elevated);padding:1px 4px;border-radius:3px;font-family:var(--font-mono);font-size:11px;color:var(--text-secondary);}
 
 /* ── EMPTY STATE ── */
-.empty{text-align:center;padding:48px 20px;color:var(--text-dim);}
+.empty{text-align:center;padding:32px 20px;color:var(--text-dim);}
 .empty .icon{font-size:36px;margin-bottom:10px;opacity:0.5;}
 .empty .title{font-size:14px;color:var(--text-secondary);margin-bottom:4px;}
 .empty .sub{font-size:12px;}
@@ -692,117 +693,69 @@ code{font-family:var(--font-mono);font-size:11px;background:var(--bg-code);paddi
         </div>
       </div>
       <div class="empty" id="domainEmpty">
-        <div style="max-width:700px;margin:0 auto;text-align:left">
+        <div style="max-width:620px;margin:0 auto;padding:20px 0">
 
-          <!-- Heading -->
-          <div style="text-align:center;margin-bottom:28px">
-            <div style="font-size:32px;margin-bottom:8px;opacity:0.65">🔍</div>
-            <div style="font-size:16px;font-weight:700;color:var(--text-primary);margin-bottom:4px">Check any domain in seconds</div>
+          <!-- Hero -->
+          <div style="text-align:center;margin-bottom:32px">
+            <div style="font-size:36px;margin-bottom:10px">🔍</div>
+            <div style="font-size:18px;font-weight:700;color:var(--text-primary);margin-bottom:6px">Check any domain in seconds</div>
             <div style="font-size:13px;color:var(--text-dim)">No login · No installation · DNS via Cloudflare DoH</div>
           </div>
 
-          <!-- 3-step flow -->
-          <div style="display:flex;gap:0;margin-bottom:28px;position:relative">
-            <div style="position:absolute;top:22px;left:18%;right:18%;height:2px;background:var(--border);z-index:0"></div>
+          <!-- Steps -->
+          <div style="display:flex;gap:0;margin-bottom:32px;position:relative">
+            <div style="position:absolute;top:20px;left:18%;right:18%;height:2px;background:var(--border);z-index:0"></div>
             <div style="flex:1;text-align:center;position:relative;z-index:1">
-              <div style="width:44px;height:44px;border-radius:50%;background:var(--bg-elevated);border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-size:14px;font-weight:800;color:var(--accent)">1</div>
+              <div style="width:40px;height:40px;border-radius:50%;background:var(--bg-elevated);border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-size:13px;font-weight:800;color:var(--accent)">1</div>
               <div style="font-size:12px;font-weight:600;color:var(--text-primary)">Type a domain</div>
-              <div style="font-size:11px;color:var(--text-dim);margin-top:3px">e.g. microsoft.com</div>
+              <div style="font-size:11px;color:var(--text-dim);margin-top:2px">e.g. microsoft.com</div>
             </div>
             <div style="flex:1;text-align:center;position:relative;z-index:1">
-              <div style="width:44px;height:44px;border-radius:50%;background:var(--bg-elevated);border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-size:14px;font-weight:800;color:var(--accent)">2</div>
+              <div style="width:40px;height:40px;border-radius:50%;background:var(--bg-elevated);border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-size:13px;font-weight:800;color:var(--accent)">2</div>
               <div style="font-size:12px;font-weight:600;color:var(--text-primary)">Click Analyze</div>
-              <div style="font-size:11px;color:var(--text-dim);margin-top:3px">SPF · DMARC · DKIM · MX</div>
+              <div style="font-size:11px;color:var(--text-dim);margin-top:2px">SPF · DMARC · DKIM · MX</div>
             </div>
             <div style="flex:1;text-align:center;position:relative;z-index:1">
-              <div style="width:44px;height:44px;border-radius:50%;background:var(--bg-elevated);border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-size:14px;font-weight:800;color:var(--accent)">3</div>
-              <div style="font-size:12px;font-weight:600;color:var(--text-primary)">Read the results</div>
-              <div style="font-size:11px;color:var(--text-dim);margin-top:3px">Score, verdict &amp; fixes</div>
+              <div style="width:40px;height:40px;border-radius:50%;background:var(--bg-elevated);border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-size:13px;font-weight:800;color:var(--accent)">3</div>
+              <div style="font-size:12px;font-weight:600;color:var(--text-primary)">Read results</div>
+              <div style="font-size:11px;color:var(--text-dim);margin-top:2px">Score, verdict &amp; fixes</div>
             </div>
-          </div>
-
-          <!-- Feature grid -->
-          <div style="font-size:11px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">All tools in this suite</div>
-          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:8px;margin-bottom:24px">
-
-            <div onclick="setView('domain')" style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;cursor:pointer;transition:all 0.15s" onmouseover="this.style.borderColor='var(--border-hover)';this.style.background='var(--bg-card)'" onmouseout="this.style.borderColor='var(--border)';this.style.background='var(--bg-elevated)'">
-              <div style="font-size:18px;margin-bottom:5px">🌐</div>
-              <div style="font-size:12px;font-weight:700;color:var(--text-primary);margin-bottom:3px">Domain DNS Check</div>
-              <div style="font-size:11px;color:var(--text-dim);line-height:1.5">Live SPF, DMARC, DKIM, MX, BIMI &amp; MTA-STS lookup with a 0–100 security score</div>
-            </div>
-
-            <div onclick="setView('headers')" style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;cursor:pointer;transition:all 0.15s" onmouseover="this.style.borderColor='var(--border-hover)';this.style.background='var(--bg-card)'" onmouseout="this.style.borderColor='var(--border)';this.style.background='var(--bg-elevated)'">
-              <div style="font-size:18px;margin-bottom:5px">📧</div>
-              <div style="font-size:12px;font-weight:700;color:var(--text-primary);margin-bottom:3px">Header Analysis</div>
-              <div style="font-size:11px;color:var(--text-dim);line-height:1.5">Paste raw email headers to detect spoofing, trace delivery hops and check authentication results</div>
-            </div>
-
-            <div onclick="setView('bulk')" style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;cursor:pointer;transition:all 0.15s" onmouseover="this.style.borderColor='var(--border-hover)';this.style.background='var(--bg-card)'" onmouseout="this.style.borderColor='var(--border)';this.style.background='var(--bg-elevated)'">
-              <div style="font-size:18px;margin-bottom:5px">📋</div>
-              <div style="font-size:12px;font-weight:700;color:var(--text-primary);margin-bottom:3px">Bulk Domain Checker</div>
-              <div style="font-size:11px;color:var(--text-dim);line-height:1.5">Check up to 50 domains at once. Export results as CSV for audits and client reports</div>
-            </div>
-
-            <div onclick="setView('dmarcxml')" style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;cursor:pointer;transition:all 0.15s" onmouseover="this.style.borderColor='var(--border-hover)';this.style.background='var(--bg-card)'" onmouseout="this.style.borderColor='var(--border)';this.style.background='var(--bg-elevated)'">
-              <div style="font-size:18px;margin-bottom:5px">📊</div>
-              <div style="font-size:12px;font-weight:700;color:var(--text-primary);margin-bottom:3px">DMARC Report Parser</div>
-              <div style="font-size:11px;color:var(--text-dim);line-height:1.5">Paste an XML aggregate report to see pass rates, sending sources and failures at a glance</div>
-            </div>
-
-            <div onclick="setView('psgen')" style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;cursor:pointer;transition:all 0.15s" onmouseover="this.style.borderColor='var(--border-hover)';this.style.background='var(--bg-card)'" onmouseout="this.style.borderColor='var(--border)';this.style.background='var(--bg-elevated)'">
-              <div style="font-size:18px;margin-bottom:5px">⚙️</div>
-              <div style="font-size:12px;font-weight:700;color:var(--text-primary);margin-bottom:3px">PowerShell Fix Generator</div>
-              <div style="font-size:11px;color:var(--text-dim);line-height:1.5">Get ready-to-run Exchange Online and DNS fix scripts tailored to exactly what is wrong</div>
-            </div>
-
-            <div onclick="setView('urlscan')" style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;cursor:pointer;transition:all 0.15s" onmouseover="this.style.borderColor='var(--border-hover)';this.style.background='var(--bg-card)'" onmouseout="this.style.borderColor='var(--border)';this.style.background='var(--bg-elevated)'">
-              <div style="font-size:18px;margin-bottom:5px">🔗</div>
-              <div style="font-size:12px;font-weight:700;color:var(--text-primary);margin-bottom:3px">Phishing URL Scanner</div>
-              <div style="font-size:11px;color:var(--text-dim);line-height:1.5">Check a suspicious link against 90+ antivirus engines via VirusTotal</div>
-            </div>
-
-            <div onclick="setView('hashcheck')" style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;cursor:pointer;transition:all 0.15s" onmouseover="this.style.borderColor='var(--border-hover)';this.style.background='var(--bg-card)'" onmouseout="this.style.borderColor='var(--border)';this.style.background='var(--bg-elevated)'">
-              <div style="font-size:18px;margin-bottom:5px">🔐</div>
-              <div style="font-size:12px;font-weight:700;color:var(--text-primary);margin-bottom:3px">Hash Checker</div>
-              <div style="font-size:11px;color:var(--text-dim);line-height:1.5">Check a file hash against VirusTotal without uploading the file — safe on any device</div>
-            </div>
-
-            <div onclick="setView('history')" style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;cursor:pointer;transition:all 0.15s" onmouseover="this.style.borderColor='var(--border-hover)';this.style.background='var(--bg-card)'" onmouseout="this.style.borderColor='var(--border)';this.style.background='var(--bg-elevated)'">
-              <div style="font-size:18px;margin-bottom:5px">🕐</div>
-              <div style="font-size:12px;font-weight:700;color:var(--text-primary);margin-bottom:3px">History &amp; Changes</div>
-              <div style="font-size:11px;color:var(--text-dim);line-height:1.5">Every scan is saved locally. Re-check domains to detect SPF/DMARC changes over time</div>
-            </div>
-
           </div>
 
           <!-- Score guide -->
-          <div style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px">
-            <div style="font-size:11px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">How scoring works</div>
-            <div style="display:flex;gap:8px;flex-wrap:wrap">
-              <div style="flex:1;min-width:120px;background:var(--green-glow);border:1px solid rgba(52,211,153,0.25);border-radius:var(--radius-sm);padding:10px 12px;text-align:center">
-                <div style="font-size:18px;font-weight:800;color:var(--green);font-family:var(--font-mono)">&#8805;72%</div>
-                <div style="font-size:11px;font-weight:700;color:var(--green);margin-top:2px">🛡️ Looks Legitimate</div>
-                <div style="font-size:10px;color:var(--text-dim);margin-top:4px;line-height:1.4">Strong or near-complete authentication. Low spoofing risk.</div>
-              </div>
-              <div style="flex:1;min-width:120px;background:var(--amber-glow);border:1px solid rgba(245,158,11,0.22);border-radius:var(--radius-sm);padding:10px 12px;text-align:center">
-                <div style="font-size:18px;font-weight:800;color:var(--amber);font-family:var(--font-mono)">45&#8211;71%</div>
-                <div style="font-size:11px;font-weight:700;color:var(--amber);margin-top:2px">⚠️ Review Carefully</div>
-                <div style="font-size:10px;color:var(--text-dim);margin-top:4px;line-height:1.4">Authentication gaps. Some spoofed emails may reach inboxes.</div>
-              </div>
-              <div style="flex:1;min-width:120px;background:var(--red-glow);border:1px solid rgba(239,68,68,0.22);border-radius:var(--radius-sm);padding:10px 12px;text-align:center">
-                <div style="font-size:18px;font-weight:800;color:var(--red);font-family:var(--font-mono)">&lt;45%</div>
-                <div style="font-size:11px;font-weight:700;color:var(--red);margin-top:2px">🚨 High Spoof Risk</div>
-                <div style="font-size:10px;color:var(--text-dim);margin-top:4px;line-height:1.4">Critical gaps. Domain can likely be freely impersonated.</div>
-              </div>
+          <div style="font-size:11px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Score guide</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px">
+            <div style="flex:1;min-width:110px;background:var(--green-glow);border:1px solid rgba(52,211,153,0.25);border-radius:var(--radius-sm);padding:10px 12px;text-align:center">
+              <div style="font-size:16px;font-weight:800;color:var(--green);font-family:var(--font-mono)">&#8805;72%</div>
+              <div style="font-size:10px;font-weight:700;color:var(--green);margin-top:2px">&#128737;&#65039; Legitimate</div>
             </div>
-            <div style="margin-top:10px;font-size:11px;color:var(--text-dim);line-height:1.5">Scoring is weighted by impact — SPF and DMARC missing each deduct 35 pts, DKIM 20 pts, MX 12 pts. A domain missing both SPF and DMARC scores 0% regardless of other checks.</div>
+            <div style="flex:1;min-width:110px;background:var(--amber-glow);border:1px solid rgba(245,158,11,0.22);border-radius:var(--radius-sm);padding:10px 12px;text-align:center">
+              <div style="font-size:16px;font-weight:800;color:var(--amber);font-family:var(--font-mono)">45&#8211;71%</div>
+              <div style="font-size:10px;font-weight:700;color:var(--amber);margin-top:2px">&#9888;&#65039; Review</div>
+            </div>
+            <div style="flex:1;min-width:110px;background:var(--red-glow);border:1px solid rgba(239,68,68,0.22);border-radius:var(--radius-sm);padding:10px 12px;text-align:center">
+              <div style="font-size:16px;font-weight:800;color:var(--red);font-family:var(--font-mono)">&lt;45%</div>
+              <div style="font-size:10px;font-weight:700;color:var(--red);margin-top:2px">&#128680; High Risk</div>
+            </div>
+          </div>
+
+          <!-- Other tools - compact -->
+          <div style="font-size:11px;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Other tools</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:6px">
+            <div onclick="setView('headers')" style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);padding:9px 12px;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all 0.15s" onmouseover="this.style.borderColor='var(--border-hover)'" onmouseout="this.style.borderColor='var(--border)'"><span style="font-size:15px">&#128231;</span><div><div style="font-size:12px;font-weight:600;color:var(--text-primary)">Header Analysis</div><div style="font-size:10px;color:var(--text-dim)">Detect spoofing from raw headers</div></div></div>
+            <div onclick="setView('bulk')" style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);padding:9px 12px;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all 0.15s" onmouseover="this.style.borderColor='var(--border-hover)'" onmouseout="this.style.borderColor='var(--border)'"><span style="font-size:15px">&#128203;</span><div><div style="font-size:12px;font-weight:600;color:var(--text-primary)">Bulk Checker</div><div style="font-size:10px;color:var(--text-dim)">Up to 50 domains, CSV export</div></div></div>
+            <div onclick="setView('dmarcxml')" style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);padding:9px 12px;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all 0.15s" onmouseover="this.style.borderColor='var(--border-hover)'" onmouseout="this.style.borderColor='var(--border)'"><span style="font-size:15px">&#128202;</span><div><div style="font-size:12px;font-weight:600;color:var(--text-primary)">DMARC XML Parser</div><div style="font-size:10px;color:var(--text-dim)">Parse aggregate DMARC reports</div></div></div>
+            <div onclick="setView('psgen')" style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);padding:9px 12px;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all 0.15s" onmouseover="this.style.borderColor='var(--border-hover)'" onmouseout="this.style.borderColor='var(--border)'"><span style="font-size:15px">&#9881;&#65039;</span><div><div style="font-size:12px;font-weight:600;color:var(--text-primary)">PS Fix Generator</div><div style="font-size:10px;color:var(--text-dim)">Exchange Online fix scripts</div></div></div>
+            <div onclick="setView('urlscan')" style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);padding:9px 12px;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all 0.15s" onmouseover="this.style.borderColor='var(--border-hover)'" onmouseout="this.style.borderColor='var(--border)'"><span style="font-size:15px">&#128279;</span><div><div style="font-size:12px;font-weight:600;color:var(--text-primary)">URL Scanner</div><div style="font-size:10px;color:var(--text-dim)">Check links via VirusTotal</div></div></div>
+            <div onclick="setView('hashcheck')" style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);padding:9px 12px;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all 0.15s" onmouseover="this.style.borderColor='var(--border-hover)'" onmouseout="this.style.borderColor='var(--border)'"><span style="font-size:15px">&#128272;</span><div><div style="font-size:12px;font-weight:600;color:var(--text-primary)">Hash Checker</div><div style="font-size:10px;color:var(--text-dim)">VirusTotal file hash check</div></div></div>
+            <div onclick="setView('history')" style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);padding:9px 12px;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all 0.15s" onmouseover="this.style.borderColor='var(--border-hover)'" onmouseout="this.style.borderColor='var(--border)'"><span style="font-size:15px">&#128336;</span><div><div style="font-size:12px;font-weight:600;color:var(--text-primary)">History</div><div style="font-size:10px;color:var(--text-dim)">Saved scans &amp; change detection</div></div></div>
           </div>
 
         </div>
       </div>
     </div>
 
-    <!-- ═══ VIEW: BULK ═══ -->
+        <!-- ═══ VIEW: BULK ═══ -->
     <div class="view" id="view-bulk">
       <div class="section-card">
         <div class="section-header">
@@ -1262,6 +1215,70 @@ async function checkDomain(d, onProgress) {
       why:'MTA-STS prevents SMTP downgrade attacks by requiring TLS for inbound mail. It\'s part of the recommended M365 hardening stack.' });
   }
 
+  // BLACKLIST CHECK
+  emit('Checking blacklists…');
+  try {
+    const dnsbls = [
+      { name:'Spamhaus ZEN',  host:'zen.spamhaus.org' },
+      { name:'SpamCop',       host:'bl.spamcop.net' },
+      { name:'SORBS',         host:'dnsbl.sorbs.net' },
+      { name:'Barracuda',     host:'b.barracudacentral.org' },
+      { name:'UCEProtect-1',  host:'dnsbl-1.uceprotect.net' },
+    ];
+
+    // Get IP from first MX hostname, or fall back to A record on domain
+    let targetIP = null;
+    let targetLabel = '';
+    const mxCheck = checks.find(c => c.id === 'mx');
+    if (mxCheck && mxCheck.value) {
+      const firstMX = mxCheck.value.split('\n')[0].trim().replace(/^\d+\s+/,'').toLowerCase();
+      const aRecs = await doh(firstMX, 'A');
+      if (aRecs && aRecs.length) {
+        targetIP = aRecs[0].data;
+        targetLabel = `${firstMX} (${targetIP})`;
+      }
+    }
+    if (!targetIP) {
+      const aRecs = await doh(d, 'A');
+      if (aRecs && aRecs.length) {
+        targetIP = aRecs[0].data;
+        targetLabel = `${d} (${targetIP})`;
+      }
+    }
+
+    if (targetIP) {
+      const rev = targetIP.split('.').reverse().join('.');
+      const hits = [];
+      const misses = [];
+      for (const bl of dnsbls) {
+        const res = await doh(`${rev}.${bl.host}`, 'A');
+        if (res && res.length) hits.push(bl.name);
+        else misses.push(bl.name);
+      }
+      if (hits.length === 0) {
+        checks.push({ id:'blacklist', name:'Blacklist Status', s:'pass',
+          badge:`Clean (${dnsbls.length} lists)`,
+          desc:`Not listed on any of ${dnsbls.length} checked blacklists. Checked: ${targetLabel}.`,
+          value:`Checked IP: ${targetIP}\nLists checked: ${dnsbls.map(b=>b.name).join(', ')}\nResult: Clean on all lists`,
+          rec: null,
+          why:'Spam blacklists are used by mail servers to reject or filter incoming mail from known spam sources. Being listed can cause legitimate email to bounce or land in spam.' });
+      } else {
+        checks.push({ id:'blacklist', name:'Blacklist Status', s:'fail',
+          badge:`Listed on ${hits.length} list${hits.length>1?'s':''}`,
+          desc:`IP ${targetIP} is listed on: ${hits.join(', ')}. Email from this domain may be rejected.`,
+          value:`Checked IP: ${targetIP}\nListed on: ${hits.join(', ')}\nClean on: ${misses.join(', ')||'none'}`,
+          rec:`<b>Action required:</b> Request delisting at each blacklist's website. Spamhaus: <code>www.spamhaus.org/lookup/</code> — SpamCop: <code>www.spamcop.net</code> — Barracuda: <code>www.barracudacentral.org/rbl/removal-request</code>. Investigate why the IP was listed before requesting removal.`,
+          why:'Being listed on a spam blacklist means many mail servers will reject or silently discard mail from this IP. Common causes: compromised systems, spam campaigns, or misconfigured mail servers.' });
+      }
+    } else {
+      checks.push({ id:'blacklist', name:'Blacklist Status', s:'info',
+        badge:'Could not check',
+        desc:'Could not resolve an IP for this domain to perform a blacklist check.',
+        value: null, rec: null,
+        why:'Blacklist checks require a resolved IP. This domain may have no A or MX records, or DNS resolution failed.' });
+    }
+  } catch(e) {}
+
   return checks;
 }
 
@@ -1339,7 +1356,7 @@ function renderSPFTree(depth) {
 //  SCORE + RENDER
 // ══════════════════════════════════════════════
 function scoreOf(checks) {
-  const W = { spf:{fail:35,warn:15}, dmarc:{fail:35,warn:15}, dkim:{fail:20,warn:8}, mx:{fail:12,warn:4}, mtasts:{fail:6,warn:3}, bimi:{fail:3,warn:1} };
+  const W = { spf:{fail:35,warn:15}, dmarc:{fail:35,warn:15}, dkim:{fail:20,warn:8}, mx:{fail:12,warn:4}, blacklist:{fail:20,warn:8}, mtasts:{fail:6,warn:3}, bimi:{fail:3,warn:1} };
   let s = 100;
   checks.forEach(c => { const w=W[c.id]||{fail:10,warn:4}; if(c.s==='fail') s-=w.fail; else if(c.s==='warn') s-=w.warn; });
   return Math.max(0,Math.min(100,s));
